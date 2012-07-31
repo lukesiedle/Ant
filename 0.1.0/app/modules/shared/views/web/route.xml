@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+	@description
+	
+	Route.xml offers a whitelist map of specific
+	keywords or types of values that may
+	exist within the request, and then
+	defines what module/template PHP
+	should load.
+	
+	The first item in the base is also 
+	the default if none is specified
+
+-->
+
+<base is="home">
+	<next is="new">
+		<var>edit</var>
+		<module>edit</module>
+		<template>edit</template>
+	</next>
+	<next when="string">
+		<var>title</var>
+		<next when="numeric">
+			<var>id</var>
+			<module>page</module>
+			<template>page</template>
+		</next>
+	</next>
+	<var>context</var>
+	<doctitle>{root}</doctitle>
+	<template>index</template>
+	<frame>frame.default</frame>
+</base>

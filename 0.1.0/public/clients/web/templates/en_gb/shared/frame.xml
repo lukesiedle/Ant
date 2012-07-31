@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<collections>
+	<collection name="stylesheets">
+		<template shared="true">stylesheet</template>
+	</collection>
+	<collection name="javascripts">
+		<template shared="true">javascript</template>
+	</collection>
+</collections>

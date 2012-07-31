@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Authenticating...</title>
+		<script type="text/javascript">
+			
+			
+			var get = parseUrl();			
+			
+			if( get.redir ){
+				location.hash = '';
+				setTimeout( function(){
+					location.href = urldecode( get.redir );
+				}, 3000 );
+				
+			}
+			
+			function parseUrl(){
+				var arr1 = location.search.split( '&' );
+				var obj = {};
+				for( var x in arr1 ){
+					if( x == 0 ){
+						arr1[x] = arr1[x].substr(1);
+					}
+					var each = arr1[x].split('=');
+					
+					obj[ each[0] ] = each[ 1 ] || null; 
+				}
+				return obj;
+			}
+			
+			function urldecode(url) {
+				return decodeURIComponent(url.replace(/\+/g, ' '));
+			}
+			
+		</script>
+	</head>
+	<body>
+		Hey there! We're logging you in...
+	</body>
+		
+</html>
