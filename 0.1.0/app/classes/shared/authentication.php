@@ -1,10 +1,13 @@
 <?php
 
-	/*
-	 *	@description	
+	/*	
 	 *	Handles authentication
 	 *	using either the Facebook
 	 *	or Google API.
+	 * 
+	 *	@package Ant
+	 *	@subpackage Authentication
+	 *	@since 0.1.0
 	 */
 
 	namespace Ant {
@@ -20,13 +23,28 @@
 			
 			public $authType;
 			
-			function __construct( $type ){
-				
-			}
+			function __construct( $type ){ }
+			
+			/*
+			 *	Check if authorization
+			 *	of the type has already
+			 *	occurred.
+			 * 
+			 *	@since 0.1.0
+			 */
 			
 			public static function isAuthorized( $type ) {
 				return isset( self :: $authorizations[$type] );
 			}
+			
+			/*
+			 *	Authorize the type
+			 *	and an optional post
+			 *	return url.
+			 *	
+			 *	@since 0.1.0
+			 *	@return array Basic auth data
+			 */
 			
 			public static function authorize( $type, $postReturnUrl = null ){
 				if( self :: isAuthorized($type)){
@@ -44,9 +62,24 @@
 				}
 			}
 			
+			/*
+			 *	Shortcut URL to output
+			 *	current authorizations.	
+			 * 
+			 *	@since 0.1.0
+			 */
+			
 			public static function getAuthStatus(){
 				Application :: out( self :: $authorizations );
 			}
+			
+			/*
+			 *	Authorize Facebook with
+			 *	optional return url
+			 * 
+			 *	@since 0.1.0
+			 *	@return array Basic auth data
+			 */
 			
 			public static function authFacebook( $postReturnUrl = null ){
 				
@@ -70,7 +103,6 @@
 							'facebook' => $user
 						));
 						self :: $authorizations['facebook'] = $user;
-						// self :: cleanUrl('facebook');
 						return $user;
 					}
 					
@@ -85,6 +117,14 @@
 				}
 				
 			}
+			
+			/*
+			 *	Authorize Google with
+			 *	optional return url
+			 * 
+			 *	@since 0.1.0
+			 *	@return array Basic auth data
+			 */
 			
 			public static function authGoogle( $postReturnUrl = null ){
 				
@@ -128,26 +168,25 @@
 				
 			}
 			
-			// If it's an authorization, need to redirect to clean up //
-			public static function cleanUrl( $authType, $redir = null ){
-				// Facebook //
-				switch( $authType ){
-					case 'facebook' :
-					Application :: redirect( Router :: getAppPath() );
-						exit;
-					case 'google' :
-					Application :: redirect(Router :: getAppPath());
-						exit;
-				}
-			}
 			
-			// API request // 
+			/*
+			 *	Perform an API request 
+			 *	based on type. Optionally
+			 *	store it in the session.
+			 * 
+			 *	@since 0.1.0
+			 *	@return array API response data
+			 */
+			
 			public static function api( $type, $request, $store = false ){
 				switch( $type ){
 					case 'facebook' :
+						
 						if( ! self :: isAuthorized('facebook') ){
 							throw 'Facebook is not yet authorized';
 						}
+						
+						// If being stored, check if it exists already //
 						if( $store ){
 							$data = Session :: get('facebook')->data;
 							if( $data && $data[ $request ] ){
@@ -155,8 +194,10 @@
 							}
 						}
 						
+						// Do API request //
 						$data = self :: $facebook->api($request);
 						
+						// Store in the session //
 						if( $store ){
 							Session :: add('facebook', array(
 								'data' => array(
@@ -169,12 +210,9 @@
 					case 'google' :
 						break;
 				}
-			}
-			
+			}	
 		}
-		 
+		
+		
 		 
 	}
-
-
-?>

@@ -63,7 +63,7 @@
 			
 			// Buffer the template for output
 			// @since 0.1.0 //
-			Template :: buffer( $frame );
+			Template :: setBuffer( $frame );
 		}
 	 
 	 }

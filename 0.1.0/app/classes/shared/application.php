@@ -30,8 +30,8 @@
 			public static function initialize( $requestVar = 'request' ){
 				
 				// Setup a stdClass object for storage //
-				(object) self :: $app;
-
+				self :: $app = new \stdClass;
+				
 				// Declare app vars / examples //
 				
 				// The request variable is set inside .htaccess //
@@ -51,6 +51,7 @@
 				
 				// Load the global configuration //
 				require('config/global.php');
+			
 				
 			}
 			
@@ -320,11 +321,15 @@
 			
 			public static function connect( Array $config ){
 				
+				$time = microtime();
+				
 				switch( $config['connection'] ){
 					// Connection to database //
 					case 'mysql' :
 						try {
+							
 							self :: $app->connection[ $type ] = \Library\MySQL :: connect( $config );
+							
 						} catch( Exception $e ){
 							// Otherwise try connect to the local host //
 							$config['host'] = 'localhost';

@@ -1,96 +1,80 @@
 <?php
 
+	/*
+	 *	Controller handles lazy-loading
+	 *	of methods based on context.
+	 *	Calls methods statically 
+	 *	or creates objects.
+	 *	Handles similar functionality
+	 *	for creating queries.
+	 * 
+	 *	@package Ant
+	 *	@subpackage Controller
+	 *	@since 0.1.0
+	 */
+
 	namespace Ant {
 	
 		Class Controller {
 			
 			/*
-			 *	@description
-			 *	Calls a method statically, 
-			 *	loads in the required 
-			 *	classes to execute
-			 *	the method
+			 *	Call a method, requiring
+			 *	if it doesn't exist. The method
+			 *	may exist with the context class,
+			 *	but it may be necessary to include
+			 *	it from the controllers directory.
+			 * 
+			 *	@note If an initialize method exists
+			 *	in the class, an instance will be
+			 *	created and returned, otherwise
+			 *	the method is called statically.
+			 * 
+			 *	@since 0.1.0
 			 */
 			
-			public static function call( $context, $classMethod, Array $args = array()){
+			public static function call( $method, Array $args = array()){
 				
-				$class = '\Ant\\' . $context;
+				$options	= explode( '.', strtolower($method) );
 				
-				if( !class_exists($c = $context) ){
-					require_once('app/classes/context/' . $c . '/' . $c . '.php');
+				$methodPath = '\Ant\\Controller\\' . $options[0] . '\\' . $options[1];
+				
+				if( !function_exists($methodPath) ){
+					require_once('app/modules/context/controllers/' . $options[0] . '/' . $options[1] . '.php');
 				}
 				
-				if( !method_exists($class, $classMethod)){
-					if( !class_exists( $c = $context . $classMethod )){
-						require_once('app/modules/context/controllers/' 
-							. $context . '/' 
-							. $classMethod . '.php');
-					}
-					$class = '\Ant\\' . $context . $classMethod;
-				} else {
-					$class = '\Ant\\' . $context;
-				}
+				$args['request'] = Router :: getRequestVars();
 				
-				$args['request'] = Router :: getRequestVars(); 
-				
-				if( method_exists($class, 'initialize')){
-					$instance = new $class( $args );
-					$instance->initialize( $args );
-					return $instance;
-				} else {
-					return $class :: $classMethod( $args );
-				}
-				
+				return $methodPath( $args );
 			}
 			
-			public static function query( $context, $classMethod, Array $args = array() ){
+			/*
+			 *	Call a query, requiring
+			 *	if it doesn't exist. The method
+			 *	may exist in the shared space,
+			 *	or the context space.
+			 * 
+			 *	@note If the shared space 
+			 *	contains the method, the 
+			 *	
+			 *	@since 0.1.0
+			 */
+			
+			public static function query( $context, $method, Array $args = array() ){
 				
-				$class = '\Ant\\' . 'Query'.$context;
+				$namespace = '\Ant\\' . 'Query\\'.$context . '\\';
 				
-				if( !class_exists('Query'.$context) ){
+				$pathMethod = $namespace.$method;
+				
+				if( !function_exists($pathMethod) ){
 					require_once('app/modules/shared/queries/' . $context . '/' . $context . '.php');
-				}
-				
-				if( !method_exists($class, $classMethod)){
-					if( !class_exists( $context . $classMethod )){
-						require_once('app/modules/context/queries/' 
-							. $context . '/' 
-							. $classMethod . '.php');
-					}
-					$class	= '\Ant\\' . 'Query'.$classMethod;
-					$method = false;
-					
-				} else {
-					$class	= '\Ant\\' . 'Query'.$context;
-					$method = $classMethod;
-					
 				}
 				
 				$args = array_merge( (array)Router :: getRequestVars(), $args );
 				
-				if( $method ){
-					$obj = new $class( new Query );
-					$obj->{ $classMethod }( Database :: getTablePrefix(), $args );
-				} else {
-					$obj = new $class( new Query, Database :: getTablePrefix(), $args );
-				}
+				return $pathMethod( new Query, Database :: getTablePrefix(), $args );
 				
-				return $obj;
-				
-			}
-			
-			public static function get( $context, $method = null, $args = array() ){
-				require_once('app/classes/context/' . $context . '/' . $context . '.php');
-				$cls = '\Ant\\' . $context;
-				$obj = new $cls;
-				if( $method ){
-					return $obj->{ $method }( $args );
-				}
-				return $cls;
 			}
 			
 		}
 		
 	}
-
-?>

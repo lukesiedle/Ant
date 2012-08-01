@@ -13,14 +13,14 @@
 				$groupBy	= '',
 				$orderBy	= '',
 				$limit		= '',
-				$isPrepared = false,
 				$query		= '',
 				$type		= '',
-				$binding	= array(),
 				$tableName	= '',
 				$where		= '',
-				$queryData	= array();
-
+				$binding	= array(),
+				$queryData	= array(),
+				$isPrepared = false;
+			
 			public function __construct( $query = null ){
 				if( $query ){
 					$this->query		= $query;

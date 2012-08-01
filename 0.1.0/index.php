@@ -6,12 +6,12 @@
 	 *	of client arrive here
 	 * 
 	 *	@package Ant
-	 *  @requirements PHP 5.3+
+	 *  @require PHP 5.3+
 	 *	@since 0.1.0
 	 */	
 	 
 	// Errors //
-	error_reporting( E_ALL ^ E_NOTICE );
+	error_reporting( E_ALL ^ E_NOTICE ^ E_STRICT );
 	
 	// Version // 
 	define( 'VERSION', '1.0' );

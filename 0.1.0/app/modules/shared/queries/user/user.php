@@ -1,20 +1,14 @@
 <?php
 
-	namespace Ant {
+	namespace Ant\Query\User {
 		
-		Class QueryUser extends Database {
+		function getUser( $query, $_, $args ){
+			$query
+				-> select("user_username, user_id", $_."user user")
+				-> orderBy("user.user_id DESC")
+				-> limit(1);
 			
-			public function getUser( $_, $args ){
-				$this->query
-					-> select("user_username, user_id", $_."user user")
-					-> orderBy("user.user_id DESC")
-					-> limit(1);
-				
-				return $this;
-			}
-			
+			return $query;
 		}
 		
 	}
-
-?>

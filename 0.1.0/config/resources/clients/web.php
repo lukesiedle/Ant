@@ -48,6 +48,7 @@
 	
 	// Minify and deploy javascript (only if local)
 	// @return string Public filename of each compiled JavaScript file //
+	
 	if( App :: get()->local ){
 		Document :: onPrepareJavascripts( function( $javascripts ){
 			
@@ -119,4 +120,4 @@
 	// @since 0.1.0 //
 	Config :: set(array(
 		'template_cache_path' => 'app\cache\clients\web\template.cache'
-	));
+	));	
