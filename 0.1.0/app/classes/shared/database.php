@@ -1,12 +1,15 @@
 <?php
 	
 	/*
-	 *	@description
 	 *	Database is a helper
 	 *	class for getting data
 	 *	from a Collection into 
 	 *	the database and for
 	 *	getting data from a query
+	 * 
+	 *	@package Ant
+	 *	@subpackage Database
+	 *	@since 0.1.0
 	 */
 
 	namespace Ant {
@@ -18,30 +21,58 @@
 			
 			public static $tablePrefix = '';
 			
+			/*
+			 *	Instantiate the Database object
+			 * 
+			 *	@since 0.1.0
+			 * 
+			 */
+			
 			public function __construct( Query $query ){
 				$this->query = $query;
 			}
 			
-			// Return query for further modification //
-			public function edit( \Closure $fn ){
-				$fn( $this->query );
-				return $this;
-			}
+			/*
+			 *	Execute the query and return
+			 *	the result
+			 * 
+			 *	@since 0.1.0
+			 *	@return bool OR Collection The result
+			 */
 			
-			// Execute the query to return a result //
 			public function execute(){
 				return self :: query( $this->query );
 			}
+			
+			/*
+			 *	Set the table prefix
+			 * 
+			 *	@since 0.1.0
+			 */
 			
 			public static function setTablePrefix( $prefix ){
 				self :: $tablePrefix = $prefix;
 			}
 			
+			/*
+			 *	Get the table prefix
+			 * 
+			 *	@since 0.1.0
+			 *	@return string The prefix
+			 */
+			
 			public static function getTablePrefix(){
 				return self :: $tablePrefix;
 			}
 			
-			// Insert new records //
+			/*
+			 *	Insert records from a Collection,
+			 *	with an optional callback that will
+			 *	return the Id for every insert.
+			 *	
+			 *	@since 0.1.0			 
+			 */
+			
 			public static function insert( Collection $col, $fnCallback = null ){
 				
 				$rows		= array();
@@ -53,6 +84,7 @@
 					$i++;
 				});
 				
+				// Make sure the insert data is OK //
 				self :: CheckSchema( array_keys($rows[0]), $namespace );
 				
 				if( $fnCallback || $col->hasJoins() ){
@@ -106,7 +138,13 @@
 				}
 			}
 			
-			// Update data (of a single row) //
+			/*
+			 *	Update records (of a single row),
+			 *	with optional conditions.
+			 * 
+			 *	@since 0.1.0			 
+			 */
+			
 			public static function update( Collection $col, $conditions = array()){
 				$data	= $col->toArrayShallow();
 				$query	= Query :: setUpdate( 
@@ -116,6 +154,12 @@
 				); 
 				MySQL :: doQuery( $query );
 			}
+			
+			/*
+			 *	Update records (of a multiple rows)
+			 * 
+			 *	@since 0.1.0			 
+			 */
 			
 			public static function updateMulti( Collection $col, $idKey, $conditions = array() ){
 				
@@ -135,12 +179,28 @@
 				}
 			}
 			
-			// Select data //
+			/*
+			 *	Select records, using query
+			 * 
+			 *	@since 0.1.0			 
+			 *	@return bool false OR Collection
+			 */
+			
 			public static function query( Query $query ){
-				return new Collection (MySQL :: doFetchQuery( $query ));
+				if( $result = MySQL :: doFetchQuery( $query )){
+					return new Collection ( $result );
+				}
+				return false;
 			}
 			
-			// Get the table schema to compare to collection data 
+			/*
+			 *	Get the table schema to compare
+			 *	collection data
+			 * 
+			 *	@since 0.1.0			 
+			 *	@return array The schema
+			 */
+			
 			public static function getSchema( $tableName ){			
 				$query = new Query( "DESCRIBE " . self :: $tablePrefix . $tableName );
 				$data = MySQL :: doFetchQuery($query);
@@ -150,6 +210,13 @@
 				}
 				return $columns;
 			}
+			
+			/*
+			 *	Compare the collection data 
+			 *	to the table schema
+			 * 
+			 *	@since 0.1.0
+			 */
 			
 			public static function checkSchema( $keys, $tableName ){
 				

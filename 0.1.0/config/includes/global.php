@@ -40,6 +40,10 @@
 	// @since 0.1.0 //
 	require('app/classes/shared/session.php');
 	
+	// Cookie Class
+	// @since 0.1.0 //
+	require('app/classes/shared/cookie.php');
+	
 	// Document Class
 	// @since 0.1.0 //
 	require('app/classes/shared/document.php');

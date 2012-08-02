@@ -325,11 +325,14 @@
 			
 			public static function loadRouteView(){
 				
+				$mod = self :: getModule();
+				
+				
+				
 				$view = ('app/modules/context/views/' 
 							. self :: getContext() . '/'
 							. self :: $client . '/'
 							. self :: getModule() . '.php');
-				
 				
 				// If not view is found, must be a 404 Not Found //
 				if( ! file_exists($view) ){
@@ -339,7 +342,7 @@
 				
 				// Include and execute //
 				require( $view );
-				$fn = self :: $namespace . "\\" . self :: getModule();
+				$fn = self :: $namespace . "\\" . self :: getContext() . '\\' . self :: getModule();
 				return $fn( self :: getRequestVars() );
 				
 			}

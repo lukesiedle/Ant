@@ -24,49 +24,55 @@
 			 *	but it may be necessary to include
 			 *	it from the controllers directory.
 			 * 
-			 *	@note If an initialize method exists
-			 *	in the class, an instance will be
-			 *	created and returned, otherwise
-			 *	the method is called statically.
-			 * 
 			 *	@since 0.1.0
 			 */
 			
 			public static function call( $method, Array $args = array()){
 				
-				$options	= explode( '.', strtolower($method) );
+				$opt = explode( '.', strtolower($method) );
 				
-				$methodPath = '\Ant\\Controller\\' . $options[0] . '\\' . $options[1];
+				$methodPath = '\Ant\\Controller\\' . $opt[0] . '\\' . $opt[1];
 				
-				if( !function_exists($methodPath) ){
-					require_once('app/modules/context/controllers/' . $options[0] . '/' . $options[1] . '.php');
+				// Try include the context class if it exists //
+				if( !class_exists($c = $opt[0])){
+					include_once('app/classes/context/' . $c . '/' . $c . '.php' );
+				}
+				
+				// Check if the method exists within the class //
+				if( method_exists('Ant\\'.$opt[0], $opt[1])){
+					$methodPath = 'Ant\\'.$opt[0];
+					$inClass = true;
+				} else {
+					$inClass = false;
+					if( !function_exists($methodPath) ){
+						require_once('app/modules/context/controllers/' . $opt[0] . '/' . $opt[1] . '.php');
+					}
 				}
 				
 				$args['request'] = Router :: getRequestVars();
 				
+				if( $inClass ){
+					return $methodPath :: $opt[1]( $args );
+				}
 				return $methodPath( $args );
 			}
 			
 			/*
-			 *	Call a query, requiring
-			 *	if it doesn't exist. The method
-			 *	may exist in the shared space,
-			 *	or the context space.
-			 * 
-			 *	@note If the shared space 
-			 *	contains the method, the 
+			 *	Call a query
 			 *	
 			 *	@since 0.1.0
 			 */
 			
-			public static function query( $context, $method, Array $args = array() ){
+			public static function query( $queryName, Array $args = array() ){
 				
-				$namespace = '\Ant\\' . 'Query\\'.$context . '\\';
+				$opt = explode( '.', strtolower($queryName) );
 				
-				$pathMethod = $namespace.$method;
+				$namespace = '\Ant\\' . 'Query\\'. $opt[0]. '\\';
+				
+				$pathMethod = $namespace.$opt[1];
 				
 				if( !function_exists($pathMethod) ){
-					require_once('app/modules/shared/queries/' . $context . '/' . $context . '.php');
+					require_once('app/modules/context/queries/' . $opt[0] . '/' . $opt[1] . '.php');
 				}
 				
 				$args = array_merge( (array)Router :: getRequestVars(), $args );

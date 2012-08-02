@@ -27,7 +27,8 @@
 			'localhost',
 			'm.localhost',
 			'tablet.localhost',
-			'api.localhost'
+			'api.localhost',
+			'127.0.0.1'
 		)
 		
 	));

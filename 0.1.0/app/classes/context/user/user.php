@@ -1,68 +1,104 @@
 <?php
 	
 	/*
-	 *	@description
 	 *	Every context has methods
 	 *	which extend from the store.
 	 * 
-	 *	These methods are used 
-	 *	within public controllers
-	 *	as well as directly
+	 *	These methods usually shouldn't
+	 *	interact directly with other
+	 *	parts of the application, apart
+	 *	from Session/Cookie which are
+	 *	wrapper classes.
 	 * 
+	 *	@package Ant
+	 *	@subpackage User
+	 *	@type Context
+	 *	@since 0.1.0
 	 */
-
+	 
 	namespace Ant {
 		
 		Class User extends Store {
 			
-			public static $me = false;
+			public static $me;
 			
-			public function __construct( $userData = null ){
-				// parent :: __construct();
-				if( $userData ){
-					$this->data = $userData;
+			/*
+			 *	Instantiation of a new user
+			 * 
+			 *	@since 0.1.0
+			 */
+			
+			public function __construct( $data = null ){
+				
+				if( $data ){
+					$this->data = (array)$data;
 				}
 				
 			}
 			
 			/*
-			 *	@todo
-			 *	If the user has logged in 
-			 *	try get them from 
-			 *	session/cookie
+			 *	Sets the current user
 			 * 
-			 *	Remember me, etc.
+			 *	@since 0.1.0
 			 */
 			
-			public static function setCurrent( $data ){
+			public static function setCurrentUser( $data ){
 				self :: $me = new self( $data );
+				self :: storeUser();
 			}
 			
-			public static function getCurrent(){
+			/*
+			 *	Gets the current user, 
+			 *	or creates a guest if none
+			 *	is specified.
+			 * 
+			 *	@since 0.1.0
+			 */
+			
+			public static function getCurrentUser(){
+				self :: loadUser();
+				if( ! self :: $me ){
+					self :: setCurrentUser( array(
+						'guest' => 1
+					));
+				}
 				return self :: $me;
 			}
 			
 			/*
-			 *	@todo
-			 *	Somehow form data or 
-			 *	data from authentication
-			 *	must be routed here...
+			 *	Store the user in the
+			 *	session
 			 * 
+			 *	@since 0.1.0
 			 */
 			
-			// Register the current user //
-			public static function register(){
-				
+			public static function storeUser(){
+				Session :: add( 'Ant.User', self :: $me->getData() );
 			}
 			
-			// Login the current user //
-			public static function login(){
-				
+			/*
+			 *	Load the user from the
+			 *	session
+			 * 
+			 *	@since 0.1.0
+			 */
+			
+			public static function loadUser(){
+				$data = Session :: get( 'Ant.User' );
+				if( $data ){
+					self :: setCurrentUser( $data );
+				}
+			}
+			
+			/*
+			 *	Get the user data
+			 * 
+			 *	@since 0.1.0
+			 */
+			
+			public function getData(){
+				return $this->data;
 			}
 			
 		}
-	
 	}
-
-
-?>

@@ -1,18 +1,32 @@
 <?php
-
+	
+	/*
+	 *	The Ajax channel
+	 *	allows for Ajax requests
+	 *	to be made to the same	
+	 *	route.
+	 * 
+	 *	@package Ant
+	 *	@since 0.1.0
+	 */
+	
 	namespace Ant\Web\Channel\Ajax {
 		
 		function index( $request ){
 			
-			// The view returns a collection set //
 			$view		= \Ant\Router :: loadRouteView();
 			
+			$output		= array();
+			
+			if( $view instanceof \Ant\CollectionSet ){
+				$output = $view->toArray( );
+			}
+			
 			echo json_encode(array(
-				'data' => $view->toArray()
+				'data' => $output
 			));
 			
-			\Ant\Document :: addHeader('Content-type:Application/Json');
+			\Ant\Document :: addHeader( 'Content-type:Application/Json' );
 		}
 	
 	}
-?>

@@ -1,4 +1,13 @@
 <?php
+	
+	/*
+	 *	Query building class
+	 * 
+	 *	@package Ant
+	 *	@subpackage Query
+	 *	@since 0.1.0
+	 * 
+	 */
 
 	namespace Ant {
 		
@@ -21,6 +30,12 @@
 				$queryData	= array(),
 				$isPrepared = false;
 			
+			/*
+			 *	Instantiate the query
+			 * 
+			 *	@since 0.1.0
+			 */
+			
 			public function __construct( $query = null ){
 				if( $query ){
 					$this->query		= $query;
@@ -28,12 +43,29 @@
 				}
 			}
 			
+			/*
+			 *	Create or extend bind data
+			 *	to be used in the PDO transaction,
+			 *	for inserting values safely into
+			 *	queries.
+			 * 
+			 *	@since 0.1.0
+			 *	@return object For chaining
+			 */
+			
 			public function bind( $arr ){
 				$this->binding = array_merge( $this->binding, $arr );
 				return $this;
 			}
 			
-			// Build the query //
+			/*
+			 *	Prepare the query for passing	
+			 *	to MySQL/PDO wrapper class.
+			 * 
+			 *	@since 0.1.0
+			 *	@return string The query
+			 */
+			
 			public function prepare(){
 				
 				if( $this->isPrepared ){
@@ -53,7 +85,13 @@
 						
 			}
 			
-			// Query options //
+			/*
+			 *	Add a select statement
+			 * 
+			 *	@since 0.1.0
+			 *	@return object For chaining
+			 */
+			
 			public function select( $cols, $tableName = null ){
 				
 				if( $this->select != '' ){
@@ -66,19 +104,40 @@
 					$this->setTableName( $tableName );
 				}
 				
-				// For useful chaining //
 				return $this;
 			}
+			
+			/*
+			 *	Set the table name
+			 * 
+			 *	@since 0.1.0
+			 *	@deprecate Not in use
+			 *	@return object For chaining
+			 */
 			
 			public function setTableName( $tableName ){
 				$this->tableName = $tableName;
 				return $this;
 			}
 			
+			/*
+			 *	Add a join statement
+			 * 
+			 *	@since 0.1.0
+			 *	@return object For chaining
+			 */
+			
 			public function join( $join, $type = 'JOIN' ){
 				$this->joins .= "\n " . $type . " " . $join . " ";
 				return $this;
 			}
+			
+			/*
+			 *	Add a where statement
+			 * 
+			 *	@since 0.1.0
+			 *	@return object For chaining
+			 */
 			
 			public function where( $where, $binding = array(), $op = '&&' ){
 				
@@ -92,6 +151,13 @@
 				return $this;
 			}
 			
+			/*
+			 *	Add a group by statement
+			 * 
+			 *	@since 0.1.0
+			 *	@return object For chaining
+			 */
+			
 			public function groupBy( $groupBy ){
 				if( $this->groupBy == '' ){
 					$this->groupBy = 'GROUP BY ';
@@ -99,6 +165,13 @@
 				$this->groupBy .= $groupBy;
 				return $this;
 			}
+			
+			/*
+			 *	Add an order by statement
+			 * 
+			 *	@since 0.1.0
+			 *	@return object For chaining
+			 */
 			
 			public function orderBy( $orderBy ){
 				if( $this->orderBy == '' ){
@@ -108,12 +181,25 @@
 				return $this;
 			}
 			
+			/*
+			 *	Add a limit statement
+			 * 
+			 *	@since 0.1.0
+			 *	@return object For chaining
+			 */
+			
 			public function limit( $limit ){
 				$this->limit = 'LIMIT ' . $limit;
 				return $this;
 			}
 			
-			// Inserts and updates //
+			/*
+			 *	Create the insert and return it
+			 * 
+			 *	@since 0.1.0
+			 *	@return Query A new query
+			 */
+			
 			public static function setInsert( $rows, $tableName ){
 				$query = 'INSERT INTO ' . $tableName;
 				$structure = array_keys( __ :: first( $rows ));
@@ -142,6 +228,13 @@
 				$query->bind( $binding );
 				return $query;
 			}
+			
+			/*
+			 *	Set the update data
+			 * 
+			 *	@since 0.1.0
+			 *	@return Query A new query
+			 */
 			
 			public static function setUpdate( $data, $conditions, $tableName ){
 				
@@ -179,13 +272,33 @@
 				return $query;
 			}
 			
+			/*
+			 *	Get the binding
+			 * 
+			 *	@since 0.1.0
+			 */
+			
 			public function getBinding(){
 				return $this->binding;
 			}
 			
+			/*
+			 *	Set the type of statement,
+			 *	INSERT, UPDATE
+			 * 
+			 *	@since 0.1.0
+			 */
+			
 			public function setType( $type ){
 				return $this->type = $type;
 			}
+			
+			/*
+			 *	Shortcut method to output
+			 *	the query.
+			 * 
+			 *	@since 0.1.0
+			 */
 			
 			public function output(){
 				Application :: out( $this->query );
@@ -193,5 +306,4 @@
 		
 		}
 	}
-
-?>
+	

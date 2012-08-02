@@ -15,12 +15,21 @@
 
 -->
 
-<base is="home">
+<base is="home,user">
+	
+	<!-- User profile -->
+	<next is="me">
+		<var>me</var>
+		<module>me</module>
+		<template>me</template>
+	</next>
+	
 	<next is="new">
 		<var>edit</var>
 		<module>edit</module>
 		<template>edit</template>
 	</next>
+	
 	<next when="string">
 		<var>title</var>
 		<next when="numeric">

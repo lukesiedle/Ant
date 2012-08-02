@@ -1,24 +1,12 @@
 <?php
 
-	namespace Ant;
+	namespace Ant\Controller\User;
 	
-	Class UserRegister extends User { 
+	function register( $request ){
 		
-		/*
-		 *	Creates a collection
-		 *	from the request, 
-		 *	and saves.
-		 */
+		$user = new self( new Collection($request, 'user') );
 		
-		public static function register( $request ){
-			$user = new self( new Collection($request, 'user') );
-			
-			// Saves the available data to the database //
-			$user->save();
-			
-			return $user;
-		}
-		
-	}
+		$user->save();
 
-?>
+		return $user;
+	}

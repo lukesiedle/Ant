@@ -12,7 +12,7 @@
 		 *	@subpackage Application
 		 *	@type Shared
 		 *	@since 0.1.0
-		 * 
+		 *	
 		 */		 
 		
 		Class Application {
@@ -51,7 +51,6 @@
 				
 				// Load the global configuration //
 				require('config/global.php');
-			
 				
 			}
 			
@@ -306,7 +305,7 @@
 				// If a channel exists, e.g. Ajax, output is its reponsibility //
 				if( Router :: $channel ){
 					return;
-				}
+				}				
 				
 				// Output the contents of the Template buffer //
 				echo Template :: output();
@@ -360,7 +359,7 @@
 			 */
 			
 			public static function out( $data ){
-				return \Library\Functions\Arr\out( $data );
+				return \Library\Arr\out( $data );
 			}
 			
 			/*

@@ -132,7 +132,7 @@
 					$postReturnUrl = Router :: getPublicRoot();
 				}
 				
-				$config = Configuration :: get('google_app');
+				$config = (object)Configuration :: get('google_app');
 				
 				$client = new GoogleApiClient();
 				
@@ -154,13 +154,16 @@
 							'token' =>	$client->getAccessToken()
 						)
 					));
-					Application :: redirect( Session :: get('application')->post_return_url );
+					$app = Session :: get('application');
+					Application :: redirect( $app['post_return_url'] );
 					return;
 				} else {
-					if( $google = Session :: get('authentication')->google ){
-						$client->setAccessToken( $google['token'] );
-						self :: $authorizations['google'] = $google;
-						return;
+					if( $auth = Session :: get('authentication') ){
+						if( $google = $auth['google'] ){
+							$client->setAccessToken( $google['token'] );
+							self :: $authorizations['google'] = $google;
+							return;
+						}
 					}
 				}
 				
@@ -188,7 +191,8 @@
 						
 						// If being stored, check if it exists already //
 						if( $store ){
-							$data = Session :: get('facebook')->data;
+							$facebook = Session :: get('facebook');
+							$data = $facebook['data'];
 							if( $data && $data[ $request ] ){
 								return $data[ $request ];
 							}

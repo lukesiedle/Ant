@@ -1,7 +1,7 @@
 <?php
 	
 	/*
-	 *	Configuration
+	 *	Configuration storage
 	 * 
 	 *	@package Ant
 	 *	@subpackage Configuration
@@ -29,7 +29,7 @@
 
 			/*
 			 *	Get the configuration
-			 *	data
+			 *	data, as an array
 			 * 
 			 *	@since 0.1.0
 			 *	@return array The configuration data
@@ -37,7 +37,7 @@
 			
 			public static function get( $key = null ){
 				if( $key ){
-					return (object) self :: $data[ $key ];
+					return self :: $data[ $key ];
 				}
 				return self :: $data;
 			}

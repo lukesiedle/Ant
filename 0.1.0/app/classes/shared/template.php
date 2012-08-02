@@ -43,11 +43,18 @@
 				// Load the file as a string //
 				if( $pathToFile ){
 					$this->setPath( $pathToFile );
-					if( ! $this->template ){
-						$this->template = self :: loadFile( $pathToFile .'.html' );
+					if( ! $this->template ){				
+						$file = $pathToFile .'.html';
+						if( ! file_exists( $file )){
+							throw new \Exception('Template file "' . $file .'" does not exist.');
+							return false;
+						}
+						$this->template = self :: loadFile( $file );
 						$this->setOutput( $this->template );
 					}
 				}
+				
+				return true;
 			}
 			
 			/*
@@ -127,7 +134,7 @@
 			 *	@return string The output
 			 */
 			
-			public function getOutput(){
+			public function getOutput(){				
 				return $this->output;
 			}
 			
@@ -168,7 +175,7 @@
 			
 			public function map( CollectionSet $collections ){
 				$xml = $this->getMap();
-				$this->setOutput($this->loopMap( $xml, $collections->getCollections(), $this->template ));
+				$this->setOutput($this->loopMap( $xml, $collections->getCollections(), $this->getOutput() ));
 				return $this;
 			}
 			
@@ -314,7 +321,7 @@
 					$tpl .= 'context/' . Router :: getContext() . '/';
 				}
 				
-				$tpl .= 'object/' . $xml->template . '.html';
+				$tpl .= 'object/' . $xml->template . '.html';				
 				
 				// Add the template //
 				$tpl = self :: addTemplate( $tpl );
@@ -410,11 +417,29 @@
 				if( !$context ){
 					$context = Router :: getContext();
 				}
+				
 				$path = self :: getPath( $context ) . $tpl;
 				
 				return new self( $path );
 				
 			}
+			
+			/*
+			 *	Load the view template
+			 *	 
+			 *	@since 0.1.0
+			 *	@return object The template
+			 */
+			
+			public static function loadViewTemplate(){
+				
+				$view = Router :: getTemplate();
+				
+				$path = self :: getPath( Router :: getContext() ) . $view;
+							
+				return new self( $path );
+			}
+			
 			
 			/*
 			 *	Load a template inside the shared space.
@@ -470,18 +495,18 @@
 			 */
 			
 			public static function output(){
-				
-				if( self :: $buffer ){
-				
+								
+				if( self :: $buffer ){					
+					
 					// Clear remaining search strings //
-					$output = self :: $buffer->getOutput();
-
+					$output = self :: getBuffer()->getOutput();
+					
 					// Do a final replace of any globals //
 					$output = Template :: replaceGlobals( $output );
 
 					// Strip leftovers //
-					$output = preg_replace("%{(\w\S*|\\\\\w\S*)}%", "", $output );
-
+					$output = preg_replace("%{(\w\S*|\\\\\w\S*)}%", "", $output );					
+					
 					self :: writeCache();
 
 				}
@@ -499,7 +524,7 @@
 			public static function getBuffer(){
 				if( self :: $buffer ){
 					return self :: $buffer;
-				}
+				}				
 				return false;
 			}
 			

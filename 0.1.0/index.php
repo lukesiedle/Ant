@@ -9,9 +9,9 @@
 	 *  @require PHP 5.3+
 	 *	@since 0.1.0
 	 */	
-	 
+	
 	// Errors //
-	error_reporting( E_ALL ^ E_NOTICE ^ E_STRICT );
+	error_reporting( E_ALL ^ E_STRICT ^ E_NOTICE );
 	
 	// Version // 
 	define( 'VERSION', '1.0' );
@@ -63,3 +63,6 @@
 	
 	// Generate output and release any resources //
 	App :: flush();
+	
+	
+	
