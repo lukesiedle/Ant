@@ -24,7 +24,11 @@
 	define( 'DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT'] );
 	
 	// Public root (http, https) //
+	// @note Replace this with your own //
 	define( 'PUBLIC_ROOT', '/lukesiedle/ant/' );
+	
+	// Library path //
+	define('LIB_PATH', '../lib');
 	
 	// Initial requires //
 	require( 'app/classes/shared/application.php' );
@@ -64,6 +68,5 @@
 	
 	// Generate output and release any resources //
 	App :: flush();
-	
 	
 	

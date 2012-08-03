@@ -58,4 +58,4 @@
 	
 	// Underscore Library
 	// @since 0.1.0 //
-	require( DOCUMENT_ROOT . '/__shared/lib/php/underscore.php' );
+	require( LIB_PATH . '/php/underscore.php' );

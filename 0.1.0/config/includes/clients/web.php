@@ -18,15 +18,15 @@
 	
 	// Facebook Connect PHP SDK and configuration
 	// @since 0.1.0
-	include( DOCUMENT_ROOT . '/__shared/lib/php/facebook/facebook.php' );
+	include( LIB_PATH . '/php/facebook/facebook.php' );
 	include( 'config/libraries/facebook.php');
 	
 	// Google API Client + Plus API and configuration
 	// @since 0.1.0
-	include( DOCUMENT_ROOT . '/__shared/lib/php/google/apiClient.php' );
-	include( DOCUMENT_ROOT . '/__shared/lib/php/google/contrib/apiPlusService.php' );
+	include( LIB_PATH . '/php/google/apiClient.php' );
+	include( LIB_PATH . '/php/google/contrib/apiPlusService.php' );
 	include( 'config/libraries/google.php');
 	
 	// Less.php compiler 
 	// @since 0.1.0
-	include( DOCUMENT_ROOT . '/__shared/lib/php/lessphp/lessc.inc.php' );
+	include( LIB_PATH . '/php/lessphp/lessc.inc.php' );
