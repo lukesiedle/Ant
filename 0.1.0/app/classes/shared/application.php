@@ -326,13 +326,17 @@
 					// Connection to database //
 					case 'mysql' :
 						try {
-							
 							self :: $app->connection[ $type ] = \Library\MySQL :: connect( $config );
-							
 						} catch( Exception $e ){
 							// Otherwise try connect to the local host //
 							$config['host'] = 'localhost';
-							self :: $app->connection[ $type ] = \Library\MySQL :: connect( $config );
+							try {
+								self :: $app->connection[ $type ] = \Library\MySQL :: connect( $config );
+							} catch( Exception $e ){
+								throw 'Connection to MySQL database failed. You may still need to create\configure
+										your MySQL Database. Locate \ant.sql in the Ant repository to create the
+											basic database setup';
+							}
 						}
 						break;
 				}
