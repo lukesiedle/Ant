@@ -27,10 +27,11 @@
 			
 			Control :: call('User.initialize');
 			
+			/*
 			Control :: call('User.authorize', array(
 				'type' => 'google'
 			));
-			
+			*/
 		}
 		
 	}
