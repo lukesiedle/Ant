@@ -84,8 +84,8 @@ if the method returns something, as follows:
 ### Namespaces
 
 Ant is namespaced throughout. Most functions or classes that are part of Ant 
-will be placed under the <code>Ant\</code> namespace. Reusable aspects of code 
-like the MySQL class are placed under the <code>Library\</code> namespace, 
+will be placed under the <code>Ant\\</code> namespace. Reusable aspects of code 
+like the MySQL class are placed under the <code>Library\\</code> namespace, 
 since they are portable.
 
 ### Clients
