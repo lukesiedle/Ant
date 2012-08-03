@@ -11,7 +11,8 @@
 	 */	
 	
 	// Errors //
-	error_reporting( E_ALL ^ E_STRICT ^ E_NOTICE );
+	error_reporting( E_ALL ^ E_STRICT );
+	error_reporting( E_ALL ^ E_NOTICE );
 	
 	// Version // 
 	define( 'VERSION', '1.0' );
