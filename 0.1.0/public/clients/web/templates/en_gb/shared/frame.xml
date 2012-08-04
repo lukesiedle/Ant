@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <collections>
-	<collection name="stylesheets">
-		<template shared="true">stylesheet</template>
-	</collection>
-	<collection name="javascripts">
-		<template shared="true">javascript</template>
-	</collection>
+	
+	<!-- Stylesheets and JavaScripts -->
+	<stylesheets>
+		<template>shared/object/stylesheet</template>
+	</stylesheets>
+	<javascripts>
+		<template>shared/object/javascript</template>
+	</javascripts>
+	
+	<!-- Globals -->
+	<document ns="document"></document>
+	
 </collections>

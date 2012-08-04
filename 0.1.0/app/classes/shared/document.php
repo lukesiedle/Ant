@@ -157,6 +157,7 @@
 			 */
 			
 			public static function createHtmlIncludes(){
+				
 				$styles			= self :: prepareStylesheets();
 				$javascript		= self :: prepareJavascripts();
 				
@@ -165,8 +166,6 @@
 				if( ! $buffer ){
 					return false;
 				}
-				
-				
 				
 				if( $buffer ){
 					$styleCollection = new Collection(array(),'stylesheets');

@@ -193,19 +193,18 @@
 				
 				foreach( $xml as $tag => $each ){
 					
-					// Get the name of the collection //
-					$nm = (string)$each->attributes()->name;
+					$nm = $tag;
 					
 					// Compare the name to the available collection //
-					if( $collections[$nm] ){
+					if( $collections[$tag] ){						
 						
-						$collection = $collections[$nm];
+						$collection = $collections[$tag];						
 						
 						$obj = $this;
 						
 						// Get the template if one is specified //
 						if( $each->template ){
-							$tpl = self :: getLoopTemplate( $each );
+							$tpl = self :: getLoopTemplate( $each->template );
 						} else {
 							// The collection will be applied globally //
 							Template :: addGlobals( $collection );
@@ -236,12 +235,14 @@
 								}
 							}
 							
+							$useNs = $each->attributes()->ns;
+							
 							// Run the replacement / append of the current iteration of the collection //
 							$in .= Template :: replace(
 								$replace
-							, $tpl, $each->template );
+							, $tpl, $useNs );
 							
-						});
+						});											
 						
 						// Run the replacement within the current iteration of the xml //
 						$html = Template :: replace(array(
@@ -298,30 +299,20 @@
 			
 			/*
 			 *	Get the loop template based 
-			 *	on the xml node.
+			 *	on the path.
 			 *	 
 			 *	@since 0.1.0
 			 *	@return string The template string
 			 */
 			
-			public static function getLoopTemplate( $xml ){
+			public static function getLoopTemplate( $path ){
 				
 				// Create the path //
 				$tpl = 'public/clients/' 
 					. Application :: getClient() . 
 					'/templates/' 
 					. Application :: getLanguage()
-					. '/';
-				
-				$shared = $xml->template->attributes()->shared ? 1 : 0;
-				
-				if( $shared ){
-					$tpl .= 'shared/';
-				} else {
-					$tpl .= 'context/' . Router :: getContext() . '/';
-				}
-				
-				$tpl .= 'object/' . $xml->template . '.html';				
+					. '/' . $path . '.html';				
 				
 				// Add the template //
 				$tpl = self :: addTemplate( $tpl );

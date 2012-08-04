@@ -24,6 +24,6 @@
 	 *	@since 0.1.0
 	 */
 	
-	function home( $request ){
+	function index( $request ){
 		
 	}

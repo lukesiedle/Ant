@@ -204,8 +204,8 @@
 			 *	This is the function which considers
 			 *	every conditional laid out in the xml
 			 *	and creates request or route vars
-			 *	accordingly. 
-			 * 
+			 *	accordingly.
+			 *	
 			 *	@since 0.1.0
 			 */
 			
@@ -228,7 +228,7 @@
 							if( $i == 0 && empty($request[$i]) ){
 								$context = explode(',', $val );
 								self :: $routeVars['context']	= $context[0];
-								self :: $routeVars['module']	= $context[0];
+								self :: $routeVars['module']	= $xml->module;
 								self :: $requestVars['context'] = $context[0];
 								$foundRoute = true;
 							}
@@ -236,7 +236,6 @@
 						case 'when' :
 							switch( $val ){
 								case 'numeric'	:
-									
 									if( is_numeric($request[$i]) ){
 										self :: $requestVars[ (string)$xml->var ] = $request[$i];
 										$foundRoute = true;
@@ -253,14 +252,23 @@
 					}
 				}
 				
+				// If a route wasn't found, it's probably a 404
+				// The application will handle it from here //
 				if( ! $foundRoute ){
 					return;
+				} else {
+					// Set a document title for the current iteration //
+					if( $xml->doctitle && $title = $xml->doctitle->{ self :: $routeVars['context'] }  ){
+						self :: $routeVars['doctitle'] = (string)$title;
+					}
 				}
 				
 				$i++;
 				$children = $xml->children();
 				foreach( $children as $tag => $xml2 ){
-					if( $tag == 'next' || $tag == 'var' ){
+					if( $tag == 'next' || 
+							$tag == 'var' || 
+								$tag == 'doctitle' ){
 						continue;
 					} 
 					self :: $routeVars[ $tag ] = (string) $xml2;
@@ -270,6 +278,7 @@
 					// Recurse //
 					self :: parseRouteXml ( $xml2, $request, $i );
 				}
+				
 			}
 			
 			/*
@@ -325,9 +334,7 @@
 			
 			public static function loadRouteView(){
 				
-				$mod = self :: getModule();
-				
-				
+				$mod = self :: getModule();				
 				
 				$view = ('app/modules/context/views/' 
 							. self :: getContext() . '/'
@@ -335,6 +342,7 @@
 							. self :: getModule() . '.php');
 				
 				// If not view is found, must be a 404 Not Found //
+				
 				if( ! file_exists($view) ){
 					Application :: setError( '404' );
 					return;
@@ -437,6 +445,30 @@
 			
 			public static function getContext(){
 				return self :: $routeVars->context;
+			}
+			
+			/*
+			 *	Get the document title
+			 *	set inside the route.
+			 * 			 
+			 *	@since 0.1.0
+			 *	@return string The title
+			 */
+			
+			public static function getDocTitle(){
+				return self :: $routeVars->doctitle;
+			}
+			
+			/*
+			 *	Set the document title
+			 *	in special cases, example '404 error'
+			 * 			 
+			 *	@since 0.1.0
+			 *	@return string The title
+			 */
+			
+			public static function setDocTitle( $title ){
+				self :: $routeVars->doctitle = $title;
 			}
 			
 		}

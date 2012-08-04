@@ -19,6 +19,7 @@
 		use \Ant\Controller as Control;
 		use \Ant\Database as Database;
 		use \Ant\Authentication as Auth;
+		use \Ant\Router as Router;
 		
 		// Context Classes //
 		use \Ant\User as User;
@@ -27,11 +28,15 @@
 			
 			Control :: call('User.initialize');
 			
-			/*
-			Control :: call('User.authorize', array(
-				'type' => 'google'
-			));
-			*/
+			// Store some globals for replacement
+			// @since 0.1.0 //
+			$document	= new Collection(array(
+				'title' => Router :: getDocTitle()
+			),'document' );
+			
+			return new CollectionSet( 
+				$document
+			);
 		}
 		
 	}
