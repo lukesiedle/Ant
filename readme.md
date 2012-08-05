@@ -1,3 +1,5 @@
+![Ant Logo](https://raw.github.com/luke-siedle/Ant/master/Ant-Logo.png)
+
 # Ant PHP
 
 Ant is a lightweight PHP application framework (that can do the heavy lifting).
