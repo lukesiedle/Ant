@@ -68,5 +68,3 @@
 	
 	// Generate output and release any resources //
 	App :: flush();
-	
-	

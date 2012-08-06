@@ -271,6 +271,30 @@
 			}
 			
 			/*
+			 *	Remove joins by current mutual key. 
+			 *	If the index is not specified, all joins
+			 *  are removed.
+			 *	
+			 *	@since 0.1.0
+			 *	@return object The object for chaining
+			 */
+			
+			public function unjoin( $namespace , $index = null ){
+				
+				// Remove joins from every record //
+				if( is_null($index) ){
+					$this->each( function( $record ) use ( $namespace ) {
+						$record -> unjoin( $namespace );
+					});
+					return $this;
+				}
+				
+				$this->records[ $index ] -> unjoin( $namespace );
+				
+				return $this;
+			}
+			
+			/*
 			 *	Set the mutual key. The mutual
 			 *	key is the key that all joins
 			 *	within a collection have in
