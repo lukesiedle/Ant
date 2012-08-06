@@ -28,8 +28,7 @@ URL rewriting using .htaccess file for CleanURLs
 
 ## Notes
 
-Open beta version. No unit tests available yet, but should be implemented soon
-with PHPUnit.
+Open beta version. Unit tests are being implemented with PHPUnit. 
 
 Documentation is incomplete, but files are commented throughout.
 
