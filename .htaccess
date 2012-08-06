@@ -4,5 +4,6 @@ RewriteCond %{ENV:REDIRECT_STATUS} 200
 RewriteRule .* - [L]
 RewriteRule (public/.*)$ 0.1.0/$1 [L]
 RewriteRule (deploy)$ deploy.php [L]
+RewriteRule (tests) tests/index.php [L]
 RewriteRule ^(.*+)$ 0.1.0/index.php?request=$1 [L]
 DirectoryIndex index.php
