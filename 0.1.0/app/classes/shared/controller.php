@@ -3,8 +3,6 @@
 	/*
 	 *	Controller handles lazy-loading
 	 *	of methods based on context.
-	 *	Calls methods statically 
-	 *	or creates objects.
 	 *	Handles similar functionality
 	 *	for creating queries.
 	 * 

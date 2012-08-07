@@ -9,7 +9,7 @@
 	 */
 
 	namespace Ant {
-	
+		
 		Class Configuration {
 
 			public static $data = array();

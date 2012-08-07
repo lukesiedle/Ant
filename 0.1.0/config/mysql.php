@@ -28,5 +28,3 @@
 	
 	// Set the table prefix (can be blank) //
 	Ant\Database :: setTablePrefix( 'ant_' );
-
-?>

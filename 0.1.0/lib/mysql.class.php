@@ -17,6 +17,7 @@
 		Class MySQL {
 
 			public static $lastConnection;
+			public static $tablePrefix;
 			private $connection;
 			
 			/*
@@ -37,9 +38,9 @@
 						';dbname='    . $set['db']		.
 						';port='	  . $set['port']	. 
 						';connect_timeout=' . $set['timeout'];
-
+				
 				self :: $lastConnection = new \PDO($dsn, $set['username'], $set['password']);
-
+				
 				return self :: $lastConnection;
 			}
 			
@@ -151,8 +152,7 @@
 				$result = MySQL :: doQuery( $query, $conn );
 
 				$result = $result->fetchAll();
-
-				// Convert to collection if available //
+				
 				return $result;
 
 			}
