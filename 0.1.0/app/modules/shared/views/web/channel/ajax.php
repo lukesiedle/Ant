@@ -4,7 +4,8 @@
 	 *	The Ajax channel
 	 *	allows for Ajax requests
 	 *	to be made to the same	
-	 *	route.
+	 *	route, and outputs a 
+	 *	JSON-encoded array.
 	 * 
 	 *	@package Ant
 	 *	@since 0.1.0
@@ -14,12 +15,20 @@
 		
 		function index( $request ){
 			
-			$view		= \Ant\Router :: loadRouteView();
-			
 			$output		= array();
 			
-			if( $view instanceof \Ant\CollectionSet ){
-				$output = $view->toArray( );
+			try {
+			
+				$view		= \Ant\Router :: loadRouteView();
+			
+				if( $view instanceof \Ant\CollectionSet ){
+					$output = $view->toArray();
+				}
+			
+			// Add the error output to JSON //
+			} catch( Exception $e ){
+				$output['error']['message'] = $e->getMessage();
+				$output['error']['trace']	= $e->getTrace();
 			}
 			
 			echo json_encode(array(
