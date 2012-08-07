@@ -13,7 +13,9 @@
 	
 	define( 'PROJECT_ROOT', dirname(__DIR__) . '/0.1.0' );
 	
-	include('classes/collection.php');
+	// include('classes/collection.php');
+	
+	include('library/mysql.php');
 	
 	
 ?>
