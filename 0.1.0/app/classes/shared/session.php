@@ -14,19 +14,20 @@
 		
 		Class Session {
 			
-			public static $session = array();
+			public static $keychain = 'ant';
+			public static $started	= false;
 			
 			/*
 			 *	Start the session
-			 *	and load in memory
 			 *	
 			 *	@since 0.1.0
 			 */
 			
 			public static function init(){
 				session_start();
-				if( isset($_SESSION['ant'])){
-					self :: $session = $_SESSION['ant'];
+				self :: $started = true;
+				if( ! isset($_SESSION[self::$keychain]) ){
+					$_SESSION[self::$keychain] = array();
 				}
 			}
 			
@@ -36,16 +37,19 @@
 			 *	@since 0.1.0
 			 */
 			
-			public static function add( $key, $obj ){
-				if( isset(self :: $session[$key] )){
-					self :: $session[ $key ] = array_merge(
-						self :: $session[$key], $obj
-					);
-				} else {
-					self :: $session[ $key ] = $obj;
+			public static function add( $key, $arr ){
+				
+				if( !self :: $started ){
+					throw 'Session has not been started yet.';
 				}
 				
-				self :: write();
+				if( isset($_SESSION[self::$keychain][$key] )){
+					$_SESSION[self::$keychain][$key] = array_merge(
+						$_SESSION[self::$keychain], $arr
+					);
+				} else {
+					$_SESSION[self::$keychain] = $arr;
+				}
 			}
 			
 			/*
@@ -55,10 +59,15 @@
 			 */
 			
 			public static function get( $key = null ){
-				if( is_null($key) ){
-					return self :: $session;
+				
+				if( !self :: $started ){
+					throw 'Session has not been started yet.';
 				}
-				return self :: $session[ $key ];
+				
+				if( is_null($key) ){
+					return $_SESSION[self::$keychain];
+				}
+				return $_SESSION[self::$keychain][ $key ];
 			}
 			
 			/*
@@ -68,31 +77,16 @@
 			 */
 			
 			public static function clear( $key = null ){
+				
+				if( !self :: $started ){
+					throw 'Session has not been started yet.';
+				}
+				
 				if( !$key ){
-					self :: $session = array();
+					$_SESSION[self::$keychain] = array();
 				} else {
-					unset( self :: $session[$key] );
+					unset( $_SESSION[self::$keychain][$key] );
 				}
-				self :: write();
-			}
-			
-			/*
-			 *	Write the value in memory
-			 *	to the session	
-			 * 
-			 *	@since 0.1.0
-			 */
-			
-			public static function write(){
-				
-				if( session_id() == "" ){
-					throw new Exception("Cannot write session. Session has not been started.");
-				}
-				
-				foreach( self :: $session as $key => $obj ){
-					$_SESSION['ant'][ $key ] = $obj;
-				}
-				
 			}
 			
 			/*
@@ -102,6 +96,11 @@
 			 */
 			
 			public static function id( $set = false ){
+				
+				if( !self :: $started ){
+					throw 'Session has not been started yet.';
+				}
+				
 				if( ! $set ){
 					return session_id();
 				}
@@ -109,6 +108,5 @@
 			}
 			
 		}
-		
 		
 	}
