@@ -137,6 +137,8 @@
 				if( $force ){
 					self :: $app->client = $force;
 				}
+				
+				self :: $app->context = self :: $app->request[0];
 
 			}
 			

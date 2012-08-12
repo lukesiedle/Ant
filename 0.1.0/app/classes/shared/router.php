@@ -48,9 +48,17 @@
 				// Create the "true" query string //
 				self :: setQueryString();
 				
-				// Load the route map if it exists and plan the route //
-				if( self :: loadRouteMap( self :: $viewDir . 'route.xml' )){
+				// Load the contextual map if it exists and plan the route //
+				// Load the route map if it exists and plan the route /				
+				if( self :: loadRouteMap( 'app/modules/context/views/' . $client .'/'. Application :: get()->context . '/route.xml' )){
+					
 					self :: planRoute();
+					
+				// Load the route map if it exists and plan the route //
+				} else if( self :: loadRouteMap( self :: $viewDir . 'route.xml' )){
+					
+					self :: planRoute();
+					
 				}
 				
 				// Check if a channel is in use ( .../?channel=ajax ) //
@@ -278,7 +286,15 @@
 								$tag == 'doctitle' ){
 						continue;
 					} 
+					
+					if( $tag == 'controller' ){
+						self :: $routeVars[ $tag ][] = (string) $xml2;
+						continue;
+					}
+					
 					self :: $routeVars[ $tag ] = (string) $xml2;
+					
+					
 				}
 				
 				foreach( $children as $tag => $xml2 ){
@@ -475,6 +491,18 @@
 			
 			public static function setDocTitle( $title ){
 				self :: $routeVars->doctitle = $title;
+			}
+			
+			/*
+			 *	Get the controllers set
+			 *	inside the route.
+			 * 			 
+			 *	@since 0.1.0
+			 *	@return string The title
+			 */
+			
+			public static function getControllers(){
+				return self :: $routeVars->controllers;
 			}
 			
 		}

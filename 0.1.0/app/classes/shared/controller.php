@@ -31,19 +31,25 @@
 				
 				$methodPath = '\Ant\\Controller\\' . $opt[0] . '\\' . $opt[1];
 				
+				// If there's another option, it's a submethod //
+				if( $opt[2] ){
+					$methodPath .= '\\' . $opt[2];
+					$subMethod = true;
+				}
+				
 				// Try include the context class if it exists //
 				if( !class_exists($c = $opt[0])){
 					include_once('app/classes/context/' . $c . '/' . $c . '.php' );
 				}
 				
 				// Check if the method exists within the class //
-				if( method_exists('Ant\\'.$opt[0], $opt[1])){
+				if( method_exists('Ant\\'.$opt[0], $opt[1]) && ! $subMethod ){
 					$methodPath = 'Ant\\'.$opt[0];
 					$inClass = true;
 				} else {
 					$inClass = false;
 					if( !function_exists($methodPath) ){
-						require_once('app/modules/context/controllers/' . $opt[0] . '/' . $opt[1] . '.php');
+						require( 'app/modules/context/controllers/' . implode( '/', $opt ) . '.php' );
 					}
 				}
 				

@@ -506,13 +506,16 @@
 			 */
 			
 			public static function output(){
-								
+				
 				if( self :: $buffer ){					
 					
 					// Clear remaining search strings //
 					$output = self :: getBuffer()->getOutput();
 					
 					// Do a final replace of any globals //
+					$output = Template :: replaceGlobals( $output );
+					
+					// Again in case of globals within globals //
 					$output = Template :: replaceGlobals( $output );
 					
 					// Strip leftovers //
