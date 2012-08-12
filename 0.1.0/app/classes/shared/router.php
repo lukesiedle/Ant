@@ -214,6 +214,13 @@
 				$foundRoute = false;
 				
 				foreach( $xml->attributes() as $attr => $val ){
+					
+					if( $xml->attributes()->base ){
+						if( $request[0] != $xml->attributes()->base ){
+							break;
+						}
+					}
+					
 					switch( $attr ){
 						case 'is' :
 							if( in_array($request[$i], explode(',', $val))){
@@ -337,14 +344,13 @@
 				$mod = self :: getModule();				
 				
 				$view = ('app/modules/context/views/' 
-							. self :: getContext() . '/'
 							. self :: $client . '/'
+							. self :: getContext() . '/'
 							. self :: getModule() . '.php');
 				
 				// If not view is found, must be a 404 Not Found //
-				
 				if( ! file_exists($view) ){
-					Application :: setError( '404' );
+					Application :: setError( '404', 'The route view could not be found.' );
 					return;
 				}
 				

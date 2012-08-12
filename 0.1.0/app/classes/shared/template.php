@@ -92,7 +92,7 @@
 				}
 				
 				// Static function behaviour //
-				if( $str ){
+				if( !is_null($str) ){
 					return str_replace( $search, array_values($data), $str );
 				}
 				
@@ -175,8 +175,10 @@
 			
 			public function map( CollectionSet $collections ){
 				$xml = $this->getMap();
-				$this->setOutput($this->loopMap( $xml, $collections->getCollections(), $this->getOutput() ));
-				return $this;
+				if( $xml ){
+					$this->setOutput($this->loopMap( $xml, $collections->getCollections(), $this->getOutput() ));
+					return $this;
+				}
 			}
 			
 			/*
@@ -266,15 +268,16 @@
 			 */
 			
 			public static function addGlobals( Collection $collection ){
+				
 				$ns = $collection->getNameSpace();
 				if(! is_array(self :: $globals[ $ns ])){
 					self :: $globals[ $ns ] = array();
 				}
 				
-				self :: $globals[ $ns ] = array_merge( 
-					$collection->first()->toArray(), 
-					self :: $globals[ $ns ]
-				);
+				// Can't use array merge due to renumbering //
+				foreach( $collection->first()->toArray() as $key => $each ){
+					self :: $globals[ $ns ][$key ] = $each;
+				}
 			}
 			
 			/*
@@ -494,7 +497,7 @@
 					
 					// Do a final replace of any globals //
 					$output = Template :: replaceGlobals( $output );
-
+					
 					// Strip leftovers //
 					$output = preg_replace("%{(\w\S*|\\\\\w\S*)}%", "", $output );					
 					

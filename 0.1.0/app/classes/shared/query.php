@@ -273,6 +273,40 @@
 			}
 			
 			/*
+			 *	Set the update data
+			 * 
+			 *	@since 0.1.0
+			 *	@return Query A new query
+			 */
+			
+			public static function setDelete( Array $conditions, $tableName ){
+				
+				$query		= 'DELETE FROM ' . $tableName;
+				$i			= 0;
+				$binding	= array();
+				
+				if( count($conditions) > 0 ){
+					$query .= "\n" . "WHERE (";
+					$y=0;
+					foreach( $conditions as $col => $val ){
+						if( $y > 0 ){
+							$query .= "AND";
+						}
+						$query .= "\n " . $col . ' = :' . $i;
+						$binding[ ':' . $i ] = $val;
+						$y++;
+						$i++;
+					}
+					$query .= "\n" . ")";
+				}
+				
+				$query = new Query( $query );
+				$query->setType('delete');
+				$query->bind( $binding );				
+				return $query;
+			}
+			
+			/*
 			 *	Get the binding
 			 * 
 			 *	@since 0.1.0

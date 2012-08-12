@@ -122,6 +122,8 @@
 				foreach( self :: config()->clients as $request => $client ){
 					if($req[0] == $request ){
 						self :: $app->client = $client;
+						// Remove it from the request as client is not a request variable //
+						array_shift( self :: $app->request );
 						break;
 					}
 				}
@@ -409,20 +411,28 @@
 			 * 
 			 */	
 			
-			public static function setError( $code = '404' ){
+			public static function setError( $code = '404', $msg = null ){
 				switch( $code ){
 					case '404' :
 						// Adds the error header //
 						Document :: addHeader('HTTP/1.0 404 Not Found');
 						
+						// Add the error message to globals //
+						Template :: addGlobals( new Collection(array(array(
+							"404" => $msg
+						)),'errors' ));
+						
 						// Resetting the channel loads error output //
 						Router :: resetChannel('error');
 						
 						// Sets the defined headers //
-						self :: setHeaders();
+						self :: setHeaders();						
 						
 						// Flushes the output //
 						self :: flush();
+						
+						
+						
 					break;
 				}
 				exit;

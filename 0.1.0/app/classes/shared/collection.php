@@ -205,6 +205,7 @@
 			 */
 			
 			public function toArray( $x = null ){
+				
 				$data = array();
 				__ :: each( $this->records, function( $record, $i ) use ( & $data ){
 					$data[ $i ] = $record->toArray();
@@ -519,7 +520,12 @@
 			 */
 			
 			public function add( Array $data ){
-				$this->data = array_merge( $this->data, $data );
+				
+				// Can't use array_merge due to renumbering //
+				foreach( $data as $key => $each ){
+					$this->data[ $key ] = $each;
+				}
+				
 				return $this;
 			}
 			

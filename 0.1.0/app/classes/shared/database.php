@@ -163,20 +163,42 @@
 			
 			public static function updateMulti( Collection $col, $idKey, $conditions = array() ){
 				
-				$data	= $col->toArray();
-				foreach( $data as $each ){
+				$col->each( function( $record ) use( $conditions, $idKey, $col ){
+					
+					$each = $record->toArray();
+					
 					if( !isset($each[ $idKey ])){
-						throw 'IdKey not found for update.';
+						throw new \Exception( 'IdKey not found for update.' );
 						break;
 					}
+					
 					$conditions[ $idKey ] = $each[ $idKey ];
+					
 					$query	= Query :: setUpdate( 
 						$each, 
 						$conditions, 
-						self :: $tablePrefix . $col->getNamespace()
+						Database :: $tablePrefix . $col->getNamespace()
 					);
+					
 					MySQL :: doQuery( $query );
-				}
+					
+				});
+			}
+			
+			/*
+			 *	Delete records
+			 * 
+			 *	@since 0.1.0			 
+			 */
+			
+			public static function delete( Collection $col, Array $conditions ){
+				
+				$query	= Query :: setDelete( 
+					$conditions, 
+					Database :: $tablePrefix . $col->getNamespace()
+				);
+				
+				MySQL :: doQuery( $query );
 			}
 			
 			/*
@@ -237,5 +259,3 @@
 		}
 		 
 	}
-
-?>
