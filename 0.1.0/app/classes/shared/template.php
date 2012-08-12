@@ -123,7 +123,7 @@
 			 *	@return string The template
 			 */
 			
-			public function getTemplate(){
+			public function get(){
 				return $this->template;
 			}
 			
@@ -443,9 +443,27 @@
 			 */
 			
 			public static function loadSharedTemplate( $tpl ){
-				$path = self :: getPath() . $tpl;
+				$path = self :: getPath() . 'shared/' . $tpl;
 				
 				return new self( $path );
+			}
+			
+			/*
+			 *	Load a template inside template space,
+			 *	optionally returning as a string 
+			 *	by default.
+			 *	 
+			 *	@since 0.1.0
+			 *	@return object The template / string The html
+			 */
+			
+			public static function getTemplate( $tpl, $return = 'string' ){
+				$path	= self :: getPath() . $tpl;
+				$tpl	= new self( $path );
+				if( $type == 'string' ){
+					return $tpl->getOutput();
+				}
+				return $tpl;
 			}
 			
 			/*
@@ -457,9 +475,8 @@
 			 */
 			
 			public static function getPath( $context = null ){
-				if( !$context ){
-					$path = 'shared/';
-				} else {
+				$path = '';
+				if( $context ){
 					$path = 'context/' . $context . '/';
 				}
 				return 'public/clients/' 
