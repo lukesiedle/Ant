@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+	Test route
+	@since 0.1.0
+-->
+
+<base is="home,templating,routing">
+	
+	<!-- Templating -->
+	<next is="frame" base="templating">
+		<frame>loopframe</frame>
+		<module>index</module>
+	</next>
+	
+	<next is="page" base="templating">
+		<frame>loopframe</frame>
+		<module>index</module>
+		<template>page</template>
+	</next>
+	
+	<next is="deep" base="templating">
+		<frame>frame</frame>
+		<module>index</module>
+		<template>deep</template>
+	</next>
+	
+	<!-- Routing -->
+	<next is="nothing" base="routing">
+		<var>nothing</var>
+		<module>nothing</module>
+		<template>nothing</template>
+	</next>
+	
+	<next is="deep" base="routing">
+		<next is="deeper">
+			<next is="deepest">				
+				<module>deepest</module>
+				<template>deepest</template>
+			</next>
+		</next>
+	</next>
+	
+	<next is="testframe" base="routing">
+		<frame>testframe</frame>
+	</next>
+	
+	<var>context</var>
+	<template>index</template>
+	<module>index</module>
+	<frame>frame</frame>
+	<doctitle>
+		<home>Home</home>
+		<user>User</user>
+	</doctitle>
+</base>
