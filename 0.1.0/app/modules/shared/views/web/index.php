@@ -42,7 +42,7 @@
 			
 			// Load a template from the shared space
 			// @since 0.1.0 //
-			$frame		= Template :: loadSharedTemplate('frame');
+			$frame		= Template :: loadSharedTemplate( Router :: getRouteVars()->frame );
 			
 			// Load the template for the view 
 			// @since 0.1.0 //

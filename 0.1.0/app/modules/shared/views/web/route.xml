@@ -50,7 +50,7 @@
 	<var>context</var>
 	<template>index</template>
 	<module>index</module>
-	<frame>frame.default</frame>
+	<frame>frame</frame>
 	<doctitle>
 		<home>Home</home>
 		<user>User</user>
