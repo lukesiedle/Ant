@@ -20,6 +20,7 @@
 		use \Ant\Database as Database;
 		use \Ant\Authentication as Auth;
 		use \Ant\Router as Router;
+		use \Ant\Template as Template;
 		
 		// Context Classes //
 		use \Ant\User as User;
@@ -31,11 +32,16 @@
 			// Store some globals for replacement
 			// @since 0.1.0 //
 			$document	= new Collection(array(
-				'title' => Router :: getDocTitle()
+				'title' => Router :: getDocTitle(),
+				'root'	=> Router :: getPublicRoot()
 			),'document' );
 			
+			$user		= new Collection(array(
+				'login' => Template :: getTemplate('shared/user/login')->get()				
+			), 'user' );
+			
 			return new CollectionSet( 
-				$document
+				$document, $user
 			);
 		}
 		

@@ -25,6 +25,7 @@
 		use \Ant\Application as Application;
 		use \Ant\Template as Template;
 		use \Ant\CollectionSet as CollectionSet;
+		use \Ant\Controller as Controller;
 		
 		/*
 		 *	The index function is automatically
@@ -34,6 +35,21 @@
 		 */
 		
 		function index( $request ){
+			
+			// Run any specified controllers, chaining them
+			// where possible
+			// @since 0.1.0 //
+			if( $controllers = Router :: getControllers() ){
+				$args = array();
+				foreach( $controllers as $controller ){					
+					if( is_array(
+							$result = Controller :: call( $controller, $args )
+						)){
+						$args = $result;
+					}
+				}
+				unset( $args, $result );
+			}
 			
 			// Load view specific data
 			// @since 0.1.0 //
@@ -48,7 +64,8 @@
 			// @since 0.1.0 //
 			$page		= Template :: loadViewTemplate();
 			
-			// Map the data to the templates if possible
+			// Map any data to the templates if they
+			// are CollectionSet objects
 			// @since 0.1.0 // 
 			if( $shared  instanceof CollectionSet ){
 				$frame -> map( $shared );

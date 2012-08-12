@@ -9,7 +9,8 @@
 		<template>shared/object/javascript</template>
 	</javascripts>
 	
-	<!-- Globals -->
+	<!-- Globals (always namespaced) -->
 	<document ns="document"></document>
+	<user></user>
 	
 </collections>
