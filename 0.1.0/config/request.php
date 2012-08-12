@@ -50,7 +50,8 @@
 		
 		'clients'	=> array(
 			'api'			=> 'api',
-			'plugin'		=> 'plugin'
+			'plugin'		=> 'plugin',
+			'test'			=> 'test'
 		)
 		
 	));
