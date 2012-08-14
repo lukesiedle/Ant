@@ -31,7 +31,7 @@
 			public function __construct( $data = null ){
 				
 				if( $data ){
-					$this->data = (array)$data;
+					$this->data = new Collection( $data );
 				}
 				
 			}
@@ -43,6 +43,9 @@
 			 */
 			
 			public static function setCurrentUser( $data ){
+				if( $data['user_id'] ){
+					$data['guest'] = false;
+				}
 				self :: $me = new self( $data );
 				self :: storeUser();
 			}
@@ -58,7 +61,7 @@
 			public static function getCurrentUser(){
 				self :: loadUser();
 				if( ! self :: $me ){
-					self :: setCurrentUser( array(
+					self :: setCurrentUser(array(
 						'guest' => 1
 					));
 				}
@@ -97,7 +100,19 @@
 			 */
 			
 			public function getData(){
-				return $this->data;
+				return $this->data->first()->toArray();
+			}
+			
+			/*
+			 *	Check if the user is a
+			 *	guest
+			 * 
+			 *	@since 0.1.0
+			 */
+			
+			public function isGuest(){
+				$data = $this->getData();
+				return $data['guest'];
 			}
 			
 		}

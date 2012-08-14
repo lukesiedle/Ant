@@ -9,22 +9,21 @@
 	 *	@type Client
 	 *	@since 0.1.0	 
 	 */
-	 
-	Ant\Configuration :: set(array(
-		'mysql_local'	=> array(
-			'host'			=> 'localhost',
-			'db'			=> 'ant',
-			'username'		=> 'root',
-			'password'		=> ''
-		),
-		
-		'mysql_remote'	=> array(
-			'host'			=> '',
-			'db'			=> 'ning',
-			'username'		=> 'root',
-			'password'		=> ''
-		)
-	));
+	
+	namespace Ant;
+	
+	$config['mysql_local']['host']		= 'localhost';
+	$config['mysql_local']['db']		= 'ant';
+	$config['mysql_local']['username']	= 'root';
+	$config['mysql_local']['password']	= '';
+	
+	$config['mysql_remote']['host']		= '';
+	$config['mysql_remote']['db']		= 'ant';
+	$config['mysql_remote']['username']	= 'root';
+	$config['mysql_remote']['password']	= '';
 	
 	// Set the table prefix (can be blank) //
-	Ant\Database :: setTablePrefix( 'ant_' );
+	$config['mysql_table_prefix']		= 'ant_';
+	
+	// Apply //
+	Configuration :: set( $config );

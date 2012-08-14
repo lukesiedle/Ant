@@ -11,7 +11,9 @@
 	
 	function logout(){
 		
+		\Ant\Session :: clear( 'Ant.User' );
+		\Ant\Cookie :: delete( 'Ant.User' );
 		
-		
+		\Ant\Application :: redirect();
 	}
 	

@@ -21,9 +21,11 @@
 			case 'web' :
 				// User is in cookie if they opted for "remember me" //
 				if ( $cookie = Cookie :: get('Ant.User') ) {
+					
 					$user = Control :: call('User.getUserFromSecret', array(
-						'secret' => $cookie['secret']
+						'secret' => $cookie['user_secret']
 					));
+					
 					if ( $user ) {
 						Control :: call( 'User.setCurrentUser', array(
 							'user' => $user

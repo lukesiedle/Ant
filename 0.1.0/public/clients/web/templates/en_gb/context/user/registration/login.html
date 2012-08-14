@@ -1,0 +1,10 @@
+<form method="post" action="user/login">
+	<fieldset>
+		{\errors}
+		<legend>Login</legend>
+		<label>Username</label><input type="text" name="username" value="{request.username}" autocomplete="off" />
+		<label>Password</label><input type="password" name="password" />
+		<button type="submit">Submit</button>
+		<label><input type="checkbox" name="remember_me" />Remember Me</label>
+	</fieldset>
+</form>

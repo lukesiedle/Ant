@@ -9,4 +9,6 @@
 
 	namespace Library\String;
 	
-	
+	function encodePassword( $str ){
+		return hash( 'sha256', $str );
+	}

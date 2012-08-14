@@ -28,7 +28,7 @@
 	define( 'PUBLIC_ROOT', '/lukesiedle/ant/' );
 	
 	// Library path //
-	define('LIB_PATH', '../lib');
+	define('LIB_PATH', dirname(__DIR__) . '/lib' );
 	
 	// Initial requires //
 	require( 'app/classes/shared/application.php' );

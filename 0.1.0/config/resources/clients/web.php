@@ -17,10 +17,10 @@
 
 	// Mysql connection
 	// @since 0.1.0 //
-	$mysql = App :: config()->mysql_remote;
+	$mysql = Config :: get('mysql_remote');
 	
 	if( App :: get()->local ){
-		$mysql = App :: config()->mysql_local;
+		$mysql = Config :: get('mysql_local');
 	}
 	
 	App :: connect( array_merge(
@@ -53,8 +53,8 @@
 		Document :: onPrepareJavascripts( function( $javascripts ){
 			
 			$minDir = APPLICATION_ROOT . '/public/clients/web/javascript/shared/';
-			$compiler = DOCUMENT_ROOT . '/__shared/lib/java/google-closure/compiler.jar';
-			$publicDir = '/public/clients/web/javascript/shared/';
+			$compiler = LIB_PATH . 'java/google-closure/compiler.jar';
+			$publicDir = 'public/clients/web/javascript/shared/';
 			$unique = '';
 			
 			foreach( $javascripts as $each ){

@@ -16,10 +16,12 @@
 		function getUser( $query, $_ , $args ){
 			$query
 				-> select(
-					"user_username
-					,user_id
-					,user_full_name", 
-					$_."user user")
+					"user.user_username
+					,user.user_id
+					,user.user_secret
+					,CONCAT( user.user_first_name, ' ', user.user_last_name ) 
+						AS user_full_name", 
+					$_ . "user user")
 				-> limit(1);
 			
 			return $query;

@@ -20,6 +20,10 @@
 	// @since 0.1.0 //
 	require('app/classes/shared/database.php');
 	
+	// Request Class
+	// @since 0.1.0 //
+	require('app/classes/shared/request.php');
+	
 	// Router Class
 	// @since 0.1.0 //
 	require('app/classes/shared/router.php');
@@ -55,6 +59,7 @@
 	// General Functions
 	// @since 0.1.0 //
 	require('lib/functions/array.php');
+	require('lib/functions/string.php');
 	
 	// Underscore Library
 	// @since 0.1.0 //

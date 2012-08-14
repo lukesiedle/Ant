@@ -21,6 +21,8 @@
 	<!-- User registration and login actions -->
 	<next is="login">
 		<controller>User.login</controller>
+	</next>
+	<next is="logout">
 		<controller>User.logout</controller>
 	</next>
 	
