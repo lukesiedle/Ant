@@ -1,5 +1,5 @@
 <?php
-
+	
 	/*
 	 *	Wrapper class for 
 	 *	handling requests
@@ -8,12 +8,19 @@
 	 *	@subpackage Request
 	 *	@since 0.1.0
 	 */
-
+	
 	namespace Ant {
 		
 		Class Request {
 			
 			public static $data = array();
+			
+			/*
+			 *	Process the request data
+			 *	and store in memory
+			 *	
+			 *	@since 0.1.0
+			 */
 			
 			public static function initialize( $getRequest ){
 				
@@ -31,13 +38,26 @@
 				self :: $data = array(
 					'post'		=> $post,
 					'get'		=> $get,
-					'request'	=> $request
+					'request'	=> $request,
+					'file'		=> $_FILES
 				);
 				
 			}
 			
-			public static function get( $type = 'request' ){
-				return self :: $data[ $type ];
+			/*
+			 *	Get the request by type
+			 *	and optional key.
+			 * 
+			 *	@since 0.1.0
+			 *	@return array The request data
+			 */
+			
+			public static function get( $type = 'request', $key = null ){
+				$data = self :: $data[ $type ];
+				if( $key ){
+					return $data[ $key ];
+				}
+				return $data;
 			}
 			
 		}
