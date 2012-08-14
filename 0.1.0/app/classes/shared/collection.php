@@ -38,10 +38,17 @@
 			
 			public function __construct( $arr = array(), $namespace = 'stdCollection' ){
 				$this->namespace	= $namespace;
-				if( ! empty($arr )){
+				if( is_string($arr)){
+					$this->namespace	= $arr;
+					return;
+				}
+				if( ! empty($arr ) ){
+					if( !is_array($arr)){
+						$arr = (array) $arr;
+					}
 					$this->add( $arr );
 				}
-				return $this;
+				return;
 			}
 			
 			/*
@@ -258,7 +265,7 @@
 			 *	@return object The object for chaining
 			 */
 			
-			public function join( Collection $col, $key, $index = null ){
+			public function join( Collection $col, $key = '_id' , $index = null ){
 				// Join to every record //
 				$col->setMutualKey( $key );
 				if( is_null($index)){

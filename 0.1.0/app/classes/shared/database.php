@@ -212,7 +212,8 @@
 				if( $result = MySQL :: doFetchQuery( $query )){
 					return new Collection ( $result );
 				}
-				return false;
+				// Return an empty collection //
+				return new Collection;
 			}
 			
 			/*

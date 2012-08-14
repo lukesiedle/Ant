@@ -317,7 +317,7 @@
 			
 			/*
 			 *	Connect to the configured
-			 *	database.
+			 *	database and set the table prefix.
 			 *	
 			 *	@since 0.1.0
 			 */
@@ -344,6 +344,9 @@
 						}
 						break;
 				}
+				
+				// Set the table prefix //
+				Database :: setTablePrefix( self :: config()->mysql_table_prefix );
 				
 			}
 
@@ -390,11 +393,16 @@
 			 *	@since 0.1.0
 			 */
 			
-			public static function redirect( $url ){
+			public static function redirect( $url = null ){
 				if( session_id() ){
 					// Make sure we write any session before redirect //
 					session_write_close();
 				}
+				
+				if( is_null($url) ){
+					$url = PUBLIC_ROOT;
+				}
+				
 				header( 'Location: ' . $url );
 				exit;
 			}

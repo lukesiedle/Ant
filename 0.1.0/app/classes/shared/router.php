@@ -48,6 +48,9 @@
 				// Create the "true" query string //
 				self :: setQueryString();
 				
+				// Initializes request vars //
+				Request :: initialize( $_GET );
+				
 				// Load the contextual map if it exists and plan the route //
 				// Load the route map if it exists and plan the route /				
 				if( self :: loadRouteMap( 'app/modules/context/views/' . $client .'/'. Application :: get()->context . '/route.xml' )){
@@ -502,7 +505,7 @@
 			 */
 			
 			public static function getControllers(){
-				return self :: $routeVars->controllers;
+				return self :: $routeVars->controller;
 			}
 			
 		}

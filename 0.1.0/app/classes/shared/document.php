@@ -105,7 +105,7 @@
 						$group[ $namespace ][] = $stylesheet;
 					}
 					foreach( $group as $namespace => $stylesheets ){
-						self :: $processedStylesheets [] = $fn( $stylesheets );
+						self :: $processedStylesheets [ $namespace ] = $fn( $stylesheets );
 					}
 				}
 				return self :: $processedStylesheets;
@@ -133,7 +133,7 @@
 					}
 					
 					foreach( $group as $namespace => $scripts ){
-						self :: $processedJavascripts [] = $fn( $scripts );
+						self :: $processedJavascripts [$namespace] = $fn( $scripts );
 					}
 				}
 				return self :: $processedJavascripts;
@@ -169,16 +169,18 @@
 				
 				if( $buffer ){
 					$styleCollection = new Collection(array(),'stylesheets');
-					foreach( $styles as $style ){
+					foreach( $styles as $nm => $style ){
 						$styleCollection->add(array(
-							'src' => Router :: getPublicRoot() . $style
+							'src'		=> Router :: getPublicRoot() . $style,
+							'namespace'	=> $nm
 						));
 					}
 					$jsCollection	= new Collection(array(), 'javascripts');
-					foreach( $javascript as $js ){
+					foreach( $javascript as $nm => $js ){
 						$jsCollection->add(array(
 							'src'			=> Router :: getPublicRoot() . $js,
-							'declaration'	=> ''
+							'declaration'	=> '',
+							'namespace'		=> $nm
 						));
 					}
 				}

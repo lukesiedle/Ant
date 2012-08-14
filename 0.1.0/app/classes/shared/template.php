@@ -22,6 +22,7 @@
 			public static $cache = array();
 			public static $globals = array();
 			public static $cacheLoaded = false;
+			public static $controllers;
 			
 			public $path;
 			public $output = '';
@@ -204,6 +205,23 @@
 						
 						$obj = $this;
 						
+						// Controller conditionals //
+						if( $each->attributes()->when ){
+							$controllers = explode(',', (string) $each->attributes()->when );
+							$checkFailed = false;
+							
+							foreach( $controllers as $controller ){
+								if( ! self :: checkController( trim($controller) ) ){
+									$checkFailed = true;
+									break;
+								}
+							}
+							
+							if( $checkFailed ){
+								continue;
+							}
+						}
+						
 						// Get the template if one is specified //
 						if( $each->template ){
 							$tpl = self :: getLoopTemplate( $each->template );
@@ -250,13 +268,32 @@
 						$html = Template :: replace(array(
 							'\\' . $nm => $in
 						), $html );
-						
-						
 					}
 				}
 				
 				return $html;
 				
+			}
+			
+			public static function checkController( $controller ){
+				
+				$controller = (string) $controller;
+				
+				$expectBool = $controller[0] != '!';
+				
+				if( $expectBool == false ){
+					$controller = substr( $controller, 1 );
+				}
+				
+				// Check if the result exists in memory //
+				if( self :: $controllers[ $controller ] ){
+					return $expectBool == self :: $controllers[ $controller ];
+				}
+				
+				$result = \Ant\Controller :: call( $controller );
+				
+				self :: $controllers[ $controller ] = $result;
+				return $expectBool == $result;
 			}
 			
 			/*
@@ -267,17 +304,28 @@
 			 *	@since 0.1.0
 			 */
 			
-			public static function addGlobals( Collection $collection ){
+			public static function addGlobals( Collection $collection, $nsPrefix = '' ){
 				
-				$ns = $collection->getNameSpace();
+				$ns = $nsPrefix . $collection->getNameSpace();
+				
 				if(! is_array(self :: $globals[ $ns ])){
 					self :: $globals[ $ns ] = array();
 				}
 				
 				// Can't use array merge due to renumbering //
-				foreach( $collection->first()->toArray() as $key => $each ){
-					self :: $globals[ $ns ][$key ] = $each;
-				}
+				$collection->each(function( $record ) use( & $self, $ns ){
+					
+					foreach( $record->toArray() as $key => $data ){
+						Template :: $globals[ $ns ][$key ] = $data;
+					}
+					// Add any joins from the collection (recurses) //
+					if( $record->hasJoins() ){
+						$joins = $record->getJoins();
+						foreach( $joins as $join ){
+							Template :: addGlobals( $join, $ns . '.' );
+						}
+					}
+				});
 			}
 			
 			/*

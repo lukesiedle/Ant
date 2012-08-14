@@ -26,8 +26,8 @@
 			public static function init(){
 				session_start();
 				self :: $started = true;
-				if( ! isset($_SESSION[self::$keychain]) ){
-					$_SESSION[self::$keychain] = array();
+				if( ! isset($_SESSION[ self::$keychain ]) ){
+					$_SESSION[ self::$keychain ] = array();
 				}
 			}
 			
@@ -43,12 +43,12 @@
 					throw 'Session has not been started yet.';
 				}
 				
-				if( isset($_SESSION[self::$keychain][$key] )){
-					$_SESSION[self::$keychain][$key] = array_merge(
-						$_SESSION[self::$keychain], $arr
+				if( isset($_SESSION[ self::$keychain ][ $key ] )){
+					$_SESSION[ self::$keychain ][ $key ] = array_merge(
+						$_SESSION[ self::$keychain ][ $key ], $arr
 					);
 				} else {
-					$_SESSION[self::$keychain] = $arr;
+					$_SESSION[self::$keychain][ $key ] = $arr;
 				}
 			}
 			
@@ -65,9 +65,11 @@
 				}
 				
 				if( is_null($key) ){
-					return $_SESSION[self::$keychain];
+					return $_SESSION[ self::$keychain ];
 				}
-				return $_SESSION[self::$keychain][ $key ];
+				
+				return $_SESSION[ self::$keychain ][ $key ];
+				
 			}
 			
 			/*
@@ -83,9 +85,9 @@
 				}
 				
 				if( !$key ){
-					$_SESSION[self::$keychain] = array();
+					$_SESSION[ self::$keychain ] = array();
 				} else {
-					unset( $_SESSION[self::$keychain][$key] );
+					unset( $_SESSION[ self::$keychain ][$key] );
 				}
 			}
 			
