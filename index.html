@@ -1,64 +1,241 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Ant by luke-siedle</title>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="chrome=1">
+		<title>Ant by luke-siedle</title>
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Ant</h1>
-        <p>The lightweight PHP framework (that can do the heavy lifting)</p>
+		<link rel="stylesheet" href="stylesheets/styles.css">
+		<link rel="stylesheet" href="stylesheets/pygment_trac.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<!--[if lt IE 9]>
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<div class="wrapper">
+			<header>
+				<h1>Ant</h1>
+				<p>The lightweight PHP framework (that can do the heavy lifting)</p>
+				
+				<p class="view"><a href="https://github.com/luke-siedle/Ant">View the Project on GitHub <small>luke-siedle/Ant</small></a></p>
+				
+				<ul>
+					<li><a href="https://github.com/luke-siedle/Ant/zipball/master">Download <strong>ZIP File</strong></a></li>
+					<li><a href="https://github.com/luke-siedle/Ant/tarball/master">Download <strong>TAR Ball</strong></a></li>
+					<li><a href="https://github.com/luke-siedle/Ant">View On <strong>GitHub</strong></a></li>
+				</ul>
+				
+				<dl>
+					<dt><a href="">Introduction</a></dt>
+					<dt><a href="#features">Features and Goals</a></dt>
+					<dt><a href="#require">Requirements</a></dt>
+					<dt><a href="#setup">Setup</a></dt>
+					<dt><a href="#basics">Basic Concepts</a></dt>
+					<dt><a href="#testing">Unit Tests</a></dt>
+					<dt><a href="#roadmap">Roadmap</a></dt>
+					<dt><a href="#github">Contributing</a></dt>
+				</dl>
+				
+				
+			</header>
+			<section>
+				<h3>Introduction</h3>
+				<p>Ant is a PHP framework for rapid web application development, designed to be lightweight
+					and to have a consistently intuitive MVC-based structure that is as easily navigable in 
+						the directory structure as it is the code.</p>
+				
+				<h3>Features and Goals</h3>
+				<a name="features"></a>
+				<h4>Organisation</h4>
+				<p>
+				<ul>
+					<li>Ability to scale from tiny projects to hundreds of files.</li>
+					<li>Keep PHP files small by relying heavily on lazy-loading.</li>
+					<li>Separation of PHP and HTML using optimized string replacement</li>
+					<li>Separation of database queries, to allow for reusability, extensibility.</li>
+					<li>Flexible routing in XML files</li>
+					<li>Accessing of controllers directly via whitelisted http requests.</li>
+					<li>"Channelling" option, to change output based on the same route.</li>
+				</ul>
+				</p>
+				<h4>Tools</h4>
+				<p>
+				<ul>
+					<li>Handling of JavaScript and Less.css compiling, optimization.</li>
+					<li>Included basic database structure for the everyday application</li>
+					<li>Basic handling of user functionality, like login</li> 
+					<li>Basic authentication class, using Facebook/Google API</li>
+					<li>Internalization of languages.</li>
+					<li>Client detection (e.g. mobile) and custom client views.</li>
+				</ul>
+				</p>
+				
+				<h3>Requirements / Dependencies</h3>
+				<a name="requires"></a>
+				<ul>
+					<li>PHP 5.3+/MySQL on Apache</li>
+					<li>Underscore.php</li>
+				</ul>
+				
+				<h3>Setup</h3>
+				<a name="setup"></a>
+				<p>Download the zip file or fetch the repository from Github.</p>
+				
+				<p><em>Create a new mysql database</em>, using the name of your project, and then import ant.sql to it. 
+					After import you can change the prefix of the tables to the name of your project
+						or just leave it as "ant_".</p>
+				
+				<p>After creating the database and importing the basic Ant structure, 
+					you'll need to confirm the local/remote mysql configuration inside
+					<code>[version]/config/mysql.php</code>. Within this file you can set
+						your database name, as well as your table prefix.</p>
+				
+				<p>Open the root to your project in your browser, 
+					and you should see the Ant Logo. </p>
+				
+				<h4>Confirming setup by testing</h4>
+				<p>To make sure Ant is working properly, you can run the included unit tests,
+						using PHPUnit. You can try run these tests immediately, using 
+							the url /test.php. This will attempt to run the tests via command line
+								using the <code>exec</code> function in PHP. 
+								If this doesn't work, or you don't have PHPUnit installed,
+									consult the <a href="">Unit Tests</a> section below.</p>
+				
+				<h3>Basic Concepts</h3>
+				
+				<h4>The Directory Structure</h4>
+				<p>Using Ant as your framework requires an understanding of the directory structure. Consider the essentials of the root directory.</p>
+				
+<pre>
+0.1.0/
+lib/
+tests/
+.htaccess
+</pre>
+				
+				<p>In the root, you'll notice a directory with a version number. 
+					This is where the current iteration of your application is stored.
+						You can store as many sibling versions as you want here, the purpose
+							being that you can quickly rollback to a previous version if needs be,
+								by changing one line in the .htaccess file.</p>
+				
+				<p>Note, <code>lib/</code> is used to store external libraries, and <code>tests/</code> are the unit tests of the application. 
+					Let's burrow down into the application folder:</p>
+				
+				<h5><code>0.1.0/</code></h5>
+				
+<pre>
+0.1.0/
+  - app/
+  - config/
+  - lib/
+  - public/
+</pre>
 
-        <p class="view"><a href="https://github.com/luke-siedle/Ant">View the Project on GitHub <small>luke-siedle/Ant</small></a></p>
+				<p>The <code>/app/</code> folder stores all the aspects of your application, 
+					like models, views, and controllers.<p>
+					
+				<p>The <code>/config/</code> folder stores your application's configuration
+					in a variety of contexts.<p>
+					
+				<p>The <code>/lib/</code> folder contains portable code, designed for your
+						application but potentially standalone.<p>
+					
+				<p>The <code>/public/</code> folder contains resources that will be accessible
+					via http, like JavaScript, Css styles, and images. Furthermore, this folder
+						contains xml that maps the templates to application data from the view.<p>
+					
+				<h5><code>0.1.0/app/</code></h5>
+<pre>
+0.1.0/
+  - app/
+    - cache/
+    - classes/
+    - modules/
+</pre>		
+				<p>Inside the app directory is a <code>/cache/</code> directory used for any kind of server-side
+						caching that needs to take place. </p>
+				
+				<p>The <code>/classes/</code> directory hosts the 
+							core application logic, as well as contextual classes (the models), 
+								used for specific contexts (e.g. User or Products).</p>
+				
+				<p>The <code>/modules/</code> directory is where dynamic logic exists, based on the application's
+						current state. Most of the files contained herein are lazy-loaded reusable functions.</p>
+			
+				<h5><code>0.1.0/app/modules/</code></h5>
+<pre>
+0.1.0/
+  - app/
+    - modules/
+      - context/
+        - controllers/
+        - queries/
+        - views/
+      - shared/
+        - views/
+</pre>		
+			
+				<p>The <code>/modules/</code> directory is divided into two concepts, <em>Shared</em> and <em>Context</em>. 
+						You'll see this division elsewhere in Ant. Simply, this explains resources that are always available
+							(like a header and footer), and resources that depend on the current context.</p>
+				
+				<p>Currently <code>/views/</code> is the only directory in the <em>Shared</em> space. This is because controllers
+						and queries usually apply to a context.</p>
+				
+				<h5><code>0.1.0/app/modules/shared/views/</code></h5>
+				
+				<p>
+					Contained inside the <code>/views/</code> directory, either in the shared or context spaces, 
+						are the <em>Clients</em>. This is another dimension of Ant used throughout, which allows the application
+							to create different output depending on the current client (e.g. mobile).</p>
+				
+				<p>Naturally, you can import 
+					the view of one client to another client's view, since everything 
+						in Ant is namespaced and won't conflict.</p>
+				
+				<p>The main client is <code>/web/</code>. This is the client for the desktop browser.</p>				
 
+				<h5><code>0.1.0/public/</code></h5>
+				
+				<p>Let's have a quick look at the public directory. This is where your public resources like
+					JavaScript and Css and images will be stored. The public folder also uses the three dimensions
+						already discussed. The <em>Shared</em> space, the <em>Context</em> space, and the <em>Client</em>
+							space.</p>
+				
+				<p>Note, .htaccess automatically rewrites any requests from <code>public/</code> to <code>0.1.0/public/</code>
+						so you don't need to worry about versioning your resources inside the html.</p>
+				
+<pre><code>0.1.0/
+  - public/
+    - clients/
+      - web/
+        - css/
+        - javascript/
+        - templates/
+          - en_gb/
+</code></pre>
+			
+				<p>Here you can see that the resources are arranged into different <code>/clients/</code>,
+					but if you needed to, you could reference resources from other clients, within your
+						html. You would load a resource like a stylesheet as follows:</p>
+				
+<pre>
+<code>&lt;link type="text/css" href="public/../reset.css" /&gt;</code>
+</pre>
+				<p>Note that Ant can dynamically load generated stylesheets using less.css, as well
+						as organize them into several defined files according to a "namespace".
+						Directly loading JavaScript or Css resources should be avoided for 
+							performance and caching reasons.</p>
+			
+			</section>
+			<footer>
+				<p>This project is maintained by <a href="https://github.com/luke-siedle">luke-siedle</a></p>
+				<p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+			</footer>
+		</div>
+		<script src="javascripts/scale.fix.js"></script>
 
-        <ul>
-          <li><a href="https://github.com/luke-siedle/Ant/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/luke-siedle/Ant/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/luke-siedle/Ant">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h3>Introduction</h3>
-		<p>Ant is a PHP framework for rapid web application development, designed to be lightweight
-			and to have a consistently intuitive MVC-based structure that is as clear in its directory structure
-				as it is in the code.</p>
-		<h3>Features Backlog</h3>
-		<p>
-			<li>Ability to scale from tiny projects to hundreds of files.</li>
-			<li>Keep PHP files small by relying heavily on lazy-loading.</li>
-			<li>Flexible routing in XML files</li>
-			<li>Separation of PHP and HTML using optimized string replacement (avoiding PHP's regex functions)</li>
-			<li>Built in handling of JavaScript and Less.css compiling, optimization.</li>
-			<li>Built in basic database structure that every common application needs</li>
-			<li>Basic handling of user functionality, like login and authentication through Facebook/Google API</li>
-			<li>Separation of database queries, to allow for reusability; ability to extend queries easily.</li>
-			<li>Accessing of controllers directly via whitelisted http requests.</li>
-			<li>Internalization of languages.</li>
-			<li>Client detection (mobile, tablet, browser) and display of different/partially different views.</li>
-			<li>"Channelling" option, to change output based on the same route.</li>
-		</p>
-
-		<pre><code></code></pre>
-
-
-	
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/luke-siedle">luke-siedle</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
-  </body>
+	</body>
 </html>
