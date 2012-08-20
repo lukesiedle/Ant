@@ -40,45 +40,37 @@
 				
 			</header>
 			<section>
-				<h3>Introduction</h3>
+				<h2>Introduction</h2>
 				<p>Ant is a PHP framework for rapid web application development, designed to be lightweight
 					and to have a consistently intuitive MVC-based structure that is as easily navigable in 
 						the directory structure as it is the code.</p>
 				
-				<h3>Features and Goals</h3>
+				<h2>Features and Goals</h2>
 				<a name="features"></a>
-				<h4>Organisation</h4>
-				<p>
+				<h3>Organisation</h3>
 				<ul>
-					<li>Ability to scale from tiny projects to hundreds of files.</li>
 					<li>Keep PHP files small by relying heavily on lazy-loading.</li>
-					<li>Separation of PHP and HTML using optimized string replacement</li>
+					<li>Templating using optimized string replacement</li>
 					<li>Separation of database queries, to allow for reusability, extensibility.</li>
-					<li>Flexible routing in XML files</li>
 					<li>Accessing of controllers directly via whitelisted http requests.</li>
 					<li>"Channelling" option, to change output based on the same route.</li>
 				</ul>
-				</p>
-				<h4>Tools</h4>
-				<p>
-				<ul>
-					<li>Handling of JavaScript and Less.css compiling, optimization.</li>
-					<li>Included basic database structure for the everyday application</li>
-					<li>Basic handling of user functionality, like login</li> 
-					<li>Basic authentication class, using Facebook/Google API</li>
-					<li>Internalization of languages.</li>
-					<li>Client detection (e.g. mobile) and custom client views.</li>
-				</ul>
-				</p>
+				<h3>Tools</h3>
+					<ul>
+						<li>JavaScript and Less.css compiling, optimization.</li>
+						<li>Built-in authentication, using Facebook/Google API</li>
+						<li>Basic database structure, and user login</li>
+						<li>Client detection (e.g. mobile) and custom client views.</li>
+					</ul>
 				
-				<h3>Requirements / Dependencies</h3>
+				<h2>Requirements / Dependencies</h2>
 				<a name="requires"></a>
 				<ul>
 					<li>PHP 5.3+/MySQL on Apache</li>
 					<li>Underscore.php</li>
 				</ul>
 				
-				<h3>Setup</h3>
+				<h2>Setup</h2>
 				<a name="setup"></a>
 				<p>Download the zip file or fetch the repository from Github.</p>
 				
@@ -94,7 +86,7 @@
 				<p>Open the root to your project in your browser, 
 					and you should see the Ant Logo. </p>
 				
-				<h4>Confirming setup by testing</h4>
+				<h3>Confirming setup by testing</h3>
 				<p>To make sure Ant is working properly, you can run the included unit tests,
 						using PHPUnit. You can try run these tests immediately, using 
 							the url /test.php. This will attempt to run the tests via command line
@@ -102,13 +94,26 @@
 								If this doesn't work, or you don't have PHPUnit installed,
 									consult the <a href="">Unit Tests</a> section below.</p>
 				
-				<h3>Basic Concepts</h3>
+				<h2>Basic Concepts</h2>
 				
-				<h4>The Directory Structure</h4>
-				<p>Using Ant as your framework requires an understanding of the directory structure. Consider the essentials of the root directory.</p>
+				<h3>The Directory Structure</h3>
+				<p>Using Ant as your framework requires an understanding of the directory structure. Consider the essentials in this exploded view of the directory:</p>
 				
 <pre>
 0.1.0/
+  - app/
+    - cache/
+    - classes/
+    - modules/
+      - context/
+        - controllers/
+        - queries/
+        - views/
+      - shared/
+        - views/
+  - config/
+  - lib/
+  - public/
 lib/
 tests/
 .htaccess
@@ -119,25 +124,9 @@ tests/
 						You can store as many sibling versions as you want here, the purpose
 							being that you can quickly rollback to a previous version if needs be,
 								by changing one line in the .htaccess file.</p>
-				
-				<p>Note, <code>lib/</code> is used to store external libraries, and <code>tests/</code> are the unit tests of the application. 
-					Let's burrow down into the application folder:</p>
-				
-				<h5><code>0.1.0/</code></h5>
-				
-<pre>
-0.1.0/
-  - app/
-  - config/
-  - lib/
-  - public/
-</pre>
 
 				<p>The <code>/app/</code> folder stores all the aspects of your application, 
-					like models, views, and controllers.<p>
-					
-				<p>The <code>/config/</code> folder stores your application's configuration
-					in a variety of contexts.<p>
+					like models, views, and controllers, and the <code>/config/</code> folder is self-explanatory.<p>
 					
 				<p>The <code>/lib/</code> folder contains portable code, designed for your
 						application but potentially standalone.<p>
@@ -146,66 +135,43 @@ tests/
 					via http, like JavaScript, Css styles, and images. Furthermore, this folder
 						contains xml that maps the templates to application data from the view.<p>
 					
-				<h5><code>0.1.0/app/</code></h5>
-<pre>
-0.1.0/
-  - app/
-    - cache/
-    - classes/
-    - modules/
-</pre>		
-				<p>Inside the app directory is a <code>/cache/</code> directory used for any kind of server-side
-						caching that needs to take place. </p>
-				
-				<p>The <code>/classes/</code> directory hosts the 
-							core application logic, as well as contextual classes (the models), 
-								used for specific contexts (e.g. User or Products).</p>
-				
-				<p>The <code>/modules/</code> directory is where dynamic logic exists, based on the application's
-						current state. Most of the files contained herein are lazy-loaded reusable functions.</p>
-			
-				<h5><code>0.1.0/app/modules/</code></h5>
-<pre>
-0.1.0/
-  - app/
-    - modules/
-      - context/
-        - controllers/
-        - queries/
-        - views/
-      - shared/
-        - views/
-</pre>		
-			
-				<p>The <code>/modules/</code> directory is divided into two concepts, <em>Shared</em> and <em>Context</em>. 
-						You'll see this division elsewhere in Ant. Simply, this explains resources that are always available
-							(like a header and footer), and resources that depend on the current context.</p>
-				
-				<p>Currently <code>/views/</code> is the only directory in the <em>Shared</em> space. This is because controllers
-						and queries usually apply to a context.</p>
-				
-				<h5><code>0.1.0/app/modules/shared/views/</code></h5>
+				<h3>The three dimensions of Ant : Shared, Context, and Client</h3>
 				
 				<p>
-					Contained inside the <code>/views/</code> directory, either in the shared or context spaces, 
-						are the <em>Clients</em>. This is another dimension of Ant used throughout, which allows the application
-							to create different output depending on the current client (e.g. mobile).</p>
+					Throughout Ant's directory structure, there are 3 different ways to store files that 
+					the application will be able to lazy load.										
+				</p>
+				<h4>Shared</h4>
+				<p>
+					Anything in this space, e.g. <code>/app/classes/shared/</code>
+					is code that is shared by the application, regardless of the current state. This means
+					it is (usually) always included. 
+				</p>
+				<h4>Context</h4>
+				<p>
+					In the context space, e.g. <code>/app/classes/context/</code>
+					code is available in certain states or <em>contexts</em>. For example, 
+					"User" is a context. The context is just a way of organising the code
+					for different areas of the application, while allowing them to be accessible
+					in a loosely coupled mechanism.
+				</p>
 				
-				<p>Naturally, you can import 
-					the view of one client to another client's view, since everything 
-						in Ant is namespaced and won't conflict.</p>
+				<h4>Client</h4>
+				<p>
+					The client is really a dimension for optimization, e.g. <code>/app/modules/context/mobile/views/home/</code>.
+					An application that relies only on responsive design can waste resources. Depending on how your app is designed, the device will load redundant server-side 
+					data as well as redundant JavaScript and stylesheets. So the client space allows you to specify device-specific
+					server-side and client-side views.
+					
+				</p>
+	
+				<h3>The Public directory</h3>
 				
-				<p>The main client is <code>/web/</code>. This is the client for the desktop browser.</p>				
-
-				<h5><code>0.1.0/public/</code></h5>
+				<p>The public directory contains resources like
+					JavaScript, Css and images. The public folder also uses the three dimensions discussed above.</p>
 				
-				<p>Let's have a quick look at the public directory. This is where your public resources like
-					JavaScript and Css and images will be stored. The public folder also uses the three dimensions
-						already discussed. The <em>Shared</em> space, the <em>Context</em> space, and the <em>Client</em>
-							space.</p>
-				
-				<p>Note, .htaccess automatically rewrites any requests from <code>public/</code> to <code>0.1.0/public/</code>
-						so you don't need to worry about versioning your resources inside the html.</p>
+				<blockquote><p>.htaccess automatically rewrites any requests from <code>public/</code> to <code>0.1.0/public/</code>
+						so you don't need to worry about versioning your resources inside the html.</p></blockquote>
 				
 <pre><code>0.1.0/
   - public/
@@ -224,11 +190,160 @@ tests/
 <pre>
 <code>&lt;link type="text/css" href="public/../reset.css" /&gt;</code>
 </pre>
-				<p>Note that Ant can dynamically load generated stylesheets using less.css, as well
+				<blockquote><p>Ant can dynamically load generated stylesheets using less.css, as well
 						as organize them into several defined files according to a "namespace".
 						Directly loading JavaScript or Css resources should be avoided for 
-							performance and caching reasons.</p>
+						performance and caching reasons.</p></blockquote>
 			
+				<h3>
+					Views, Controllers, and Queries
+				</h3>
+				<h4>Views</h4>
+				<p>
+					Views contain logic for displaying a view with all its html and data. The view is either
+					shared or in context. The shared view is the frame, the context view is the canvas.
+					<br /><br />
+					Example request : <code>http://../user/profile</code>
+					<br />
+					The shared view : <code>/app/modules/shared/views/[client]/frame.php</code>
+					<br />
+					The context view : <code>/app/modules/context/views/[client]/user/profile.php</code>
+					
+				</p>
+				<p>The Router class handles the <code>route.xml</code> file found in the root of each views folder. This allows
+					you to configure (and whitelist) certain URLs to point them to specific PHP files and to load certain templates.</p>
+				
+				<h4>Controllers</h4>
+				<p>
+					In Ant, controllers are functions that perform actions. They provide a means of communicating between the View and the Application or the Model.
+					Controllers must be defined within a context, because every action within an application must exist in some kind of context.
+				</p>
+				<p>Controllers can be explicitly called inside the code:</p>
+<pre>
+<code>
+// Get the a user by Id
+$user = Controller :: call('User.getUserById', array(
+  'id' => 5
+));
+</code>
+</pre>
+				<p>Controllers can also be called implicitly from within <code>route.xml</code> under the <code>&lt;controllers&gt; </code> tag.
+					This means a URL can perform an action directly in the application (like a form), but it has to be whitelisted by the Router.
+					Controllers can also be used for conditioning whether certain html is displayed. This functionality is covered below under <a href="#templates">Templates</a>.</p>
+				
+				<h4>Queries</h4>
+				
+				<p>Queries are specific controllers that return a Query object. Ant has the class Query, which handles query building.
+					The way queries are handled in Ant encourages reuse. Consider the following example:</p>
+				
+<pre>
+<code>
+// Get the query to get user data //
+$query = Controller :: query('User.getUser');
+
+// Add some condition //
+$query->where('user.user_id = :id', array(
+    'id' => 5
+));
+</code>
+</pre>	
+				<p>
+					The query object can be passed around until the satisfactory query is determined, and then it can be 
+					used for database transactions. This means you don't have to build each query from scratch as long
+					as you have some foundational queries to work with.
+				</p>
+				
+				<h3>Collections</h3>
+				<p>Collections are fairly tightly coupled to other aspects of Ant, because they help manage data and the insertion
+					of data into the html. A Collection is a wrapper for data. Most often, it will be used as a representation inside PHP of 
+					a series of rows from the database.</p>
+				<p>Collections are always namespaced. The namespace, when a Collection reflects a database row, should be the same
+					as the table name (omitting the table prefix).</p>
+
+				<pre>
+<code>
+// Create a new Collection //
+$user = new Collection(array(
+  'user_id' => 5,
+  'user_first_name' => 'Bruce',
+  'user_last_name' => 'Wayne'
+), 'users' );
+
+// Iterate through the collection //
+$user->each( function( $record ){
+  if( $record->toObject()->user_id == 5 ){
+    // Join a collection to a record //
+    $record->join( new Collection(array(
+	    'user_id' => 8,
+	    'user_first_name' => 'Robin'
+      ), 'users_sidekicks') 
+    );
+  }
+});
+</code>
+</pre>
+				<h4>Collections for Templates</h4>
+				<p>Ant applies data to templates by using Collections and mapping them to the html using an XML helper.
+				Consider the following example:
+				</p>
+				
+<pre><code>
+// The XML file (inside the public context/shared directory) //
+
+&lt;collections&gt;
+  &lt;users when="User.isBatman"&gt;&lt;users&gt;
+&lt;/collections&gt;
+</code></pre>
+				<p>In the above example, the collection "users" will be applied to the template
+					only when the controller returns a boolean of true.</p>
+				
+				<h4>Collections for Databases</h4>
+				
+				<p>The collection can be passed to the Database class which will extract the data from
+						the collection and attempt to either UPDATE a series of records, or INSERT them into the database.
+						If the collection contains data that doesn't belong in the table, the query will naturally fail.
+							The namespace of the table is used for getting the table name, along with the prefix 
+							set in the MySQL configuration.</p> 
+
+<pre><code>
+// Insert a collection into the database //
+Database :: insert( $collection, function( $insertId ){
+  echo $insertId;
+});
+</code></pre>
+				
+				<h3>Templates</h3>
+				<p>Ant HTML is not to be stored inside PHP. Any amount of html, no matter how small, 
+				should be stored in its own file and imported to the view by using an XML map placed 
+					inside the template directory.</p>
+				
+				<p>The default web frame map:<br/> <code>/public/clients/web/templates/en_gb/shared/frame.xml</code></p>
+				<p>A context map: <br /><code>/public/clients/web/templates/en_gb/context/user/profile.xml</code></p>
+				
+				<p>Inside the map, you specify the Collections to map to the templates, recognizing hierarchical sets of data, as follows:</p>
+<pre><code>
+// The XML file (inside the public context/shared directory) //
+
+&lt;collections&gt;
+  &lt;users&gt;
+    &lt;template&gt;context/users/user&lt;/template&gt;
+    &lt;collections&gt;
+      &lt;friends&gt;
+        &lt;template&gt;context/users/friend&lt;/template&gt;
+      &lt;/friends&gt;
+    &lt;/collections&gt;
+  &lt;users&gt;
+&lt;/collections&gt;
+
+// The HTML files //
+
+# context/users/user
+&lt;div class="user"&gt;{user_first_name}'s friends : {\friends}&lt;/div&gt;
+
+# context/users/friend
+&lt;div class="friend"&gt;{friend_name}&lt;/div&gt;
+</code></pre>
+				
 			</section>
 			<footer>
 				<p>This project is maintained by <a href="https://github.com/luke-siedle">luke-siedle</a></p>
