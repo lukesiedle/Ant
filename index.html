@@ -28,7 +28,7 @@
 				
 				<dl>
 					<dt><a href="">Introduction</a></dt>
-					<dt><a href="#features">Features and Goals</a></dt>
+					<dt><a href="#features">Features, Goals and Cool Snippets</a></dt>
 					<dt><a href="#require">Requirements</a></dt>
 					<dt><a href="#setup">Setup</a></dt>
 					<dt><a href="#basics">Basic Concepts</a></dt>
@@ -45,7 +45,7 @@
 					and to have a consistently intuitive MVC-based structure that is as easily navigable in 
 						the directory structure as it is the code.</p>
 				
-				<h2>Features and Goals</h2>
+				<h2>Features, Goals and Cool Snippets</h2>
 				<a name="features"></a>
 				<h3>Organisation</h3>
 				<ul>
@@ -62,6 +62,120 @@
 						<li>Basic database structure, and user login</li>
 						<li>Client detection (e.g. mobile) and custom client views.</li>
 					</ul>
+				
+				<h3>Cool Snippets</h3>
+				<p>Let's show off Ant syntax quick so you know why it even needs to exist.</p>
+				<h4>Controllers</h4>
+				<p>Controllers are stored in intuitive places in the directory structure, 
+					so you can find them quickly to modify them. They're not buried inside
+						thousands of lines of code.</p>
+<pre>
+<code>
+// Lazy loading controllers  //
+$user = Controller :: call('User.getCurrentUser');
+</code>
+</pre>
+				<h4>Queries</h4>
+				<p>Queries are stored in a similarly intuitive way as controllers, only using them in memory 
+					when needed, and allowing you to further modify them after referencing.</p>
+<pre>
+<code>
+// Reusable lazy loading queries //
+$query = Controller :: query('User.getUserById', array(
+  'id' => 5
+));
+
+$query->join('user_permissions perm ON 
+  perm.user_id = user.user_id' );
+</code>
+</pre>
+				<h4>Collections</h4>
+				<p>A simple way to store data for various uses, like a filing system. </p>
+<pre>
+<code>
+/* 
+ * Collections for storing/manipulating data sets,
+ * including relational data
+ */
+ 
+$collection = new Collection(array(
+ 'user_name' => 'batman'
+), 'users' );
+
+$collection->first()->join( 
+  new Collection(array(
+    'user_perm' => 'use-batarang' 
+  ), 'user_perms')
+);
+
+// Set the primary key //
+$collection->setPrimaryKey('user_id');
+
+// Inserts 2 records, one being for the rel table 'user_perms' //
+Database :: insert( $collection, function( $insertId ){
+  echo $insertId;
+});
+
+</code>
+</pre>
+				<h4>Templating using XML, HTML, and Collections</h4>
+				<p>
+					This one might not make much sense, but basically, PHP syntax never mixes with html, and vice versa,
+					and the html required is always easy to find in the directory structure.
+				</p>
+				
+<pre>
+<code>
+# .../friends.xml (friends page)
+&lt;collections&gt;
+  &lt;users ns="friends"&gt;
+    &lt;template&gt;context/user/list&lt;/template&gt;
+	&lt;collections&gt;
+	  // Recursive iteration ... //
+	&lt;/collections&gt;
+  &lt;/users&gt;
+&lt;/collections&gt;
+
+
+# .../friends.html
+&lt;ul&gt;{\friends}&lt;/ul&gt;
+
+# .../user/list.html
+&lt;li&gt;{\user_name}&lt;/li&gt;
+</code>
+</pre>				
+				
+				<h4>Routing</h4>
+				<p>Routing is handled using a combination of the directory structure configuration and XML files which whitelist requests. The XML
+					allows you to configure certain aspects of the view, like what module/template is loaded, by using conditionals. The Router studies
+						each segment of the URL according to the XML parameters and creates the result arguments for the application to follow.</p>
+<pre>
+<code>
+# .../route.xml
+// The URL : http://app.com/home/4 (blog page) //
+&lt;base is="home"&gt;
+  &lt;next is="about"&gt;
+    &lt;template&gt;about&lt;/template&gt;
+    &lt;module&gt;about&lt;/module&gt;
+  &lt;/next&gt;
+  &lt;next when="int"&gt;
+    &lt;var&gt;blog_id&lt;/var&gt;
+    &lt;template&gt;blog&lt;/template&gt;
+    &lt;module&gt;blog&lt;/module&gt;
+  &lt;/next&gt;
+  &lt;frame&gt;frame_default&lt;/frame&gt;
+&lt;/base&gt;
+
+// Resulting arguments //
+$module == 'blog';
+$template == 'blog';
+$blog_id == '4';
+$frame == 'frame_default';
+</code>
+</pre>								
+				<h4>Namespacing</h4>
+				<p>Ant is namespaced throughout, which means you need a PHP 5.3+ installation, and you need to be familiar with <a href="http://php.net/manual/en/language.namespaces.php" target="_blank">namespace syntax</a>. It also
+					means a lot of the functions in Ant are usable in different contexts, successfully avoiding naming conflicts, allowing you to important one view into another for example, without any issues.</p>
 				
 				<h2>Requirements / Dependencies</h2>
 				<a name="requires"></a>
@@ -337,12 +451,73 @@ Database :: insert( $collection, function( $insertId ){
 
 // The HTML files //
 
-# context/users/user
+# ../context/users/user.html
 &lt;div class="user"&gt;{user_first_name}'s friends : {\friends}&lt;/div&gt;
 
-# context/users/friend
+# ../context/users/friend.html
 &lt;div class="friend"&gt;{friend_name}&lt;/div&gt;
 </code></pre>
+				
+				<blockquote><p>Collections that omit a template are assumed to be global by the application, and will be applied inside the lowest level template, like the frame or context.</p></blockquote>
+				
+				<h3>Routing</h3>
+				<p>Ant routing is handled by the Router class and a combination of the directory structure and XML files that configure it. Routing is the process of extracting the information from the request and loading the appropriate application
+					state to perform the requested action. Consider the example of the route.xml file:</p>
+<pre>
+<code>
+# .../route.xml
+// The URL : http://app.com/home/4 (blog page) //
+&lt;base is="home"&gt;
+  &lt;next is="about"&gt;
+    &lt;template&gt;about&lt;/template&gt;
+    &lt;module&gt;about&lt;/module&gt;
+  &lt;/next&gt;
+  &lt;next when="int"&gt;
+    &lt;var&gt;blog_id&lt;/var&gt;
+    &lt;template&gt;blog_page&lt;/template&gt;
+    &lt;module&gt;blog&lt;/module&gt;
+  &lt;/next&gt;
+  &lt;frame&gt;frame_default&lt;/frame&gt;
+&lt;/base&gt;
+
+// Resulting arguments //
+$module == 'blog';
+$template == 'blog';
+$blog_id == '4';
+$frame == 'frame_default';
+</code>
+</pre>
+				<p>The Router will now load the view module <code>blog</code> and create relevant data by automatically calling the function inside this file <code>Ant\[Client]\Home\blog()</code>.
+					The html from the template <code>blog_page.html</code> will have the data inserted into it.</p> <p>The resulting output from the view will be imported into the framing template <code>frame_default.html</code>,
+					and finally the output will be created and downloaded by the device.</p>
+				
+				<h3>Advanced Documentation</h3>
+				<p>While the documentation is limited at this point in time, you can have a look at the Unit Tests and other examples within the repository to see how the application works on a more advanced and comprehensive level.</p>
+				
+			
+				<h2>Unit Tests</h2>
+				<p>Never done unit tests before? Check out <a href="http://en.wikipedia.org/wiki/Unit_testing" target="_blank">this article</a>. If that article doesn't make sense, the point of unit testing will become apparent from studying the tests contained in this repository. You're basically testing your expectations of what each part of the application should do. And every time you change an aspect of the application, you can check the tests to make sure everything is still working correctly.</p>
+				<p>Some Unit tests are already provided using <a href="https://github.com/sebastianbergmann/phpunit" target="_blank">PHPUnit</a>. There should ultimately be a unit test for every Ant function or behaviour as the framework grows. </p>
+				<p>You can immediately run the included tests using <code>http://path/to/Ant/test.php</code>, which simulates a command line test using <code>exec</code>. These tests will only work if you have PHPUnit installed, and the PHP file
+					has correctly configured the path to PHP to be used in <code>exec</code>.</p>
+				<p>If you want a visual representation of tests, try out <a href="https://github.com/NSinopoli/VisualPHPUnit" target="_blank">VisualPHPUnit</a>.
+				
+				<p>Unit testing tightly coupled aspects of a PHP framework may rely on using <code>cURL</code> and examining the response of the request. This is particularly applicable to the testing 
+					of routing in the application. For this reason, <code>cURL</code> must be enabled in <em>php.ini</em>.</p>
+				
+				<h2>Roadmap</h2>
+				<p>
+					The goal of Ant is keep it lightweight and to not fall prey to <em>Zawinski's law of software envelopment</em> regarding software bloat.
+				</p>
+				<blockquote><p>
+					Every program attempts to expand until it can read mail. Those programs which cannot so expand are replaced by ones which can.
+				</p></blockquote>
+				<p>The point is there is always some PHP library that can handle the tricky, specialist stuff, like reading pop email. Rather look for a reliable library, keep it separate, and simply invoke it inside your application where necessary.</p>
+				
+				
+				
+				<h2>Contributing</h2>
+				<p>Contributions are welcome! Your additions or modifications will be considered for merging with the Ant repository. A branch for each release will be created from the master. Pull requests will be merged to the master branch and eventually be part of a future release branch.</p>
 				
 			</section>
 			<footer>
