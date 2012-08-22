@@ -27,26 +27,27 @@
 				</ul>
 				
 				<dl>
-					<dt><a href="">Introduction</a></dt>
+					<dt><a href="#introduction">Introduction</a></dt>
 					<dt><a href="#features">Features, Goals and Cool Snippets</a></dt>
 					<dt><a href="#require">Requirements</a></dt>
 					<dt><a href="#setup">Setup</a></dt>
 					<dt><a href="#basics">Basic Concepts</a></dt>
-					<dt><a href="#testing">Unit Tests</a></dt>
+					<dt><a href="#tests">Unit Tests</a></dt>
 					<dt><a href="#roadmap">Roadmap</a></dt>
-					<dt><a href="#github">Contributing</a></dt>
+					<dt><a href="#contributing">Contributing</a></dt>
 				</dl>
 				
 				
 			</header>
 			<section>
+				<a name="introduction"></a>
 				<h2>Introduction</h2>
 				<p>Ant is a PHP framework for rapid web application development, designed to be lightweight
 					and to have a consistently intuitive MVC-based structure that is as easily navigable in 
 						the directory structure as it is the code.</p>
 				
-				<h2>Features, Goals and Cool Snippets</h2>
 				<a name="features"></a>
+				<h2>Features, Goals and Cool Snippets</h2>
 				<h3>Organisation</h3>
 				<ul>
 					<li>Keep PHP files small by relying heavily on lazy-loading.</li>
@@ -177,15 +178,15 @@ $frame == 'frame_default';
 				<p>Ant is namespaced throughout, which means you need a PHP 5.3+ installation, and you need to be familiar with <a href="http://php.net/manual/en/language.namespaces.php" target="_blank">namespace syntax</a>. It also
 					means a lot of the functions in Ant are usable in different contexts, successfully avoiding naming conflicts, allowing you to important one view into another for example, without any issues.</p>
 				
+				<a name="require"></a>
 				<h2>Requirements / Dependencies</h2>
-				<a name="requires"></a>
 				<ul>
 					<li>PHP 5.3+/MySQL on Apache</li>
 					<li>Underscore.php</li>
 				</ul>
 				
-				<h2>Setup</h2>
 				<a name="setup"></a>
+				<h2>Setup</h2>
 				<p>Download the zip file or fetch the repository from Github.</p>
 				
 				<p><em>Create a new mysql database</em>, using the name of your project, and then import ant.sql to it. 
@@ -208,6 +209,7 @@ $frame == 'frame_default';
 								If this doesn't work, or you don't have PHPUnit installed,
 									consult the <a href="">Unit Tests</a> section below.</p>
 				
+				<a name="basics"></a>
 				<h2>Basic Concepts</h2>
 				
 				<h3>The Directory Structure</h3>
@@ -494,7 +496,8 @@ $frame == 'frame_default';
 				<h3>Advanced Documentation</h3>
 				<p>While the documentation is limited at this point in time, you can have a look at the Unit Tests and other examples within the repository to see how the application works on a more advanced and comprehensive level.</p>
 				
-			
+				
+				<a name="tests"></a>
 				<h2>Unit Tests</h2>
 				<p>Never done unit tests before? Check out <a href="http://en.wikipedia.org/wiki/Unit_testing" target="_blank">this article</a>. If that article doesn't make sense, the point of unit testing will become apparent from studying the tests contained in this repository. You're basically testing your expectations of what each part of the application should do. And every time you change an aspect of the application, you can check the tests to make sure everything is still working correctly.</p>
 				<p>Some Unit tests are already provided using <a href="https://github.com/sebastianbergmann/phpunit" target="_blank">PHPUnit</a>. There should ultimately be a unit test for every Ant function or behaviour as the framework grows. </p>
@@ -505,6 +508,7 @@ $frame == 'frame_default';
 				<p>Unit testing tightly coupled aspects of a PHP framework may rely on using <code>cURL</code> and examining the response of the request. This is particularly applicable to the testing 
 					of routing in the application. For this reason, <code>cURL</code> must be enabled in <em>php.ini</em>.</p>
 				
+				<a name="roadmap"></a>
 				<h2>Roadmap</h2>
 				<p>
 					The goal of Ant is keep it lightweight and to not fall prey to <em>Zawinski's law of software envelopment</em> regarding software bloat.
@@ -515,7 +519,7 @@ $frame == 'frame_default';
 				<p>The point is there is always some PHP library that can handle the tricky, specialist stuff, like reading pop email. Rather look for a reliable library, keep it separate, and simply invoke it inside your application where necessary.</p>
 				
 				
-				
+				<a name="contributing"></a>
 				<h2>Contributing</h2>
 				<p>Contributions are welcome! Your additions or modifications will be considered for merging with the Ant repository. A branch for each release will be created from the master. Pull requests will be merged to the master branch and eventually be part of a future release branch.</p>
 				
