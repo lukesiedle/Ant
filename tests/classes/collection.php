@@ -62,7 +62,7 @@
 			$collection = new \Ant\Collection( self :: $testArrayMulti );
 			$join		= new \Ant\Collection( self :: $testArraySingle );
 			
-			$collection->join( $join, 'actors' );
+			$collection->join( $join );
 			
 			$this->assertEquals( self :: $testArrayMulti , $collection->toArrayShallow() );
 		}
@@ -126,7 +126,7 @@
 			$collection = new \Ant\Collection( self :: $testArrayMulti, 'movies' );
 			$join		= new \Ant\Collection( self :: $testJoin, 'actors' );
 			
-			$collection->join( $join, 'actors' );
+			$collection->join( $join );
 			
 			$equalArray = self :: $testArrayMulti;
 			
@@ -143,7 +143,7 @@
 			$collection = new \Ant\Collection( self :: $testArrayMulti, 'movies' );
 			$join		= new \Ant\Collection( self :: $testJoin, 'actors' );
 			
-			$collection->join( $join, 'actors' );
+			$collection->join( $join );
 			
 			$equalArray = self :: $testArrayMulti;
 			
@@ -161,7 +161,7 @@
 			
 			$join		= new \Ant\Collection( self :: $testJoin, 'actors' );
 			
-			$collection->join( $join, 'actors' );
+			$collection->join( $join );
 			
 			$collection->unjoin( 'actors' );
 			
