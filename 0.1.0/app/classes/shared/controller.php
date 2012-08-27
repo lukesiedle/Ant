@@ -72,17 +72,21 @@
 				
 				$opt = explode( '.', strtolower($queryName) );
 				
-				$namespace = '\Ant\\' . 'Query\\'. $opt[0]. '\\';
+				$methodPath = '\Ant\\' . 'Query\\'. $opt[0]. '\\' . $opt[1];
 				
-				$pathMethod = $namespace.$opt[1];
+				// If there's another option, it's a submethod //
+				if( $opt[2] ){
+					$methodPath .= '\\' . $opt[2];
+					$subMethod = true;
+				}
 				
-				if( !function_exists($pathMethod) ){
-					require_once('app/modules/context/queries/' . $opt[0] . '/' . $opt[1] . '.php');
+				if( ! function_exists($methodPath) ){
+					require_once('app/modules/context/queries/' . implode('/', $opt) . '.php' );
 				}
 				
 				$args = array_merge( (array)Router :: getRequestVars(), $args );
 				
-				return $pathMethod( new Query, Database :: getTablePrefix(), $args );
+				return $methodPath( new Query, Database :: getTablePrefix(), $args );
 				
 			}
 			
