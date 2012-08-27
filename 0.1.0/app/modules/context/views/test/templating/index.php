@@ -68,9 +68,9 @@
 				'test_margin'	=> '30px'
 			)), 'level' );
 
-		$level1Collection->first()->join( $level2Collection, 'level' );
+		$level1Collection->first()->join( $level2Collection );
 		
-		$collection->join( $level1Collection, 'level' );
+		$collection->join( $level1Collection );
 		
 		$set = new CollectionSet( 
 			$collection
