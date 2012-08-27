@@ -28,6 +28,7 @@
 			
 			private $records	= array(), 
 					$index		= 0,
+					$primaryKey,
 					$namespace;
 			
 			/*
@@ -265,10 +266,10 @@
 			 *	@return object The object for chaining
 			 */
 			
-			public function join( Collection $col, $key = '_id' , $index = null ){
+			public function join( Collection $col, $index = null ){
+				
 				// Join to every record //
-				$col->setPrimaryKey( $key );
-				if( is_null($index)){
+				if( is_null($index) ){
 					$this->each( function( $record ) use( $col ){
 						$record->join( clone $col );
 					});
