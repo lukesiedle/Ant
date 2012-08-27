@@ -267,7 +267,7 @@
 			
 			public function join( Collection $col, $key = '_id' , $index = null ){
 				// Join to every record //
-				$col->setMutualKey( $key );
+				$col->setPrimaryKey( $key );
 				if( is_null($index)){
 					$this->each( function( $record ) use( $col ){
 						$record->join( clone $col );
@@ -279,7 +279,7 @@
 			}
 			
 			/*
-			 *	Remove joins by current mutual key. 
+			 *	Remove joins by current primary key. 
 			 *	If the index is not specified, all joins
 			 *  are removed.
 			 *	
@@ -303,7 +303,7 @@
 			}
 			
 			/*
-			 *	Set the mutual key. The mutual
+			 *	Set the primary key. The primary
 			 *	key is the key that all joins
 			 *	within a collection have in
 			 *	common. Example 'user_id'
@@ -312,23 +312,20 @@
 			 *	@return object The object for chaining
 			 */
 			
-			public function setMutualKey( $key ){
-				$this->mutualKey = $key;
+			public function setPrimaryKey( $key ){
+				$this->primaryKey = $key;
 				return $this;
 			}
 			
 			/*
-			 *	Get the mutual key. The mutual
-			 *	key is the key that all joins
-			 *	within a collection have in
-			 *	common. Example 'user_id'
+			 *	Get the primary key. 
 			 *	
 			 *	@since 0.1.0
 			 *	@return object The object for chaining
 			 */
 			
-			public function getMutualKey(){
-				return $this->mutualKey;
+			public function getPrimaryKey(){
+				return $this->primaryKey;
 			}
 			
 			/*
