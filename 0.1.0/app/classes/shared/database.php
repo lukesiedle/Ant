@@ -91,6 +91,10 @@
 					
 					foreach( $rows as $y => $each ){
 						
+						if( $col->hasJoins() && !$col->getPrimaryKey() ){
+							throw new Exception('A collection needs a primary key when inserting joins.');
+						}
+						
 						$id = MySQL :: insert(
 							Query :: setInsert( array($each), self :: $tablePrefix . $namespace )
 						);
@@ -101,9 +105,16 @@
 						
 						$joins = $col->at( $y )->getJoins();
 						
+						// Add the new Id to the record if we know it's primary key //
+						if( $col->getPrimaryKey() ){
+							$col->at( $y )->add(array(
+								$col->getPrimaryKey() => $id
+							));
+						}
+						
 						foreach( $joins as $nm => $join ){
 							
-							$key = $join->getMutualKey();
+							$key = $join->getPrimaryKey();
 							
 							$join->each( function( $record ) use( $key, $id ){
 								$record->add( array(
