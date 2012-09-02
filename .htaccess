@@ -1,10 +1,23 @@
+# Ant required .htaccess file
+# for handling URL rewriting.
+#	
+# @require mod_setenvif
+# @since 0.1.0	
+
 Options +FollowSymLinks
 RewriteEngine On
 RewriteCond %{ENV:REDIRECT_STATUS} 200
 RewriteRule .* - [L]
+RewriteRule (public/.*.xml)$ 0.1.0/index.php?request=?channel=error [L]
 RewriteRule (public/.*)$ 0.1.0/$1 [L]
-RewriteRule (deploy)$ deploy.php [L]
 RewriteRule (tests) tests/index.php [L]
 RewriteRule (test.php) test.php [L]
-RewriteRule ^(.*+)$ 0.1.0/index.php?request=$1 [L]
+RewriteRule ^(.*+)$ 0.1.0/index.php?request=$1&uri=%{REQUEST_URI} [L]
+
+# Directory 
 DirectoryIndex index.php
+
+# Custom environmental variables
+SetEnvIf Host ^(127.0.0.1|localhost) IS_STAGE=1
+SetEnvIf Remote_Addr ^(127.0.0.1) IS_ADMIN=1
+
