@@ -52,16 +52,11 @@
 				Request :: initialize( $_GET );
 				
 				// Load the contextual map if it exists and plan the route //
-				// Load the route map if it exists and plan the route /				
 				if( self :: loadRouteMap( 'app/modules/context/views/' . $client .'/'. Application :: get()->context . '/route.xml' )){
-					
 					self :: planRoute();
-					
-				// Load the route map if it exists and plan the route //
+				// Load the shared route map if it exists and plan the route //
 				} else if( self :: loadRouteMap( self :: $viewDir . 'route.xml' )){
-					
 					self :: planRoute();
-					
 				}
 				
 				// Check if a channel is in use ( .../?channel=ajax ) //
@@ -296,8 +291,6 @@
 					}
 					
 					self :: $routeVars[ $tag ] = (string) $xml2;
-					
-					
 				}
 				
 				foreach( $children as $tag => $xml2 ){

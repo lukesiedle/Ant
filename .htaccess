@@ -20,4 +20,3 @@ DirectoryIndex index.php
 # Custom environmental variables
 SetEnvIf Host ^(127.0.0.1|localhost) IS_STAGE=1
 SetEnvIf Remote_Addr ^(127.0.0.1) IS_ADMIN=1
-

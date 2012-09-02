@@ -239,14 +239,6 @@
 			}
 			
 			/*
-			 *	Set some useful paths 
-			 * 
-			 *	@since 0.1.0
-			 */
-			
-			public static function setPaths(){ }
-			
-			/*
 			 *	Allocate resources based
 			 *	on the current client designation
 			 * 

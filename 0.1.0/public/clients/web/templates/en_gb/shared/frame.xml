@@ -19,9 +19,6 @@
 		<template>shared/document/javascript</template>
 	</javascripts>
 	
-	<!-- Document globals -->
-	<document ns="document"></document>
-	
 	<!-- User globals, conditioned by a controller -->
 	<user.login when="User.when.isGuest">
 		<template>context/user/registration/login</template>
@@ -37,5 +34,8 @@
 	
 	<!-- Request globals -->
 	<request></request>
+	
+	<!-- Document globals -->
+	<document></document>
 	
 </collections>

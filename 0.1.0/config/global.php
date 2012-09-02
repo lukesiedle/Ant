@@ -10,7 +10,7 @@
 	 *	@since 0.1.0
 	 * 
 	 */
-
+	
 	namespace Ant;
 	
 	// Context when none is specified in the request
@@ -37,5 +37,3 @@
 	
 	// Store the config //
 	Configuration :: set( $config );
-	
-	
