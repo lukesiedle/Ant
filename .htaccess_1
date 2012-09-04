@@ -1,7 +1,0 @@
-Options +FollowSymLinks
-RewriteEngine On
-RewriteCond %{ENV:REDIRECT_STATUS} 200
-RewriteRule .* - [L]
-RewriteRule (www/.*)$ 2.0/public/$1 [L]
-RewriteRule ^(.*+)$ 2.0/public/index.php?request=$1 [L]
-DirectoryIndex index.php
