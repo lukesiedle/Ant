@@ -1,0 +1,2 @@
+USER_LOGIN_FAILED_MSG			= Failed to log you in, please try again.
+USER_LOGIN_ERROR_LABEL			= An error occurred
