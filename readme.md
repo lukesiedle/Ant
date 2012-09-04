@@ -142,6 +142,6 @@ by a period.
 You should prefer using the Controller within the view to call the appropriate 
 function, as follows:
 
-		Controller :: call('User.getUserById', array(
-			'id' => 1
-		));
+Controller :: call('User.getUserById', array(
+	'id' => 1
+));
