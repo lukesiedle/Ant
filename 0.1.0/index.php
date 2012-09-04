@@ -11,8 +11,8 @@
 	 */
 
 	// Errors //
-	// error_reporting( E_ALL ^ E_NOTICE );
-	error_reporting( E_ALL ^ E_NOTICE ^ E_STRICT );
+	error_reporting( E_ALL ^ E_NOTICE );
+	// error_reporting( E_ALL ^ E_NOTICE ^ E_STRICT );
 	
 	// Version // 
 	define( 'VERSION', '1.0' );
@@ -49,6 +49,9 @@
 	
 	// Set the current language, based on user's session, cookies //
 	App :: setLanguage();
+	
+	// Set the current theme (for templates) //
+	App :: setTheme( 'default' );
 	
 	// Detect region from Ip Address, set the timezone and date //
 	App :: setLocale();

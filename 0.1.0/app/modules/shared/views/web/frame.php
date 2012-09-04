@@ -49,10 +49,10 @@
 		// Store the login //
 		function login( $data ){
 			$login = new Collection( $data , 'user.login' );
-			if( $request = \Ant\Request :: get('post')){
+			if( $request = \Ant\Request :: get('post') ){
 				if( $request['username'] ){
 					$login->join( new Collection(array(
-						'message' => 'Failed to log you in.'
+						'message' => Template :: phrase('USER_LOGIN_FAILED_MSG')
 					), 'errors' ));
 				}
 			}

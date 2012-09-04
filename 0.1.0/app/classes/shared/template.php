@@ -362,7 +362,7 @@
 				$tpl = 'public/clients/' 
 					. Application :: getClient() . 
 					'/templates/' 
-					. Application :: getLanguage()
+					. Application :: getTheme()
 					. '/' . $path . '.html';				
 				
 				// Add the template //
@@ -530,7 +530,7 @@
 				return 'public/clients/' 
 						. Application :: getClient()
 						. '/templates/'
-						. Application :: getLanguage()
+						. Application :: getTheme()
 						. '/' . $path;
 			}
 			
@@ -588,6 +588,47 @@
 					return self :: $buffer;
 				}				
 				return false;
+			}
+			
+			/*
+			 *	Load languages into globals
+			 * 
+			 *	@since 0.1.0
+			 */
+			
+			public static function loadLanguageGlobals(){
+				
+				$dir = 'config/i18n/languages/' 
+						. Application :: get()->lang . '/';
+				
+				$lang = array();
+				
+				if ($handle = opendir( $dir )) {
+					
+					while ( false !== ($entry = readdir($handle)) ) {
+						if( is_file($dir . $entry)  ){
+							$buffer = file( $dir . $entry, FILE_IGNORE_NEW_LINES );
+							foreach( $buffer as $i => $each ){
+								$exp = explode( '=', $each );
+								$lang [ trim($exp[0]) ] = trim( $exp[1] );
+							}
+						}
+					}
+					closedir($handle);
+				}				
+				
+				Template :: addGlobals( new Collection( $lang, 'LANG' ) );
+			}
+			
+			/*
+			 *	Return a language phrase from memory
+			 *	
+			 *	@since 0.1.0
+			 *	@return String The language string
+			 */
+			
+			public static function phrase( $str ){
+				return self :: $globals['LANG'][ $str ];
 			}
 			
 		}

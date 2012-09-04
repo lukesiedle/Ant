@@ -43,6 +43,7 @@
 				);
 				self :: $app->context		= '';
 				self :: $app->lang			= 'en_gb';
+				self :: $app->theme			= 'default';
 				self :: $app->location		= array();
 				self :: $app->dates			= array();
 				self :: $app->time			= date('U');
@@ -193,8 +194,11 @@
 			 *	@since 0.1.0
 			 */
 			
-			public static function setLanguage( $lang = 'en_gb' ){
+			public static function setLanguage( $lang = 'en_all' ){
 				self :: $app->lang = $lang;
+				
+				// Load the languages into the template globals //
+				Template :: loadLanguageGlobals();
 			}
 			
 			/*
@@ -206,6 +210,27 @@
 			
 			public static function getLanguage(){
 				return self :: $app->lang;
+			}
+			
+			/*
+			 *	Sets the current template theme
+			 *	Here for forward-compatibility	
+			 *	
+			 *	@since 0.1.0
+			 */
+			
+			public static function setTheme( $theme = 'default' ){
+				self :: $app->theme = $theme;
+			}
+			
+			/*
+			 *	Gets the current theme
+			 *	
+			 *	@since 0.1.0
+			 */
+			
+			public static function getTheme(){
+				return self :: $app->theme;
 			}
 			
 			/*
