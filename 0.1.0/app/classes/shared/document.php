@@ -105,7 +105,7 @@
 						$group[ $namespace ][] = $stylesheet;
 					}
 					foreach( $group as $namespace => $stylesheets ){
-						self :: $processedStylesheets [ $namespace ] = $fn( $stylesheets );
+						self :: $processedStylesheets [ $namespace ] = $fn( $stylesheets, $namespace );
 					}
 				}
 				return self :: $processedStylesheets;
@@ -133,7 +133,7 @@
 					}
 					
 					foreach( $group as $namespace => $scripts ){
-						self :: $processedJavascripts [$namespace] = $fn( $scripts );
+						self :: $processedJavascripts [$namespace] = $fn( $scripts, $namespace );
 					}
 				}
 				return self :: $processedJavascripts;
