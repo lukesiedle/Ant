@@ -145,5 +145,3 @@ function, as follows:
 	Controller :: call('User.getUserById', array(
 		'id' => 1
 	));
-
-A change
