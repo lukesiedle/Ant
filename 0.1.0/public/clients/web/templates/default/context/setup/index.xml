@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+	
+	Frame template map, bound to collections
+	specified in /app/modules/context/setup/index.php
+	
+	@since 0.1.0
+	
+-->
+
+<collections>
+	
+	<!-- Make the collection 'newview' available -->
+	<newview></newview>
+	
+</collections>

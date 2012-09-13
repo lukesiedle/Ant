@@ -1,0 +1,52 @@
+<div class="setup">
+	
+	<h1>Introduction to Ant</h1>
+	
+	<p>This is the first time you're viewing Ant, so we just want to let you know a couple of things.</p>
+	<ul>
+		<li>Firstly this is <em>not</em> an installation page. 
+				You configure everything yourself; this page just exists 
+					to give you some pointers.</li>
+		<li>Below are some examples of how to create new clients, views, 
+				and where to add/edit Less files and JavaScript.</li>
+		<li>If you want to know more about Ant and what 
+				you can do with it check out 
+					<a href="https://luke-siedle.github.com/Ant">
+						https://luke-siedle.github.com/Ant
+					</a>
+	</ul>
+	
+	<h2>Create a new view context</h2>
+	<p>You're looking at the Web client. The web client is reserved for desktop browsers. 
+		You can serve completely different html depending on the device that's accessing your website.
+			But if you don't have more clients configured, Web will be the default.</p>
+	
+	
+	<p>To create a new view context (a top-level page that can have children):</p>
+	
+	<p>Create the folder <strong><code>{newview.folder}</code></strong></p>
+	<p>Create the PHP file <strong><code>{newview.file}</code></strong></p>
+	
+	<p>Inside your PHP file, you need to declare the route function: </p>
+	<pre>
+	namespace Ant\Web\{newview.name};
+
+	function index(){
+		// This is where you create data for output //
+	}
+	</pre>
+	
+	<p>Create the HTML file <strong><code>{newview.html}</code></strong></p>
+	
+	<p>Add your view to the default route <strong><code>{newview.route}</code></strong> like so:</p>
+	
+	<pre>
+	&lt;base is="home,user,setup,<strong>mynewview</strong>"&gt;
+	</pre>
+	
+	<p>The route will look for index by default, unless you specify otherwise. </p>
+
+	<p>Alternatively, create a route just for this context <strong><code>{newview.newroute}</code></strong></p>
+
+	
+</div>
