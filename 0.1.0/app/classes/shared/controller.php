@@ -40,7 +40,9 @@
 				// Try include the context class if it exists //
 				if( ! class_exists($c = $opt[0]) ){
 					$path = 'app/classes/context/' . $c . '/' . $c . '.php';
-					require_once( $path );
+					if( file_exists($path)){
+						require_once( $path );
+					}
 				}
 				
 				// Check if the method exists within the class //
