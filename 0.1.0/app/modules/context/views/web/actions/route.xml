@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+	
+	@description
+	
+	Route.xml offers a whitelist map of specific
+	keywords or types of values that may
+	exist within the request, and then
+	defines what module/template PHP
+	should load.
+	
+	This is the route for the current context. If 
+	this file doesn't exist, the default route
+	will be used.
+	
+-->
+
+<base is="actions">
+	
+	<!-- Put your controllers here -->
+	
+	<!-- Min router setup-->
+	<var>context</var>
+	<module>index</module>
+	<template>index</template>
+	<frame>shell</frame>
+</base>

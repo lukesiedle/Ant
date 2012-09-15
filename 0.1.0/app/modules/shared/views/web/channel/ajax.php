@@ -13,6 +13,12 @@
 	
 	namespace Ant\Web\Channel\Ajax {
 		
+		use \Ant\Router as Router;
+		use \Ant\Application as Application;
+		use \Ant\Template as Template;
+		use \Ant\CollectionSet as CollectionSet;
+		use \Ant\Controller as Controller;
+		
 		function index( $request ){
 			
 			$output		= array();
@@ -20,7 +26,7 @@
 			try {
 			
 				$view		= \Ant\Router :: loadRouteView();
-			
+				
 				if( $view instanceof \Ant\CollectionSet ){
 					$output = $view->toArray();
 				}

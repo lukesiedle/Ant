@@ -9,10 +9,15 @@
 	 *  @require PHP 5.3+
 	 *	@since 0.1.0
 	 */
-
+	 
 	// Errors //
-	error_reporting( E_ALL ^ E_NOTICE );
-	// error_reporting( E_ALL ^ E_NOTICE ^ E_STRICT );
+	// error_reporting( E_ALL ^ E_NOTICE );
+	error_reporting( E_ALL ^ E_NOTICE ^ E_STRICT );
+	
+	// Check the PHP version //
+	if( (float)substr(phpversion(), 0, 3) < 5.3 ){
+		throw new Exception('You need PHP 5.3.0+ to run the Ant framework.');
+	}
 	
 	// Version // 
 	define( 'VERSION', '1.0' );
