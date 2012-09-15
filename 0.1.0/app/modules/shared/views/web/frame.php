@@ -29,10 +29,10 @@
 		function frame(){
 			
 			// First time installation of Ant (REMOVE THIS) //
-			if( file_exists( $file = APPLICATION_ROOT . '/config/is.fresh.install' )){
-				// unlink( $file );
+			if( ! file_exists( $file = APPLICATION_ROOT . '/config/installed' )){
 				if( Router :: getContext() != 'setup' ){
-					// App :: redirect('setup');
+					file_put_contents( $file , 1 );
+					App :: redirect('setup');
 				}
 			}
 			
