@@ -176,7 +176,7 @@ $frame == 'frame_default';
 </pre>								
 				<h4>Namespacing</h4>
 				<p>Ant is namespaced throughout, which means you need a PHP 5.3+ installation, and you need to be familiar with <a href="http://php.net/manual/en/language.namespaces.php" target="_blank">namespace syntax</a>. It also
-					means a lot of the functions in Ant are usable in different contexts, successfully avoiding naming conflicts, allowing you to important one view into another for example, without any issues.</p>
+					means a lot of the functions in Ant are usable in different contexts, successfully avoiding naming conflicts, allowing you to import one view into another for example, without any issues.</p>
 				
 				<a name="require"></a>
 				<h2>Requirements / Dependencies</h2>
@@ -195,11 +195,12 @@ $frame == 'frame_default';
 				
 				<p>After creating the database and importing the basic Ant structure, 
 					you'll need to confirm the local/remote mysql configuration inside
-					<code>[version]/config/mysql.php</code>. Within this file you can set
+					<code>/[version]/app/config/mysql.php</code>. Within this file you can set
 						your database name, as well as your table prefix.</p>
 				
-				<p>Open the root to your project in your browser, 
-					and you should see the Ant Logo. </p>
+				<p>Open the root to your project in your browser. If it's the first time, it should redirect to the setup page. 
+					You might see errors on this page, in which case you need to configure the project before it will work correctly.
+				</p>
 				
 				<h3>Confirming setup by testing</h3>
 				<p>To make sure Ant is working properly, you can run the included unit tests,
@@ -207,7 +208,7 @@ $frame == 'frame_default';
 							the url /test.php. This will attempt to run the tests via command line
 								using the <code>exec</code> function in PHP. 
 								If this doesn't work, or you don't have PHPUnit installed,
-									consult the <a href="">Unit Tests</a> section below.</p>
+									consult the <a href="#tests">Unit Tests</a> section below.</p>
 				
 				<a name="basics"></a>
 				<h2>Basic Concepts</h2>
