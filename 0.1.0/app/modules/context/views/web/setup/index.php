@@ -22,7 +22,11 @@
 			'newroute'	=> APPLICATION_ROOT . '\app\modules\context\views\web\newview\route.xml',
 			'less'		=> APPLICATION_ROOT . '\public\clients\web\css\shared\my_styles.less',
 			'js'		=> APPLICATION_ROOT . '\public\clients\web\javascript\shared\my_plugin.js',
-			'resources' => APPLICATION_ROOT . '\app\config\resources\clients\includes\web.xml'
+			'resources' => APPLICATION_ROOT . '\app\config\resources\clients\includes\web.xml',
+			
+			'class' => APPLICATION_ROOT . '\app\classes\context\newview\newview.php',
+			'controller' => APPLICATION_ROOT . '\app\modules\context\controllers\newview\dostuff.php'
+			
 		), 'newview' );
 		
 		// Test for a database error //

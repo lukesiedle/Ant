@@ -98,8 +98,36 @@ function index(){
 	
 	<p>Ant will now attempt to execute that controller when the appropriate URL is used:</p>
 	<p><strong><code>/home/dostuff</code></strong></p>
+	
+	<p>First Ant will look for the context class here <strong><code>{newview.class}</code></strong></p>
+	<p> It will attempt to find a function inside the class if the class exists. If it doesn't find the class or function 
+			it will search for a controller inside here <strong><code>{newview.controller}</code></strong>
+			You can namespace your controllers even further, as you will see inside that folder for better organization.</p>
+	
 	<p>Note if the top level view "home" does not exist, you will get a 404 error.</p>
 	
+	<p>What if you don't want an html view for it? Well you can create your own channel, or use the built in "action" channel. </p>
+	<p><strong><code>/home/dostuff/?channel=action</code></strong></p>
+		
+	<p> Using that channel will not attempt to include html, but rather just output the results of your controllers as JSON.
+		If you want to redirect to another page after a controller is executed, you can add another controller beneath it inside the Route.xml. 
+			Each controller passes its name and associated results to the next controller, and based on those results, you can redirect to a specific page inside
+			your custom redirect controller. Like so
+	</p>
+		<p>Add your own redirect controller</p>
+	<pre>
+&lt;base is="home"&gt;
+	
+	// User registration and login actions //
+	&lt;next is="dostuff"&gt;
+		&lt;controller&gt;NewView.doStuff&lt;/controller&gt;
+		&lt;controller&gt;NewView.redirect&lt;/controller&gt;
+	&lt;/next&gt;
+
+	// More declarations ...//
+
+&lt;/next&gt;
+	</pre>
 	
 	<h2>Getting stuck?</h2>
 	
