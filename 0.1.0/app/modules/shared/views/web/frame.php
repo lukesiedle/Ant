@@ -11,7 +11,7 @@
 	 *	@since 0.1.0
 	 * 
 	 */
-
+	
 	namespace Ant\Web {
 		
 		use \Ant\Application as App;
@@ -52,6 +52,7 @@
 					
 				// Store logout button
 				logout()
+					
 			);
 		}
 		
@@ -68,8 +69,9 @@
 			return $login;
 		}
 		
+		// Condition the logout form //
 		function logout(){
-			return new Collection( 1, 'user.logout' );
+			return Collection :: create( 'user.logout' );
 		}
 		
 		// Store document globals for replacement
