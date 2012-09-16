@@ -15,7 +15,7 @@
 
 -->
 
-<base is="home,user">
+<base is="home,user,setup">
 	
 	<!-- User profile -->
 	<next is="me">

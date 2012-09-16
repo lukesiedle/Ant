@@ -38,17 +38,26 @@
 			
 			// Run any specified controllers, chaining them
 			// where possible
+			// 
+			// @note Why not use the "actions" channel? Well we
+			// don't necessarily want to redirect the user.
+			// Maybe we want to show the same URL after
+			// the controller runs/fails.
+			// 
 			// @since 0.1.0 //
-			if( $controllers = Router :: getControllers() ){
+			if( $controllers = \Ant\Router :: getControllers() ){
 				$args = array();
-				foreach( $controllers as $controller ){					
-					if( is_array(
-							$result = Controller :: call( $controller, $args )
-						)){
+				foreach( $controllers as $controller ){
+					
+					$result = \Ant\Controller :: call( $controller, $args );
+					
+					// Chain the arguments //
+					if( is_array( $result )){
 						$args = $result;
+					} else {
+						$args = array( $controller => $result );
 					}
 				}
-				unset( $args, $result );
 			}
 			
 			// Load view specific data

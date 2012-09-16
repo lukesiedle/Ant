@@ -31,7 +31,7 @@
 			public static function connect( $set ){
 				
 				if ( ! defined('PDO::ATTR_DRIVER_NAME') ) {
-					throw new Exception( 'You must enable the PDO driver in PHP.ini' );
+					throw new \Exception( 'You must enable the PDO driver in PHP.ini' );
 				}
 				
 				$dsn =  'mysql:host=' . $set['host']	.
@@ -39,8 +39,23 @@
 						';port='	  . $set['port']	. 
 						';connect_timeout=' . $set['timeout'];
 				
-				self :: $lastConnection = new \PDO($dsn, $set['username'], $set['password']);
+				try {
+					self :: $lastConnection = new \PDO($dsn, $set['username'], $set['password']);
+				} catch( \PDOException $e ){
+					throw new \Exception( $e->getMessage() );
+				}
 				
+				return self :: $lastConnection;
+			}
+			
+			/*
+			 *	Get the last known connection
+			 * 
+			 *	@since 0.1.0
+			 *	@return resource The connection
+			 */
+			
+			public static function getLastConnection(){
 				return self :: $lastConnection;
 			}
 			

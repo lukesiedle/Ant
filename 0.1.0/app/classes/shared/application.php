@@ -348,16 +348,23 @@
 					case 'mysql' :
 						try {
 							self :: $app->connection[ $type ] = \Library\MySQL :: connect( $config );
-						} catch( Exception $e ){
+						} catch( \Exception $e ){
+							
+							self :: set(array(
+								'errors' => array('mysql' => $e->getMessage())
+							));
+							
 							// Otherwise try connect to the local host //
 							$config['host'] = 'localhost';
+							
 							try {
 								self :: $app->connection[ $type ] = \Library\MySQL :: connect( $config );
-							} catch( Exception $e ){
-								throw 'Connection to MySQL database failed. You may still need to create\configure
-										your MySQL Database. Locate \ant.sql in the Ant repository to create the
-											basic database setup';
+							} catch( \Exception $e ){
+								self :: set(array(
+									'errors' => array('mysql' => $e->getMessage())
+								));
 							}
+							
 						}
 						break;
 				}

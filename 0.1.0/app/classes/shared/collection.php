@@ -412,6 +412,20 @@
 				Application :: out( $this->toArray() );
 			}
 			
+			/*
+			 *	Create a placeholder
+			 *	collection that will
+			 *	iterate once, useful
+			 *	for conditioning in
+			 *	templates.
+			 *	
+			 *	@since 0.1.0
+			 */
+			
+			public static function create( $namespace ){
+				return new Collection(array( 1 ), $namespace );
+			}
+			
 		}
 		
 		/*

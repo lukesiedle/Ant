@@ -29,18 +29,19 @@
 				
 				$opt = explode( '.', strtolower($method) );
 				
-				$methodPath = '\Ant\\Controller\\' . $opt[0] . '\\' . $opt[1];
+				$methodPath = '\Ant\\Controller\\' . implode('\\', $opt );
 				
 				// If there's another option, it's a submethod //
 				if( $opt[2] ){
-					$methodPath .= '\\' . $opt[2];
 					$subMethod = true;
 				}
 				
 				// Try include the context class if it exists //
 				if( ! class_exists($c = $opt[0]) ){
 					$path = 'app/classes/context/' . $c . '/' . $c . '.php';
-					require_once( $path );
+					if( file_exists($path)){
+						require_once( $path );
+					}
 				}
 				
 				// Check if the method exists within the class //
@@ -72,11 +73,10 @@
 				
 				$opt = explode( '.', strtolower($queryName) );
 				
-				$methodPath = '\Ant\\' . 'Query\\'. $opt[0]. '\\' . $opt[1];
+				$methodPath = '\Ant\\' . 'Query\\' . implode( '\\', $opt );
 				
 				// If there's another option, it's a submethod //
 				if( $opt[2] ){
-					$methodPath .= '\\' . $opt[2];
 					$subMethod = true;
 				}
 				

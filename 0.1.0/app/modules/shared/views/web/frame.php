@@ -11,9 +11,10 @@
 	 *	@since 0.1.0
 	 * 
 	 */
-
+	
 	namespace Ant\Web {
 		
+		use \Ant\Application as App;
 		use \Ant\Collection as Collection;
 		use \Ant\CollectionSet as CollectionSet;
 		use \Ant\Controller as Control;
@@ -26,6 +27,14 @@
 		use \Ant\User as User;
 		
 		function frame(){
+			
+			// First time installation of Ant (REMOVE THIS) //
+			if( ! file_exists( $file = APPLICATION_ROOT . '/config/installed' )){
+				if( Router :: getContext() != 'setup' ){
+					file_put_contents( $file , 1 );
+					App :: redirect('setup');
+				}
+			}
 			
 			// Always attempt to determine the current user //
 			$theUser = Control :: call('User.initialize');
@@ -43,6 +52,7 @@
 					
 				// Store logout button
 				logout()
+					
 			);
 		}
 		
@@ -50,7 +60,7 @@
 		function login( $data ){
 			$login = new Collection( $data , 'user.login' );
 			if( $request = \Ant\Request :: get('post') ){
-				if( $request['username'] ){
+				if( isset($request['username'] )){
 					$login->join( new Collection(array(
 						'message' => Template :: phrase('USER_LOGIN_FAILED_MSG')
 					), 'errors' ));
@@ -59,16 +69,18 @@
 			return $login;
 		}
 		
+		// Condition the logout form //
 		function logout(){
-			return new Collection( 1, 'user.logout' );
+			return Collection :: create( 'user.logout' );
 		}
 		
 		// Store document globals for replacement
 		// @since 0.1.0 //
 		function document(){
 			return new Collection(array(
-				'title' => Router :: getDocTitle(),
-				'root'	=> Router :: getPublicRoot()
+				'title'		=> Router :: getDocTitle(),
+				'root'		=> Router :: getPublicRoot(),
+				'context'	=> Router :: getContext()
 			), 'document' );
 		}
 		

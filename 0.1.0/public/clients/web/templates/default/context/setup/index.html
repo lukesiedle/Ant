@@ -1,0 +1,168 @@
+<div class="setup">
+	<img src="public/images/Ant-Logo.png" />
+	<h1>Introduction to Ant</h1>
+	
+	<p>This is the first time you're viewing Ant, so we just want to let you know a couple of things.</p>
+	<ul>
+		<li>Firstly this is <em>not</em> an installation page. 
+				You configure everything yourself; this page just exists 
+					to give you some pointers.</li>
+		<li>There's a simple database included test below to make sure you have the requirements for the database connection to be successful.</li>
+		<li>Also below is an example of how to create new views, 
+				and where to add/edit Less files and JavaScript.</li>
+		<li>If you want to know more about Ant and what 
+				you can do with it check out 
+					<a href="http://luke-siedle.github.com/Ant">
+						http://luke-siedle.github.com/Ant
+					</a>
+	</ul>
+	
+	<h2>Database Connection</h2>
+	Connection : <span class="{status.class}">{status.database}</span>
+	
+	<h3>Configuring the Database</h3>
+	<p>Import the default Ant database (included in the repo - ant.sql) or create your own. Specify the connection details inside the mysql config file here</p>
+	<p><strong><code>{status.config}</code></strong></p>
+	
+	<h2>Create a new view context</h2>
+	<p>You're looking at the Web client. The web client is reserved for desktop browsers. 
+		You can serve completely different html depending on the device that's accessing your website.
+			But if you don't have more clients configured, Web will be the default.</p>
+	
+	
+	<h3>The PHP</h3>
+	
+	<p>To create a new view context (a top-level page that can have children):</p>
+	
+	<p>Create the folder inside the "web" client subdirectory here <br /><strong><code>{newview.folder}</code></strong></p>
+	<p>Create the PHP file inside the new folder here <strong><code>{newview.file}</code></strong></p>
+	
+	<p>Inside your PHP file, you need to declare the route function (namespaced): </p>
+	<pre>
+namespace Ant\Web\{newview.name};
+
+function index(){
+	// This is where you create data for output //
+}
+	</pre>
+	
+	<blockquote>I just need a URL to perform an action. What then?</blockquote>
+	
+	<p>Check out the section below : <a href="setup#controllers">Controllers</a>.</p>
+	
+	<h3>The HTML</h3>
+	
+	<p>Create the HTML file to correspond with the view here <br /> <strong><code>{newview.html}</code></strong></p>
+	
+	<h3>The XML Router</h3>
+	
+	<p>Whitelist your view in the default route here <strong><code>{newview.route}</code></strong> like so:</p>
+	
+	<pre>
+	&lt;base is="home,user,setup,<strong>newview</strong>"&gt;
+	</pre>
+	
+	<p>The route will look for your newly created php file <strong><code>.\newview\index.php</code></strong> by default, unless you specify otherwise. </p>
+
+	<p>Alternatively, create a route just for this context here <strong><code>{newview.newroute}</code></strong></p>
+
+	<h3>The CSS (Less) and JavaScript</h3>
+	
+	<p>If you want to add a less file to your project create it here <strong><code>{newview.less}</code></strong></p>
+	
+	<p>If you want to add a JavaScript file or library to your project create it here <strong><code>{newview.js}</code></strong></p>
+	
+	<p>Then to make sure it gets included, you need to define it as a resource inside here <strong><code>{newview.resources}</code></strong></p>
+	
+	<p>Ant will regenerate the less files as css files using a Java port of Less, and compile/minify the JavaScript with Google Closure Compiler every time the files are modified. </p>
+	
+	<a name="controllers"></a>
+	<h2>Controllers</h2>
+	<p>Controllers in Ant are simply namespaced functions that perform actions. You can access a controller directly via a URL. You just need to ensure you define it inside the Route and ensure it falls beneath a context page.</p>
+	
+	<p>Open the contextual or global route.xml file for the client. <strong><code>{newview.route}</code></strong></p>
+	
+	<p>Whitelist a controller</p>
+	<pre>
+&lt;base is="home"&gt;
+	
+	// User registration and login actions //
+	&lt;next is="dostuff"&gt;
+		&lt;controller&gt;NewView.doStuff&lt;/controller&gt;
+	&lt;/next&gt;
+
+	// More declarations ...//
+
+&lt;/next&gt;
+	</pre>
+	
+	<p>Ant will now attempt to execute that controller when the appropriate URL is used:</p>
+	<p><strong><code>/home/dostuff</code></strong></p>
+	
+	<p>First Ant will look for the context class here <strong><code>{newview.class}</code></strong></p>
+	<p> It will attempt to find a function inside the class if the class exists. If it doesn't find the class or function 
+			it will search for a controller inside here <strong><code>{newview.controller}</code></strong>
+			You can namespace your controllers even further, as you will see inside that folder for better organization.</p>
+	
+	<p>Note if the top level view "home" does not exist, you will get a 404 error.</p>
+	
+	<p>What if you don't want an html view for it? Well you can create your own channel, or use the built in "action" channel. </p>
+	<p><strong><code>/home/dostuff/?channel=action</code></strong></p>
+		
+	<p> Using that channel will not attempt to include html, but rather just output the results of your controllers as JSON.
+		If you want to redirect to another page after a controller is executed, you can add another controller beneath it inside the Route.xml. 
+			Each controller passes its name and associated results to the next controller, and based on those results, you can redirect to a specific page inside
+			your custom redirect controller. Like so
+	</p>
+		<p>Add your own redirect controller</p>
+	<pre>
+&lt;base is="home"&gt;
+	
+	// User registration and login actions //
+	&lt;next is="dostuff"&gt;
+		&lt;controller&gt;NewView.doStuff&lt;/controller&gt;
+		&lt;controller&gt;NewView.redirect&lt;/controller&gt;
+	&lt;/next&gt;
+
+	// More declarations ...//
+
+&lt;/next&gt;
+	</pre>
+	
+	<h2>Getting stuck?</h2>
+	
+	<p>Take a look inside the files used to generate this setup page, as well as the files created for unit tests (the "test" client). 
+		You should become familiar with how the framework works just by looking through these files. That's the best way to understand the structure.</p>
+	
+	<h2>Additional Recommended Libraries</h2>
+	
+	<p>You will find that great tools for common tasks already exist for PHP 5. No point reinventing the wheel, especially if the wheel is well maintained!</p>
+	
+	<h3>PHP</h3>
+	<ul>
+		<li><a href="https://github.com/Respect/Validation" target="_blank">Respect/Validation</a> - PHP Server-side validation</li>
+		<li><a href="http://code.google.com/a/apache-extras.org/p/phpmailer/" target="_blank">PHPMailer</a> - Email tools for PHP</li>
+		<li><a href="http://code.google.com/p/dompdf/" target="_blank">dompdf</a> - HTML to PDF converter</li>
+	</ul>
+	<h3>JavaScript</h3>
+	<ul>
+		<li><a href="https://github.com/documentcloud/underscore" target="_blank">Underscore</a> - JavaScript Utility Belt</li>
+		<li><a href="https://github.com/documentcloud/backbone" target="_blank">Backbone</a> - JavaScript OOP Library for Model-View binding, Collections, RESTFul JSON interface.</li>
+	</ul>
+	
+	<h2>Important Security Issues</h2>
+	<p>These security problems are generalized and may not always apply to your application.
+		They are not solved by Ant at this time.</p>
+	<ul>
+		<li><a href="http://stackoverflow.com/questions/1996122/how-to-prevent-xss-with-html-php">Cross Site Scripting</a></li>
+		<li><a href="http://stackoverflow.com/questions/1780687/preventing-csrf-in-php">Cross Site Request Forgery</a></li>
+		<li><span style="text-decoration: line-through">SQL Injection</span> Ant uses prepared statements which prevent SQL injection. However
+			there are other ways to exploit a database. <a href="http://stackoverflow.com/questions/134099/are-pdo-prepared-statements-sufficient-to-prevent-sql-injection">
+				More information
+			</a>.</li>
+			<li><a href="http://php.robm.me.uk/#toc-FileUploads">File Uploads</a></li>
+			<li><a href="http://php.robm.me.uk">Detailed</a> Security Issues</li>
+	</ul>
+	
+	
+</div>

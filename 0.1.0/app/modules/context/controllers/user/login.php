@@ -23,7 +23,7 @@
 	function login( $vars ){
 		
 		if( ! $request = Request :: get('post') ){
-			return;
+			return false;
 		}
 		
 		// Skip login if the user is already logged in //
@@ -52,6 +52,8 @@
 			
 			// Set the current user in memory //
 			User :: setCurrentUser( $data );
+			
+			return true;
 		}
 		
 	}
