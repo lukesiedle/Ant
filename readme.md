@@ -74,6 +74,49 @@ if the method returns something, as follows:
 		return self :: $app;
 	}
 
+##b. Scope
+
+### Instance methods vs. static methods IMPORTANT
+
+Don't create instant methods if you don't need an instance. If only a single object is required, 
+rather use static methods and store data inside static variables or constants in the class. In this case, 
+the class is a wrapper class for a set of functions and variables that can exist uniquely in the script.
+
+When you need an object to be instantiated more than once, then you should use instance methods, or a combination
+of instance and static methods. Usually these type of PHP classes represent models, a set of rules signifying how
+data should be manipulated. For example 'users' or 'articles'.
+
+This discipline ensures that the programmer is always aware of what type of scope is required, and ultimately 
+avoids confusion.
+
+### Chaining
+
+Support chaining in classes if instance methods manipulate the object and don't return a value, 
+i.e. return <code>$this</code>.
+
+##c. Case
+
+Use CapitalCamelCase for classes, camelCase for functions, and variables. Use underscore_case for array keys, and UPPERCASE_UNDERSCORE_CASE
+for constants.
+
+##d. Function arguments
+
+Borrowing from Wordpress, avoid making arguments booleans or some type that is meaningless to the uninformed reader, 
+but rather pass a string explaining the purpose of the argument. For example :
+
+	saveComment( 'stripHTML:yes', 'emailParticipants:no' );
+	
+rather than:
+
+	saveComment( true, false );
+	
+OR you could use an array to represent the arguments
+
+	saveComment( array(
+		'stripHTML' 		=> true,
+		'emailParticipants' 	=> false
+	));
+
 ##2. Implementation
 
 ### Namespaces
