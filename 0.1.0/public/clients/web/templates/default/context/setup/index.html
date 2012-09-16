@@ -7,8 +7,8 @@
 		<li>Firstly this is <em>not</em> an installation page. 
 				You configure everything yourself; this page just exists 
 					to give you some pointers.</li>
-		<li>There's a simple test here included to make sure you have the requirements for the database connection to be successful.</li>
-		<li>Below is an example of how to create new views, 
+		<li>There's a simple database included test below to make sure you have the requirements for the database connection to be successful.</li>
+		<li>Also below is an example of how to create new views, 
 				and where to add/edit Less files and JavaScript.</li>
 		<li>If you want to know more about Ant and what 
 				you can do with it check out 
@@ -74,7 +74,7 @@ function index(){
 	
 	<p>Then to make sure it gets included, you need to define it as a resource inside here <strong><code>{newview.resources}</code></strong></p>
 	
-	<p>Ant will regenerate the less files as css files every time the files are modified. It only performs this locally, so be sure to commit the generated files to your project. </p>
+	<p>Ant will regenerate the less files as css files using a Java port of Less, and compile/minify the JavaScript with Google Closure Compiler every time the files are modified. </p>
 	
 	<a name="controllers"></a>
 	<h2>Controllers</h2>
@@ -133,5 +133,36 @@ function index(){
 	
 	<p>Take a look inside the files used to generate this setup page, as well as the files created for unit tests (the "test" client). 
 		You should become familiar with how the framework works just by looking through these files. That's the best way to understand the structure.</p>
+	
+	<h2>Additional Recommended Libraries</h2>
+	
+	<p>You will find that great tools for common tasks already exist for PHP 5. No point reinventing the wheel, especially if the wheel is well maintained!</p>
+	
+	<h3>PHP</h3>
+	<ul>
+		<li><a href="https://github.com/Respect/Validation" target="_blank">Respect/Validation</a> - PHP Server-side validation</li>
+		<li><a href="http://code.google.com/a/apache-extras.org/p/phpmailer/" target="_blank">PHPMailer</a> - Email tools for PHP</li>
+		<li><a href="http://code.google.com/p/dompdf/" target="_blank">dompdf</a> - HTML to PDF converter</li>
+	</ul>
+	<h3>JavaScript</h3>
+	<ul>
+		<li><a href="https://github.com/documentcloud/underscore" target="_blank">Underscore</a> - JavaScript Utility Belt</li>
+		<li><a href="https://github.com/documentcloud/backbone" target="_blank">Backbone</a> - JavaScript OOP Library for Model-View binding, Collections, RESTFul JSON interface.</li>
+	</ul>
+	
+	<h2>Important Security Issues</h2>
+	<p>These security problems are generalized and may not always apply to your application.
+		They are not solved by Ant at this time.</p>
+	<ul>
+		<li><a href="http://stackoverflow.com/questions/1996122/how-to-prevent-xss-with-html-php">Cross Site Scripting</a></li>
+		<li><a href="http://stackoverflow.com/questions/1780687/preventing-csrf-in-php">Cross Site Request Forgery</a></li>
+		<li><span style="text-decoration: line-through">SQL Injection</span> Ant uses prepared statements which prevent SQL injection. However
+			there are other ways to exploit a database. <a href="http://stackoverflow.com/questions/134099/are-pdo-prepared-statements-sufficient-to-prevent-sql-injection">
+				More information
+			</a>.</li>
+			<li><a href="http://php.robm.me.uk/#toc-FileUploads">File Uploads</a></li>
+			<li><a href="http://php.robm.me.uk">Detailed</a> Security Issues</li>
+	</ul>
+	
 	
 </div>
