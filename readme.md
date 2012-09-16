@@ -186,3 +186,9 @@ You can execute a controller as follows:
 Controllers can also be called directly via an http request. You need to whitelist
 the controller inside route.xml, examples of which you can find inside the /setup page
 when placing the Ant framework on your server.
+
+# More Documentation
+
+Consult the /setup page when using Ant for the first time for some basic examples to get you started. 
+You can also find some more info at the (Ant Github page)[luke-siedle.github.com/Ant]. Advanced documentation
+is still being put together, since there is no first release yet.
