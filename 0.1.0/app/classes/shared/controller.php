@@ -29,11 +29,10 @@
 				
 				$opt = explode( '.', strtolower($method) );
 				
-				$methodPath = '\Ant\\Controller\\' . $opt[0] . '\\' . $opt[1];
+				$methodPath = '\Ant\\Controller\\' . implode('\\', $opt );
 				
 				// If there's another option, it's a submethod //
 				if( $opt[2] ){
-					$methodPath .= '\\' . $opt[2];
 					$subMethod = true;
 				}
 				
@@ -74,11 +73,10 @@
 				
 				$opt = explode( '.', strtolower($queryName) );
 				
-				$methodPath = '\Ant\\' . 'Query\\'. $opt[0]. '\\' . $opt[1];
+				$methodPath = '\Ant\\' . 'Query\\' . implode( '\\', $opt );
 				
 				// If there's another option, it's a submethod //
 				if( $opt[2] ){
-					$methodPath .= '\\' . $opt[2];
 					$subMethod = true;
 				}
 				
