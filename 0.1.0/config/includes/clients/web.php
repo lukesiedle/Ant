@@ -26,7 +26,3 @@
 	include( LIB_PATH . '/php/google/apiClient.php' );
 	include( LIB_PATH . '/php/google/contrib/apiPlusService.php' );
 	include( 'config/libraries/google.php');
-	
-	// Less.php compiler 
-	// @since 0.1.0
-	include( LIB_PATH . '/php/lessphp/lessc.inc.php' );

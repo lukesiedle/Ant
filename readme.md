@@ -190,5 +190,5 @@ when placing the Ant framework on your server.
 # More Documentation
 
 Consult the /setup page when using Ant for the first time for some basic examples to get you started. 
-You can also find some more info at the (Ant Github page)[luke-siedle.github.com/Ant]. Advanced documentation
+You can also find some more info at the [Ant Github page](http://luke-siedle.github.com/Ant). Advanced documentation
 is still being put together, since there is no first release yet.
