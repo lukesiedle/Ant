@@ -51,7 +51,12 @@
 				} else {
 					$inClass = false;
 					if( !function_exists($methodPath) ){
-						require( 'app/modules/context/controllers/' . implode( '/', $opt ) . '.php' );
+						$methodInclude = 'app/modules/context/controllers/' . implode( '/', $opt ) . '.php';
+						if( file_exists($methodInclude)){
+							require( $methodInclude );
+						} else {
+							throw new \Exception( $methodInclude . ' does not exist.' );
+						}
 					}
 				}
 				

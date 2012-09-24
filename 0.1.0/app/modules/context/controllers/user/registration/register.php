@@ -12,17 +12,20 @@
 	
 	use \Ant\User as User;
 	
-	function register(){
-		
-		if( ! $request = \Ant\Request :: get('post') ){
-			return false;
-		}
-		
-		$user = new User( new Collection( $request, 'user' ) );
-		
-		$user->save();
-		
-		User :: setCurrentUser( $user );
-		
-		return $user;
+	function register( $args ){
+		return false;
 	}
+	
+	/*
+	 *	Filter the request
+	 * 
+	 */
+	
+	function registerFilter( $request ){
+		return array(
+			'user_first_name'	=> 'Luke',
+			'user_last_name'	=> 'Siedle',
+			'user_email'		=> 'ljsiedle@gmail.com',
+		);
+	}
+	

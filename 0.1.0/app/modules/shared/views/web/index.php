@@ -10,7 +10,7 @@
 	 *	the application. Perform specific
 	 *	global operations inside a shared
 	 *	view like 'frame'
-	 * 
+	 *	
 	 *	@package Ant
 	 *	@type Shared
 	 *	@since 0.1.0
@@ -26,6 +26,8 @@
 		use \Ant\Template as Template;
 		use \Ant\CollectionSet as CollectionSet;
 		use \Ant\Controller as Controller;
+		use \Ant\Request as Request;
+		use \Ant\Session as Session;
 		
 		/*
 		 *	The index function is automatically
@@ -49,6 +51,7 @@
 				$args = array();
 				foreach( $controllers as $controller ){
 					
+					// Execute the controller to get a result //
 					$result = \Ant\Controller :: call( $controller, $args );
 					
 					// Chain the arguments //
@@ -60,12 +63,33 @@
 				}
 			}
 			
+			// Get the CSRF tokens from session and add them to memory
+			// @since 0.1.0 //
+			Request :: setCSRF( Session :: get('csrf') );
+			
+			$oldChannel	= Router :: getChannel();
+			
 			// Load view specific data
 			// @since 0.1.0 //
 			$view		= Router :: loadRouteView();
+			
+			// Check if the channel has changed 
+			// from the view, and stop here
+			// @since 0.1.0 //
+			if( $oldChannel != Router :: getChannel() ){
+				return;
+			}
+			
+			// Get the CSRF tokens from memory and store them
+			// @since 0.1.0
+			Session :: add( 'csrf', Request :: getCSRF() );
+			
+			// Load the shared view
+			// @since 0.1.0
 			$shared		= Router :: loadSharedView('frame', $view );
 			
 			// Load a template from the shared space
+			// The shared template specified inside Route
 			// @since 0.1.0 //
 			$frame		= Template :: loadSharedTemplate( Router :: getRouteVars()->frame );
 			

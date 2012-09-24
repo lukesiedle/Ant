@@ -1,0 +1,23 @@
+<div>
+	<h1>Registration</h1>
+	<form method="post" action="{register.resource}">
+		
+		<!-- Fields -->
+		<label>First Name</label><input type="text" name="user_first_name" /><br />
+		<label>Last Name</label><input type="text" name="user_last_name" /><br />
+		<label>Email<input type="text" name="user_email" /></label><br />
+		
+		<!-- Create task -->
+		<input type="text" name="__task" value="create" />
+		
+		<!-- Resource and associated token -->
+		<input type="text" name="__resource" value="{register.resource}" />
+		<input type="text" name="__token" value="{register.token}" />
+		
+		<!-- Intention hook -->
+		<input type="hidden" name="__intention" value="User.registration.register" />
+		
+		<input type="submit" value="Submit" />
+		
+	</form>
+</div>

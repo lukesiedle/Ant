@@ -131,6 +131,17 @@
 			}
 			
 			/*
+			 *	Get the current channel
+			 *	in use
+			 * 
+			 *	@since 0.1.0
+			 */
+			
+			public static function getChannel(){
+				return self :: $channel;
+			}
+			
+			/*
 			 *	Get the current public path 
 			 *	to the application, i.e. not 
 			 *	necessarily the root

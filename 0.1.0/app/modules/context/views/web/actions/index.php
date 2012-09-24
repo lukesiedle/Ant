@@ -12,16 +12,13 @@
 	 */
 
 	namespace Ant\Web\Actions;
-	use Ant\Collection as Collection;
-	use Ant\CollectionSet as CollectionSet;
+	use \Ant\Collection as Collection;
+	use \Ant\CollectionSet as CollectionSet;
+	use \Ant\Router as Router;
+	use Ant\Request as Request;
 	
 	function index(){
 		
-		// Show the user some helpful info when local //
-		if( \Ant\Application :: get()->local ){
-			return new CollectionSet( Collection :: create('message') );
-		} else {
-			// Just set an error //
-			\Ant\Application :: setError('404');
-		}
+	
+		
 	}

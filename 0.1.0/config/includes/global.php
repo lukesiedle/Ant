@@ -20,6 +20,14 @@
 	// @since 0.1.0 //
 	require('app/classes/shared/database.php');
 	
+	// Resource Class
+	// @since 0.1.0 //
+	require('app/classes/shared/resource.php');
+	
+	// Model
+	// @since 0.1.0 //
+	require('app/classes/shared/model.php');
+	
 	// Request Class
 	// @since 0.1.0 //
 	require('app/classes/shared/request.php');
@@ -55,6 +63,10 @@
 	// Authentication
 	// @since 0.1.0 //
 	require('app/classes/shared/authentication.php');
+	
+	// Exception
+	// @since 0.1.0 //
+	require('app/classes/shared/exception.php');
 	
 	// General Functions
 	// @since 0.1.0 //
