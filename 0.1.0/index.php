@@ -11,8 +11,7 @@
 	 */
 	 
 	// Errors //
-	error_reporting( E_ALL ^ E_NOTICE );
-	// error_reporting( E_ALL ^ E_NOTICE ^ E_STRICT );
+	error_reporting( E_ERROR | E_WARNING );
 	
 	// Check the PHP version //
 	if( (float)substr(phpversion(), 0, 3) < 5.3 ){

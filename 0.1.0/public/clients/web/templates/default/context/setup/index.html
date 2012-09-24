@@ -78,13 +78,13 @@ function index(){
 	
 	<a name="controllers"></a>
 	<h2>Controllers</h2>
-	<p>Controllers in Ant are simply namespaced functions that perform actions. You can access a controller directly via a URL. You just need to ensure you define it inside the Route and ensure it falls beneath a context page.</p>
+	<p>Controllers in Ant are simply namespaced functions that perform actions. You can access a controller directly via a URL. You just need to ensure you define it inside the Route and ensure it falls beneath a context page. Ant has a context called "actions" already included so you can use that context from the start.</p>
 	
 	<p>Open the contextual or global route.xml file for the client. <strong><code>{newview.route}</code></strong></p>
 	
 	<p>Whitelist a controller</p>
 	<pre>
-&lt;base is="home"&gt;
+&lt;base is="home,actions"&gt;
 	
 	// User registration and login actions //
 	&lt;next is="dostuff"&gt;
@@ -97,7 +97,11 @@ function index(){
 	</pre>
 	
 	<p>Ant will now attempt to execute that controller when the appropriate URL is used:</p>
-	<p><strong><code>/home/dostuff</code></strong></p>
+	<p>
+		<strong><code>http://myapp.com/home/dostuff</code></strong>
+		or
+		<strong><code>http://myapp.com/actions/dostuff</code></strong>
+	</p>
 	
 	<p>First Ant will look for the context class here <strong><code>{newview.class}</code></strong></p>
 	<p> It will attempt to find a function inside the class if the class exists. If it doesn't find the class or function 

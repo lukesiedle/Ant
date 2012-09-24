@@ -37,3 +37,6 @@
 	
 	// Store the config //
 	Configuration :: set( $config );
+	
+	// Custom Error Handler //
+	

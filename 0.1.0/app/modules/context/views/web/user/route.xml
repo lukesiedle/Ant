@@ -25,6 +25,13 @@
 	<next is="logout">
 		<controller>User.logout</controller>
 	</next>
+	<next is="register">
+		<module>register</module>
+		<template>register</template>
+		<doctitle>
+			<register>User | Sign Up</register>
+		</doctitle>
+	</next>
 	
 	<next is="new">
 		<var>edit</var>

@@ -89,11 +89,16 @@
 			 */
 			
 			public static function setEnvironment(){
+				
+				self :: $app->local = false;
+				self :: $app->developerMode = false;
+				
 				if( in_array(
 					$_SERVER['SERVER_NAME'], 
 					self :: config()->local_server_name
 				)){
 					self :: $app->local = true;
+					self :: $app->developerMode = true;
 				}
 			}
 			
