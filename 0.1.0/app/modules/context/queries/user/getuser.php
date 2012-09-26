@@ -19,6 +19,9 @@
 					"user.user_username
 					,user.user_id
 					,user.user_secret
+					,user.user_first_name
+					,user.user_last_name
+					,user.user_email
 					,CONCAT( user.user_first_name, ' ', user.user_last_name ) 
 						AS user_full_name", 
 					$_ . "user user")

@@ -1,13 +1,14 @@
 <?php
-
+	
 	/*
-	 *	Model takes care
-	 *	of the representation
-	 *	of a context as a resource
+	 *	Resource takes care
+	 *	of RESTFul / CRUD
+	 *	structure, and data
+	 *	validation, sanitization.
 	 *	
 	 *	@since 0.1.0
 	 *	@package Ant
-	 *	@subpackage Model
+	 *	@subpackage Resource
 	 * 
 	 */
 
@@ -17,22 +18,42 @@
 			
 			/*
 			 *	Constructor initializes
-			 *	the model in use, and 
+			 *	the resource in use, and 
 			 *	prepares for CRUD task.
 			 * 
 			 *	@since 0.1.0
 			 */
 			
-			public function __construct( $model, $data ){
+			public function __construct( $resource, $data = array()){
 				
-				$this->model	= $model;
+				$this->resource = $resource;
 				$this->data		= $data;
+				
+				// Generate a default or custom model //
+				$this->model	= Model :: make( $resource );
+				
+				// Try set the resource Id //
+				$this->setId( $this->data['id'] );
+				
+				// Get the schema of this resource //
 				$this->getSchema();
 			}
 			
 			/*
+			 *	Get the resource
+			 *	(the name)
+			 * 
+			 *	@since 0.1.0
+			 *	@return string The resource
+			 */
+			
+			public function getResource(){
+				return $this->resource;
+			}
+			
+			/*
 			 *	Gets the schema of the
-			 *	specified model
+			 *	specified resource
 			 * 
 			 *	@since 0.1.0
 			 */
@@ -40,15 +61,19 @@
 			public function getSchema(){				
 				
 				// Get the XML schema //
-				try { 
-					$xml = simplexml_load_file( 'app/classes/models/schema/' 
-						. $this->model->getName() . '.xml' );
-				} catch( \Exception $e ){
+				$schemaFile = 'app/classes/models/schema/' 
+						. $this->resource . '.xml';
+				
+				// If it doesn't exist, throw error //
+				if( file_exists( $schemaFile )){
+					$xml = simplexml_load_file( $schemaFile );
+				} else {
 					throw new \Exception('You must specify a schema for resource ' 
-						. $this->model->getName() );
+						. $this->resource, 404 );
 				}
 				
-				// Get all the fields, type casting, and validation/sanitization options //
+				// Get all the fields, type casting, 
+				// and validation/sanitization options //
 				foreach( $xml->data as $set ){
 					foreach( $set as $field ){
 						$key = (string) $field;
@@ -67,8 +92,13 @@
 						if( $field->attributes()->pk ){
 							$this->setPrimaryKey( $key );
 						}
+						
+						$readable[] = $key;
 					}
 				}
+				
+				// Readable fields default to all //
+				$this->setReadableFields($readable);
 				
 				// Configure the CRUD tasks //
 				foreach( $xml->tasks as $set ){
@@ -89,6 +119,16 @@
 				}
 			}
 			
+			/*
+			 *	Compares the schema
+			 *	against the provided
+			 *	input and validates,
+			 *	sanitizes the data.
+			 * 
+			 *	@since 0.1.0
+			 *	
+			 */
+			
 			function compareSchema( $operation = 'create' ){
 				
 				switch( $operation ){
@@ -107,7 +147,7 @@
 									$each['key'],
 									$each['type'] )) > 0 ){
 									throw new \Exception('Incorrect or insufficient values or value types for ' 
-										. $operation . ' task in ' . $this->model->getName(), 0 );
+										. $operation . ' task in ' . $this->resource, 0 );
 								}
 							}
 							
@@ -124,7 +164,7 @@
 						foreach( $this->crud[ $operation ] as $key => $each ){							
 							if( ! isset( $this->data[ $key ] ) ){
 								throw new \Exception('Insufficent data for ' 
-									. $operation . ' task in ' . $this->model->getName() 
+									. $operation . ' task in ' . $this->resource
 										. '. Requires ' . implode(', ', $this->crud[ $operation ], 0 ) 
 								);
 							}
@@ -146,7 +186,7 @@
 									$this->fields[ $each ] )
 								) > 0 ){
 									throw new \Exception('Incorrect values or value types for
-										' . $operation . ' task in ' . $this->model, 0 );
+										' . $operation . ' task in ' . $this->resource, 0 );
 								}
 							}
 						}
@@ -154,8 +194,8 @@
 						// Check if minimum field values are met //
 						if( ! $read ){
 							throw new \Exception('Insufficent data for ' 
-								. $operation . ' task in ' . $this->model 
-									. '. Requires ' . implode(' OR ', $this->crud[ $operation ], 1 ) 
+								. $operation . ' task in ' . $this->resource 
+									. '. Requires ' . implode(' OR ', $this->crud[ $operation ]) 
 							);
 						}
 						
@@ -199,24 +239,30 @@
 				
 			}
 			
+			/*
+			 *	Sanitization of a string
+			 *	usually submitted by a user	
+			 *	
+			 *	@since 0.1.0
+			 *	@return string The sanitized string
+			 */
+			
 			private static function sanitize( $data, $type ){
-				
 				switch( $type ){
 					case 'html' :
 						return strip_tags( $data );
 						break;
 				}
-				
 			}
 			
 			/*
 			 *	Check if the task is 
-			 *	valid and set it
+			 *	valid set it
 			 * 
 			 *	@since 0.1.0
 			 */
 			
-			public function checkTask( $task ){
+			public function setTask( $task ){
 				switch( $task ){
 					case 'create' :
 					case 'read' :
@@ -229,8 +275,50 @@
 							throw new \Exception('Invalid task "' . $task . '"' );
 				}
 				
+				// Set permissions
+				$this->setPermissions();
+				
 				// Check the data complies //
 				$this->compareSchema( $task );
+				
+				
+			}
+			
+			/*
+			 *	Check if the user has permissions
+			 *	for the current task and set them.
+			 * 
+			 *	@since 0.1.0
+			 *	
+			 */
+			
+			public function setPermissions(){
+				
+				try {
+					
+					$perms = \Ant\Controller :: call( $this->getResource() . '.permission', array(
+						'resource'	=> $this,
+						'task'		=> $this->getTask(),
+						'data'		=> $this->getData()
+					));
+					
+					// Set the readable fields if an array was returned //
+					if(isset($perms['read'])){
+						$this->setReadableFields( $perms['read'] );
+						return $perms['allow'];
+					}
+					
+				} catch (\Exception $e ){
+					// No permissions are defined //
+					return true;
+				}
+				
+				// Check if not allowed and throw forbidden //
+				if( ! $perms['allow'] ){
+					throw new \Exception( 'Insufficient permissions for this task.', 403 );
+				}
+				
+				return $perms['allow'];
 			}
 			
 			/*
@@ -242,6 +330,16 @@
 			
 			public function getTask(){
 				return $this->task;
+			}
+			
+			/*
+			 *	Do a task
+			 * 
+			 *	@since 0.1.0
+			 */
+			
+			public function doTask( $task ){
+				return $this->{ $task }();
 			}
 			
 			/*
@@ -294,6 +392,78 @@
 			
 			public function getPrimaryKey(){
 				return $this->primaryKey;
+			}
+			
+			/*
+			 *	Sets the fields readable
+			 *	by the script
+			 *	
+			 *	@since 0.1.0
+			 */
+			
+			public function setReadableFields( $fields ){
+				$this->readableFields = $fields;
+			}
+			
+			/*
+			 *	Gets the fields readable
+			 *	by the script
+			 *	
+			 *	@since 0.1.0
+			 */
+			
+			public function getReadableFields(){
+				return $this->readableFields;
+			}
+			
+			/*
+			 *	Shortcut to CRUD methods
+			 *	inside the model
+			 *	
+			 *	@since 0.1.0
+			 * 
+			 */
+			
+			public function read(){
+				$this->setTask('read');
+				return $this->model->read( $this );
+			}
+			
+			public function create(){
+				$this->setTask('create');
+				return $this->model->create( $this );
+			}
+			
+			public function update(){
+				$this->setTask('update');
+				return $this->model->update( $this );
+			}
+			
+			public function delete(){
+				$this->setTask('delete');
+				return $this->model->delete( $this );
+			}
+			
+			/*
+			 *	Set the Id for use
+			 *	with updates, reads or deletes
+			 * 
+			 *	@since 0.1.0
+			 */
+			
+			public function setId( $id ){
+				$this->resourceId = $id;
+			}
+			
+			/*
+			 *	Get the Id for use
+			 *	with updates, reads or deletes
+			 * 
+			 *	@since 0.1.0
+			 */
+			
+			public function getId(){
+				return $this->resourceId;
 			}
 			
 		}

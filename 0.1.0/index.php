@@ -11,7 +11,11 @@
 	 */
 	 
 	// Errors //
-	error_reporting( E_ERROR | E_WARNING );
+	error_reporting( 
+		E_ERROR | 
+			E_WARNING | 
+				E_RECOVERABLE_ERROR 
+	);
 	
 	// Check the PHP version //
 	if( (float)substr(phpversion(), 0, 3) < 5.3 ){

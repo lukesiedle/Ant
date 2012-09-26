@@ -14,7 +14,7 @@
 		
 		return \Ant\Controller :: query('User.getUser')
 			-> where( 'user.user_id = :id' , array(
-				'id' => $args['resource']->data['id']
+				'id' => $args['resource']->getId()
 			));
 		
 	}

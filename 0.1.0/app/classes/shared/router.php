@@ -26,7 +26,8 @@
 							$path			= '',
 							$requestVars	= array(),
 							$routeVars		= array(),
-							$channel		= false;
+							$channel		= false,
+							$stopRouting	= false;
 			
 			/*
 			 *	The principal function to
@@ -228,6 +229,10 @@
 			
 			public static function parseRouteXml( $xml, $request, $i ){
 				
+				if( self :: $stopRouting ){
+					return;
+				}
+				
 				$foundRoute = false;
 				
 				foreach( $xml->attributes() as $attr => $val ){
@@ -239,7 +244,7 @@
 					}
 					
 					switch( $attr ){
-						case 'is' :
+						case 'is' : 
 							if( in_array($request[$i], explode(',', $val))){
 								if( $i == 0 ){
 									self :: $routeVars['context']	= $request[$i];
@@ -261,6 +266,12 @@
 							switch( $val ){
 								case 'numeric'	:
 									if( is_numeric($request[$i]) ){
+										self :: $requestVars[ (string)$xml->var ] = $request[$i];
+										$foundRoute = true;
+									}
+									break;
+								case '!numeric' :
+									if( ! is_numeric($request[$i]) ){
 										self :: $requestVars[ (string)$xml->var ] = $request[$i];
 										$foundRoute = true;
 									}
@@ -305,10 +316,13 @@
 				}
 				
 				foreach( $children as $tag => $xml2 ){
-					// Recurse //
+					// Recurse through all xml or until stop is called //
+					if( $tag == 'stop' ){
+						self :: $stopRouting = true;
+						return;
+					}
 					self :: parseRouteXml ( $xml2, $request, $i );
 				}
-				
 			}
 			
 			/*

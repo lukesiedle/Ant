@@ -16,10 +16,27 @@
 		// Get POST data //
 		$post = Request :: get('post');
 		
-		$data = $post;
+		// URI data //
 		$resourceName = $request['resource'];
+		
+		// A var was set if it shouldn't be there //
+		$invalid = $request['invalid'];
+		
+		// Store useful vars //
+		$data = $post;
 		$task = $post['__task'];
 		$intention = $post['__intention'];
+		
+		// Preliminary error checking //
+		if( $invalid ){
+			throw new \Exception( 'Invalid resource', 422 );
+		}
+		
+		// Task is create but Id was sent (for RUD) //
+		if( $task == 'create' && isset($request['id']) ){
+			throw new \Exception( 'Task/Resource mismatch. ' 
+			. 'Create task should not specify Id.', 422 );
+		}
 		
 		// Perform a read by default //
 		if( !isset( $task ) ){
@@ -27,25 +44,11 @@
 			$data = array_merge( $data, $request );
 		}
 		
-		// Include the model of the resource //
-		$model = "\Ant\Model\\" . $resourceName;
-		$modelInclude = 'app/classes/models/' 
-			. strtolower( $resourceName ) . '.php';
-		
-		// Try include the model //
-		if( file_exists($modelInclude) ){
-			require_once( $modelInclude );
-		} else {
-			// Use the base model //
-			$model = '\Ant\Model';
-		}
-		// Instantiate the model for this resource //
-		$model = new $model( $resourceName );
+		// Set the request Id if available //
+		$data['id'] = $request['id'];
 		
 		// Implement a resource //
-		$resource = new \Ant\Resource( $model, $data );
-		
-		$resource->checkTask( $task );
+		$resource = new \Ant\Resource( $resourceName, $data );
 		
 		// Check if the user has adequate permissions //
 		$permsController = "$resourceName.permission.crud.$task";
@@ -56,23 +59,28 @@
 				'intention' => $intention
 			))){
 				// Execute the task, managed by the model //
-				$result = $model->task( $resource );
+				$resource->doTask( $task );
 				
 			} else {
-				throw new \Exception( 'Insufficient permission for task ' . $task, 0 );
+				throw new \Exception( 'Insufficient permission for task ' . $task, 403 );
 			}
 			
 		} catch( \Exception $e ){
 			switch( $e->getCode()){
 				case 0 :
-					throw new \Exception( $e->getMessage(), 404 );
+					// Permissions controller does not exist. OK. Execute the task. //
+					$result = $resource->doTask( $task );
 					break;
-				default : 
-					throw new \Exception( "Resource '$resourceName' does not exist ", 404 );
+				case 404 :
+					throw new \Exception( "Resource '$resourceName' does not exist", 404 );
+				default :
+					throw new \Exception( $e->getMessage(), $e->getCode() );
+					break;
 					
 			}
 			
 		}
+		
 		
 		/*
 		 *	The intention is used

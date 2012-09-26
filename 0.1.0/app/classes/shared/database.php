@@ -156,7 +156,7 @@
 			 *	@since 0.1.0			 
 			 */
 			
-			public static function update( Collection $col, $conditions = array()){
+			public static function update( Collection $col, $conditions = array() ){
 				$data	= $col->toArrayShallow();
 				$query	= Query :: setUpdate( 
 					__ :: first( $data ), 

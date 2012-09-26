@@ -23,20 +23,6 @@
 			public static $me;
 			
 			/*
-			 *	Instantiation of a new user
-			 * 
-			 *	@since 0.1.0
-			 */
-			
-			public function __construct( $data = null ){
-				
-				if( $data ){
-					$this->data = new Collection( $data );
-				}
-				
-			}
-			
-			/*
 			 *	Sets the current user
 			 * 
 			 *	@since 0.1.0
@@ -46,7 +32,7 @@
 				if( $data['user_id'] ){
 					$data['guest'] = false;
 				}
-				self :: $me = new self( $data );
+				self :: $me = new self( $data, 'user' );
 				self :: storeUser();
 			}
 			
@@ -91,16 +77,6 @@
 				if( $data ){
 					self :: setCurrentUser( $data );
 				}
-			}
-			
-			/*
-			 *	Get the user data
-			 * 
-			 *	@since 0.1.0
-			 */
-			
-			public function getData(){
-				return $this->data->first()->toArray();
 			}
 			
 			/*

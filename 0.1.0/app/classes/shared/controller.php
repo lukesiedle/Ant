@@ -55,7 +55,7 @@
 						if( file_exists($methodInclude)){
 							require( $methodInclude );
 						} else {
-							throw new \Exception( $methodInclude . ' does not exist.' );
+							throw new \Exception( $methodInclude . ' does not exist.', 0 );
 						}
 					}
 				}

@@ -21,25 +21,31 @@
 		
 		function index( $request ){
 			
-			$output		= array();
+			$output			= array();
 			
-			try {
-			
-				$view		= \Ant\Router :: loadRouteView();
+			// Ajax channel is whitelisted //
+			if ( Router :: getRouteVars()->allowAjax ){
 				
-				if( $view instanceof \Ant\CollectionSet ){
-					$output = $view->toArray();
+				try {
+
+					$view		= \Ant\Router :: loadRouteView();
+
+					if( $view instanceof \Ant\CollectionSet ){
+						$output['data'] = $view->toArray();
+					}
+
+				// Add the error output to JSON //
+				} catch( Exception $e ){
+					$output['error']['message'] = $e->getMessage();
+					$output['error']['trace']	= $e->getTrace();
 				}
 			
-			// Add the error output to JSON //
-			} catch( Exception $e ){
-				$output['error']['message'] = $e->getMessage();
-				$output['error']['trace']	= $e->getTrace();
+			} else {
+				$output['error']['message'] = '404. Page not found.';
+				\Ant\Document :: addHeader('HTTP/1.0 404 Not Found');
 			}
 			
-			echo json_encode(array(
-				'data' => $output
-			));
+			echo json_encode( $output );
 			
 			\Ant\Document :: addHeader( 'Content-type:Application/Json' );
 		}

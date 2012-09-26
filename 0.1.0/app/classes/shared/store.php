@@ -25,75 +25,34 @@
 			 *	@since 0.1.0
 			 */
 			
-			public function __construct( Collection $col, $idKey = null ){
-				$this->idKey = $idKey;
-				$this->collection = $col;
+			public function __construct( $data, $resourceName ){
+				$this->collection = new Collection( $data, $resourceName );
 			}
-
+			
 			/*
-			 *	Save the store to the 
-			 *	database, by either creating it,
-			 *	or updating it.
-			 * 
-			 *	@since 0.1.0
-			 *	@return object For chaing
-			 */
-
-			public function save(){
-
-				// Updates if an Id is found //
-				if( $this->collection->length() == 1 ){
-					if( is_numeric($this->getId()) ){
-						self :: update( $this->collection, array(
-							$this->idKey => $this->id
-						));
-					}
-					return $this;
-				} else {
-					if( is_numeric($this->getId(1) )){
-						self :: updateMulti( $this->collection, $this->idKey );
-						return $this;
-					}
-				}
-
-				// Or it's an insert if no id is found //
-
-				$idKey = $this->idKey;
-
-				// For each insert, modify the id value //
-				self :: insert( $this->collection, function( $id, $i ) use ( $idKey ) {
-					$this->collection->at( $i )->add(array(
-						$idKey => $id
-					));
-				});
-
-				return $this;
-			}
-
-			/*
-			 *	Best guess method to make an Id
+			 *	Get the data of the stored
+			 *	item.
 			 * 
 			 *	@since 0.1.0
 			 */
 			
-			public function makeIdKey(){
-				$this->idKey = $this->dataContext . '_id';
+			public function getData(){
+				return $this->collection->first()->toArray();
 			}
-
+			
 			/*
-			 *	Best guess method to get the Id,
-			 *	example 'user_id', from the collection
+			 *	Get the Id from
+			 *	the collection using
+			 *	the resource name.
 			 * 
 			 *	@since 0.1.0
 			 */
-
-			public function getId( $at ){
-				if( $this->collection->length() == 1 ){
-					$arr = $this->collection->first()->toArray();
-					$this->id = $arr[ $this->idKey ];
-				}
+			
+			public function getId(){
+				$data = $this->getData();
+				return $data[ $resourceName . '_id' ];
 			}
-
+			
 		}
 
 	}

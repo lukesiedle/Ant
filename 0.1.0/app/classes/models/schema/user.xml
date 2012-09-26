@@ -6,6 +6,7 @@
 	data required for each
 	task.
 	
+	@since 0.1.0
 	
 -->
 
@@ -35,7 +36,7 @@
 		</create>
 		
 		<!-- 
-			Acceptable fields to do
+			Acceptable fields to use to perform
 			a read
 		-->
 		
@@ -55,7 +56,7 @@
 		</update>
 		
 		<!-- 
-			Acceptable fields to do
+			Acceptable fields to query to perform
 			a delete
 		-->
 		

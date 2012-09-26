@@ -14,4 +14,7 @@
 	<!-- Make the collection 'newview' available -->
 	<register></register>
 	
+	<!-- Make the collection 'user' available -->
+	<user></user>
+	
 </collections>

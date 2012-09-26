@@ -25,6 +25,9 @@
 			// Basic prevention of request forgery //
 			$post = \Ant\Request :: get('post');	
 			
+			// Is it an AJAX request //
+			$isAjax = isset( $post['__ajax'] );
+			
 			switch( false ){
 				// Post must have at least 2 fields //
 				case count( $post >= 2 ) :
@@ -73,12 +76,21 @@
 					$results['error']['code']	= $e->getCode();
 					$results['error']['trace']	= $e->getTrace();
 					
-					if( $e->getCode() == 404 ){
-						// Adds the error header //
-						\Ant\Document :: addHeader('HTTP/1.0 404 Not Found');
+					switch( $e->getCode() ){
+						case 403 : 
+							// Forbidden //
+							\Ant\Document :: addHeader('HTTP/1.0 403 Forbidden');
+							break;
+						case 404 :
+							// Adds the error header //
+							\Ant\Document :: addHeader('HTTP/1.0 404 Not Found');
+							break;
+						case 422 : 
+							// Unprocessable entity - syntactically correct, bad semantics //
+							\Ant\Document :: addHeader('HTTP/1.0 422 Unprocessable Entity');
+							break;
 					}
 				}
-				
 			}
 			
 			// Output JSON with header //

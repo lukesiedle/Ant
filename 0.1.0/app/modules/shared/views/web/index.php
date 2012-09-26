@@ -71,7 +71,15 @@
 			
 			// Load view specific data
 			// @since 0.1.0 //
-			$view		= Router :: loadRouteView();
+			try {
+				$view		= Router :: loadRouteView();
+			} catch( \Exception $e ){
+				switch( $e->getCode()){
+					case 403 :
+						\Ant\Application :: setError('403');
+						break;
+				}
+			}
 			
 			// Check if the channel has changed 
 			// from the view, and stop here

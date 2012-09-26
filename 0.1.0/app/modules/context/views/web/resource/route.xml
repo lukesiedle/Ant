@@ -23,6 +23,15 @@
 		<var>resource</var>
 		<next when="numeric">
 			<var>id</var>
+			<next when="string">
+				<var>invalid</var>
+			</next>
+			<next when="numeric">
+				<var>invalid</var>
+			</next>
+		</next>
+		<next when="!numeric">
+			<var>invalid</var>
 		</next>
 	</next>
 	

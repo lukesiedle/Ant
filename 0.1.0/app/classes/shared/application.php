@@ -452,6 +452,16 @@
 			
 			public static function setError( $code = '404', $msg = null ){
 				switch( $code ){
+					case '403' :
+						// Adds the error header //
+						Document :: addHeader('HTTP/1.0 403 Forbidden');
+						
+						// Add the error message to globals //
+						Template :: addGlobals( new Collection(array(array(
+							"403" => 'You do not have permission to access this resource.'
+						)),'errors' ));					
+						
+						break;
 					case '404' :
 						// Adds the error header //
 						Document :: addHeader('HTTP/1.0 404 Not Found');
@@ -461,19 +471,18 @@
 							"404" => $msg
 						)),'errors' ));
 						
-						// Resetting the channel loads error output //
-						Router :: resetChannel('error');
-						
-						// Sets the defined headers //
-						self :: setHeaders();						
-						
-						// Flushes the output //
-						self :: flush();
-						
-						
-						
 					break;
 				}
+				
+				// Resetting the channel loads error output //
+				Router :: resetChannel('error');
+						
+				// Sets the defined headers //
+				self :: setHeaders();					
+
+				// Flushes the output //
+				self :: flush();	
+				
 				exit;
 			}
 
