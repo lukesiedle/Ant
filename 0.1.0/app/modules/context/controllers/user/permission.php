@@ -22,6 +22,7 @@
 			
 			case 'read' :
 				$perms['allow'] = true;
+				$perms['owner'] = $isOwner;
 				$perms['read'] = array(
 					'user_id',
 					'user_first_name',

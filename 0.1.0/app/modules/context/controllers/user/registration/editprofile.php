@@ -11,8 +11,11 @@
 	namespace Ant\Controller\User\Registration;
 	
 	use \Ant\User as User;
+	use \Ant\Application as App;
 	
 	function editProfile( $args ){
-		return false;
+		if( ! $args['is_ajax'] ){
+			App :: redirect( 'user/edit/?saved' );
+		}
 	}
 	

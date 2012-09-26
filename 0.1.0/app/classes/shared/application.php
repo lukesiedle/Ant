@@ -430,6 +430,8 @@
 				
 				if( is_null($url) ){
 					$url = PUBLIC_ROOT;
+				} else {
+					$url = PUBLIC_ROOT . $url;
 				}
 				
 				header( 'Location: ' . $url );
@@ -451,37 +453,46 @@
 			 */	
 			
 			public static function setError( $code = '404', $msg = null ){
+				
 				switch( $code ){
 					case '403' :
 						// Adds the error header //
 						Document :: addHeader('HTTP/1.0 403 Forbidden');
-						
-						// Add the error message to globals //
-						Template :: addGlobals( new Collection(array(array(
-							"403" => 'You do not have permission to access this resource.'
-						)),'errors' ));					
-						
+						if( ! $msg ){
+							$msg = 'You do not have permission to access this resource.';
+						}
 						break;
 					case '404' :
 						// Adds the error header //
 						Document :: addHeader('HTTP/1.0 404 Not Found');
-						
-						// Add the error message to globals //
-						Template :: addGlobals( new Collection(array(array(
-							"404" => $msg
-						)),'errors' ));
-						
+						if( ! $msg ){
+							$msg = 'Resource not found.';
+						}
 					break;
+				
+					case '422' :
+						// Adds the error header //
+						Document :: addHeader('HTTP/1.0 422 Unprocessable Entity');
+						if( ! $msg ){
+							$msg = 'Request could not be completed due to invalid request data.';
+						}
+						break;
 				}
+				
+				// Add the error message to globals //
+				Template :: addGlobals( new Collection(array(array(
+					"msg"	=> $msg,
+					"code"	=> $code
+				)),'error' ));
 				
 				// Resetting the channel loads error output //
 				Router :: resetChannel('error');
 						
 				// Sets the defined headers //
 				self :: setHeaders();					
-
+				
 				// Flushes the output //
-				self :: flush();	
+				self :: flush();
 				
 				exit;
 			}

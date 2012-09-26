@@ -74,9 +74,12 @@
 			try {
 				$view		= Router :: loadRouteView();
 			} catch( \Exception $e ){
-				switch( $e->getCode()){
+				switch( $e->getCode() ){
 					case 403 :
-						\Ant\Application :: setError('403');
+						\Ant\Application :: setError('403', $e->getMessage() );
+						break;
+					default : 
+						throw new \Exception( $e->getMessage() );
 						break;
 				}
 			}

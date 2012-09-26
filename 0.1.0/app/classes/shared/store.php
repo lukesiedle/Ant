@@ -15,9 +15,7 @@
 		Class Store extends Database {
 
 			var $collection,
-				$idKey,
-				$id,
-				$dataContext;
+				$resourceName;
 			
 			/*
 			 *	Instantiate a new Store
@@ -26,6 +24,7 @@
 			 */
 			
 			public function __construct( $data, $resourceName ){
+				$this->resourceName = $resourceName;
 				$this->collection = new Collection( $data, $resourceName );
 			}
 			
@@ -50,7 +49,7 @@
 			
 			public function getId(){
 				$data = $this->getData();
-				return $data[ $resourceName . '_id' ];
+				return $data[ $this->resourceName . '_id' ];
 			}
 			
 		}

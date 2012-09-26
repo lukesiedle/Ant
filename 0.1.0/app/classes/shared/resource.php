@@ -195,7 +195,7 @@
 						if( ! $read ){
 							throw new \Exception('Insufficent data for ' 
 								. $operation . ' task in ' . $this->resource 
-									. '. Requires ' . implode(' OR ', $this->crud[ $operation ]) 
+									. '. Requires ' . implode(' OR ', $this->crud[ $operation ] ) 
 							);
 						}
 						
@@ -304,11 +304,14 @@
 					
 					// Set the readable fields if an array was returned //
 					if(isset($perms['read'])){
-						$this->setReadableFields( $perms['read'] );
-						return $perms['allow'];
+						if( ! $perms['owner'] ){
+							$this->setReadableFields( $perms['read'] );
+							return $perms['allow'];
+						}
+						return true;
 					}
 					
-				} catch (\Exception $e ){
+				} catch ( \Exception $e ){
 					// No permissions are defined //
 					return true;
 				}

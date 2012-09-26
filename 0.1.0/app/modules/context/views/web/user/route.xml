@@ -32,12 +32,13 @@
 		<doctitle>
 			<register>User | Sign Up</register>
 		</doctitle>
-		<next when="numeric">
-			<var>id</var>
-			<module>register</module>
-			<template>registration/register</template>
-			<stop><!-- Stop routing --></stop>
-		</next>
+	</next>
+	
+	<next is="edit">
+		<module>register</module>
+		<template>registration/register</template>
+		<var>edit</var>
+		<stop><!-- Stop routing --></stop>
 	</next>
 	
 	<var>context</var>

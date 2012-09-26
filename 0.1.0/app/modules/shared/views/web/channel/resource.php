@@ -26,24 +26,16 @@
 			$post = \Ant\Request :: get('post');	
 			
 			// Is it an AJAX request //
-			$isAjax = isset( $post['__ajax'] );
-			
-			switch( false ){
-				// Post must have at least 2 fields //
-				case count( $post >= 2 ) :
-				
-				// Token must match resource/request //
-				case \Ant\Request :: CSRFtoken( $post['__resource'] ) == $post['__token'] :
-					\Ant\Application :: setError();
-					return false;
-				break;
-			}
+			$isAjax = isset( $post['__ajax'] );				
 			
 			// Run the resource controller
 			// catching any errors 
 			// @since 0.1.0 //
 			try {
-				$data = \Ant\Controller :: call( 'Application.resource', (array) Router :: getRequestVars() );
+				
+				$data = \Ant\Controller :: call( 'Application.resource', array(
+					'is_ajax' => $isAjax
+				));
 				
 				$results = array(
 					'success' => true

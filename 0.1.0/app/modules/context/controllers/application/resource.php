@@ -11,7 +11,9 @@
 	use \Ant\Request as Request;
 	use \Ant\Controller as Controller;
 	
-	function resource( $request ){
+	function resource( $args ){
+		
+		$request = (array) $args['request'];
 		
 		// Get POST data //
 		$post = Request :: get('post');
@@ -32,6 +34,13 @@
 			throw new \Exception( 'Invalid resource', 422 );
 		}
 		
+		// Check the csrf token is valid for this resource //
+		$requestToken = \Ant\Request :: CSRFtoken( implode('/', $request ) );
+		
+		if( $post['__token'] != $requestToken ){
+			throw new \Exception( 'Invalid token', 422 );
+		}
+		
 		// Task is create but Id was sent (for RUD) //
 		if( $task == 'create' && isset($request['id']) ){
 			throw new \Exception( 'Task/Resource mismatch. ' 
@@ -50,37 +59,11 @@
 		// Implement a resource //
 		$resource = new \Ant\Resource( $resourceName, $data );
 		
-		// Check if the user has adequate permissions //
-		$permsController = "$resourceName.permission.crud.$task";
+		// Execute the task, managed by the model //
+		$resource->setTask( $task );
 		
-		try { 
-			
-			if( Controller :: call( $permsController , array(
-				'intention' => $intention
-			))){
-				// Execute the task, managed by the model //
-				$resource->doTask( $task );
-				
-			} else {
-				throw new \Exception( 'Insufficient permission for task ' . $task, 403 );
-			}
-			
-		} catch( \Exception $e ){
-			switch( $e->getCode()){
-				case 0 :
-					// Permissions controller does not exist. OK. Execute the task. //
-					$result = $resource->doTask( $task );
-					break;
-				case 404 :
-					throw new \Exception( "Resource '$resourceName' does not exist", 404 );
-				default :
-					throw new \Exception( $e->getMessage(), $e->getCode() );
-					break;
-					
-			}
-			
-		}
-		
+		// Execute the task, managed by the model //
+		$resource->doTask( $task );
 		
 		/*
 		 *	The intention is used
@@ -95,7 +78,8 @@
 		// Post resource task hook The Intention //
 		if( isset($intention) ){
 			Controller :: call( $intention, array(
-				'resource' => $resource
+				'resource'	=> $resource,
+				'is_ajax'	=> $args['is_ajax']
 			));
 		}
 		
