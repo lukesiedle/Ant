@@ -296,5 +296,9 @@
 				return $this->primaryKey;
 			}
 			
+			public function dummyFunction(){
+				
+			}
+			
 		}
 	}
