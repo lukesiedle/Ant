@@ -7,7 +7,7 @@
 	* 	@since 0.1.0
 	*/
 
-	namespace Ant\Controller\User;
+	namespace Ant\Controller\User\State;
 
 	use \Ant\Application as App;
 	use \Ant\User as User;

@@ -37,7 +37,7 @@
 			}
 			
 			// Always attempt to determine the current user //
-			$theUser = Control :: call('User.initialize');
+			$theUser = Control :: call('User.state.initialize');
 			
 			return new CollectionSet(
 				

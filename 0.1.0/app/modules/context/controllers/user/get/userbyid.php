@@ -8,11 +8,11 @@
 	 *	@return Collection The user(s)
 	 */
 
-	namespace Ant\Controller\User;
+	namespace Ant\Controller\User\Get;
 	
-	use \Ant\Controller as Control;
+	use \Ant\Controller as Controller;
 	
-	function getUserById( $vars ){
+	function userById( $vars ){
 		
 		if( ! isset($vars['id'])){
 			throw new Exception( 'User Id must be specified' );
@@ -22,11 +22,11 @@
 			(array) $vars['id'];
 		}
 		
-		$query = Control :: query('User.getUser')
+		$query = Controller :: query('User.getUser')
 			->where('user.user_id IN( :ids )', array(
 				'ids' => implode( ',', $ids )
 			));
 		
-		return Database :: query( $query );
+		return \Ant\Database :: query( $query );
 	}
 	

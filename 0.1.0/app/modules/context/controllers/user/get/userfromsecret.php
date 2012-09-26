@@ -9,13 +9,13 @@
 	 *	@since 0.1.0 
 	 */
 
-	namespace Ant\Controller\User;
+	namespace Ant\Controller\User\Get;
 	
 	use \Ant\Query as Query;
 	use \Ant\Controller as Control;
 	use \Ant\Database as Database;
 	
-	function getUserFromSecret( $vars ){
+	function userFromSecret( $vars ){
 		
 		// Load the base query //
 		$query = Control :: query('User.getUser');

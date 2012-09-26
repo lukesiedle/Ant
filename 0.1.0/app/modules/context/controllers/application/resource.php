@@ -59,10 +59,10 @@
 		// Implement a resource //
 		$resource = new \Ant\Resource( $resourceName, $data );
 		
-		// Execute the task, managed by the model //
+		// Set the resource's CRUD task //
 		$resource->setTask( $task );
 		
-		// Execute the task, managed by the model //
+		// Execute the CRUD task //
 		$resource->doTask( $task );
 		
 		/*

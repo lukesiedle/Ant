@@ -1,6 +1,6 @@
 <?php
 
-	namespace Ant\Controller\User;
+	namespace Ant\Controller\User\State;
 	
 	/*
 	 *	Authorize the user by type

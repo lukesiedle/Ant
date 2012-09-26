@@ -38,7 +38,7 @@
 				
 				// Try include the context class if it exists //
 				if( ! class_exists($c = $opt[0]) ){
-					$path = 'app/classes/context/' . $c . '/' . $c . '.php';
+					$path = 'app/classes/context/' . $c . '.php';
 					if( file_exists($path)){
 						require_once( $path );
 					}
