@@ -1,6 +1,6 @@
 <?php
 
-	/*
+	/**
 	 *	The user interface
 	 *	
 	 *	Allows CRUD tasks

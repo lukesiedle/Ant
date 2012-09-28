@@ -1,18 +1,15 @@
 <?php
 	
-	/*
+	/**
 	 *	Query building class
 	 * 
 	 *	@package Ant
 	 *	@subpackage Query
 	 *	@since 0.1.0
-	 * 
 	 */
-
 	namespace Ant {
 		
 		use \Ant\Collection as Collection;
-		
 		use \__ as __;
 		
 		Class Query {
@@ -142,6 +139,20 @@
 			/**
 			 *	Add a where statement
 			 *	
+			 *	@param string $where The condition (exclude 
+			 *	the WHERE statement). To avoid SQL injection
+			 *	use dynamic search strings ( e.g. ":id" ) 
+			 *	and bind them using the	second argument. 
+			 *	
+			 *	@param array $binding The items to bind, e.g.
+			 *		array(
+			 *			':id' => $_GET['id']
+			 *		)
+			 *	@param string $op The operator to use. Remember
+			 *	to bracket conditions adequately to preserve
+			 *	your logic.	
+			 * 
+			 * 
 			 *	@since 0.1.0
 			 *	@return object For chaining
 			 */
@@ -157,13 +168,14 @@
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Add a group by statement
+			 *	
+			 *	@param string $groupBy 
 			 * 
 			 *	@since 0.1.0
 			 *	@return object For chaining
 			 */
-			
 			public function groupBy( $groupBy ){
 				if( $this->groupBy == '' ){
 					$this->groupBy = 'GROUP BY ';
@@ -172,13 +184,14 @@
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Add an order by statement
+			 * 
+			 *	@param string $orderBy
 			 * 
 			 *	@since 0.1.0
 			 *	@return object For chaining
 			 */
-			
 			public function orderBy( $orderBy ){
 				if( $this->orderBy == '' ){
 					$this->orderBy = 'ORDER BY ';
@@ -187,25 +200,30 @@
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Add a limit statement
+			 *	
+			 *	@param string $limit
 			 * 
 			 *	@since 0.1.0
 			 *	@return object For chaining
 			 */
-			
 			public function limit( $limit ){
 				$this->limit = 'LIMIT ' . $limit;
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Create the insert and return it
+			 * 
+			 *	@param array $rows They key value 
+			 *	pairs representing the columns and 
+			 *	values.
+			 *	@param string $tableName 
 			 * 
 			 *	@since 0.1.0
 			 *	@return Query A new query
 			 */
-			
 			public static function setInsert( $rows, $tableName ){
 				$query = 'INSERT INTO ' . $tableName;
 				$structure = array_keys( __ :: first( $rows ));
@@ -235,13 +253,20 @@
 				return $query;
 			}
 			
-			/*
+			/**
 			 *	Set the update data
+			 *
+			 *	@param array $data The key value
+			 *	pairs of data representing columns
+			 *	and values.
+			 *	@param array $conditions The key value
+			 *	pairs of data representing columns
+			 *	and values for conditions.	
+			 *	@param string $tableName
 			 * 
 			 *	@since 0.1.0
 			 *	@return Query A new query
 			 */
-			
 			public static function setUpdate( $data, $conditions, $tableName ){
 				
 				$query		= 'UPDATE ' . $tableName . ' SET ';
@@ -278,13 +303,17 @@
 				return $query;
 			}
 			
-			/*
+			/**
 			 *	Set the update data
+			 *	
+			 *	@param $conditions The key value
+			 *	pairs representing columns and values
+			 *	that will be used to delete rows.
+			 *	@param string $tableName 
 			 * 
 			 *	@since 0.1.0
 			 *	@return Query A new query
 			 */
-			
 			public static function setDelete( Array $conditions, $tableName ){
 				
 				$query		= 'DELETE FROM ' . $tableName;
@@ -312,38 +341,39 @@
 				return $query;
 			}
 			
-			/*
+			/**
 			 *	Get the binding
-			 * 
+			 *	
 			 *	@since 0.1.0
+			 *	@return array The binding
 			 */
 			
 			public function getBinding(){
 				return $this->binding;
 			}
 			
-			/*
-			 *	Set the type of statement,
+			/**
+			 *	Set the type of statement
+			 *	
+			 *	@param $type The type of statement, 
 			 *	INSERT, UPDATE
 			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public function setType( $type ){
 				return $this->type = $type;
 			}
 			
-			/*
+			/**
 			 *	Shortcut method to output
 			 *	the query.
 			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public function output(){
 				Application :: out( $this->query );
 			}
-		
+			
 		}
 	}
 	

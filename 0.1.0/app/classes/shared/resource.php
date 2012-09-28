@@ -16,14 +16,17 @@
 		
 		Class Resource {
 			
-			/*
+			/**
 			 *	Constructor initializes
-			 *	the resource in use, and 
+			 *	the resource in use by name, and 
 			 *	prepares for CRUD task.
 			 * 
+			 *	@param string $resource The resource 'user','article'
+			 *	@param array $data The data provided, often
+			 *	by a POST, GET.
+			 *	
 			 *	@since 0.1.0
 			 */
-			
 			public function __construct( $resource, $data = array()){
 				
 				$this->resource = $resource;
@@ -36,29 +39,31 @@
 				$this->setId( $this->data['id'] );
 				
 				// Get the schema of this resource //
-				$this->getSchema();
+				$this->setSchema( );
 			}
 			
-			/*
+			/**
 			 *	Get the resource
-			 *	(the name)
+			 *	(the named resource)
 			 * 
 			 *	@since 0.1.0
 			 *	@return string The resource
 			 */
-			
 			public function getResource(){
 				return $this->resource;
 			}
 			
-			/*
-			 *	Gets the schema of the
-			 *	specified resource
-			 * 
+			/**
+			 *	Sets the schema of the
+			 *	specified resource. The schema
+			 *	is stored inside an xml file
+			 *	and offers directives about what
+			 *	data exists and how it can be
+			 *	accessed.
+			 *	
 			 *	@since 0.1.0
 			 */
-			
-			public function getSchema(){				
+			public function setSchema(){				
 				
 				// Get the XML schema //
 				$schemaFile = 'app/classes/models/schema/' 
@@ -119,19 +124,17 @@
 				}
 			}
 			
-			/*
+			/**
 			 *	Compares the schema
 			 *	against the provided
 			 *	input and validates,
 			 *	sanitizes the data.
 			 * 
 			 *	@since 0.1.0
-			 *	
 			 */
-			
-			function compareSchema( $operation = 'create' ){
+			function compareSchema(){
 				
-				switch( $operation ){
+				switch( $this->task ){
 					
 					case 'create'	:
 					case 'update'	:	
@@ -204,13 +207,19 @@
 				
 			}
 			
-			/*
+			/**
 			 *	Basic PHP native validation
+			 * 
+			 *	@param string $value The value 
+			 *	passed in
+			 *	@param string $key The key to 
+			 *	preserve for failures
+			 *	@param string $type The type of 
+			 *	value expected 'email' 'int'
 			 * 
 			 *	@since 0.1.0
 			 *	@return array The failed fields
 			 */
-			
 			private static function validate( $value, $key, $type ){
 				
 				$fails = array();
@@ -238,14 +247,19 @@
 				
 			}
 			
-			/*
+			/**
 			 *	Sanitization of a string
 			 *	usually submitted by a user	
+			 *	
+			 *	@param string $data The string
+			 *	to sanitize
+			 *	@param string $type The type 
+			 *	of sanitization. Currently only 'html' 
+			 *	is avaiable.
 			 *	
 			 *	@since 0.1.0
 			 *	@return string The sanitized string
 			 */
-			
 			private static function sanitize( $data, $type ){
 				switch( $type ){
 					case 'html' :
@@ -254,13 +268,15 @@
 				}
 			}
 			
-			/*
+			/**
 			 *	Check if the task is 
 			 *	valid set it
 			 * 
+			 *	@param string $task The task:
+			 *	only 'create' 'read' 'update' 'delete'
+			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public function setTask( $task ){
 				switch( $task ){
 					case 'create' :
@@ -278,19 +294,16 @@
 				$this->setPermissions();
 				
 				// Check the data complies //
-				$this->compareSchema( $task );
-				
+				$this->compareSchema();
 				
 			}
 			
-			/*
+			/**
 			 *	Check if the user has permissions
 			 *	for the current task and set them.
-			 * 
-			 *	@since 0.1.0
 			 *	
+			 *	@since 0.1.0
 			 */
-			
 			public function setPermissions(){
 				
 				try {
@@ -323,45 +336,49 @@
 				return $perms['allow'];
 			}
 			
-			/*
+			/**
 			 *	Get the task
 			 * 
 			 *	@since 0.1.0
 			 *	@return string The task
 			 */
-			
 			public function getTask(){
 				return $this->task;
 			}
 			
-			/*
-			 *	Do a task
+			/**
+			 *	Execute a task. This first sets the task
+			 *	and may throw an error if the requirements
+			 *	are not met.
+			 *	
+			 *	@param string $task The CRUD task 
 			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public function doTask( $task ){
 				return $this->{ $task }();
 			}
 			
-			/*
-			 *	Get the data
-			 * 
-			 *	@since 0.1.0
-			 *	@return array The data
-			 */
-			
-			public function getData(){
-				return $this->mapData();
-			}
-			
-			/*
-			 *	Map data according to input
+			/**
+			 *	Get the mapped data. Data
+			 *	will be returned using key
+			 *	value pairs according to the
+			 *	XML schema.
 			 *	
 			 *	@since 0.1.0
 			 *	@return array The data
 			 */
+			public function getData(){
+				return $this->mapData();
+			}
 			
+			/**
+			 *	Map data according to input
+			 *	and the schema
+			 * 	
+			 *	@since 0.1.0
+			 *	@return array The data
+			 */
 			public function mapData(){
 				
 				$result = array();
@@ -374,96 +391,125 @@
 				
 			}
 			
-			/*
+			/**
 			 *	Sets the primary key
-			 *	For use with a Collection	
+			 *	For use with a Collection
 			 *	
+			 *	@param string $key The key 
+			 *	used for an Id, 'user_id' 'article_id'
+			 * 
 			 *	@since 0.1.0
 			 */
-			
 			private function setPrimaryKey( $key ){
 				$this->primaryKey = $key;
 			}
 			
-			/*
+			/**
 			 *	Gets the primary key
 			 *	For use with a Collection	
 			 *	
 			 *	@since 0.1.0
+			 *	@return string The primary key
 			 */
-			
 			public function getPrimaryKey(){
 				return $this->primaryKey;
 			}
 			
-			/*
+			/**
 			 *	Sets the fields readable
-			 *	by the script
+			 *	by the script. This may be
+			 *	modified by the permissions
+			 *	controller, and thin down
+			 *	the readable fields depending
+			 *	on the current user.
 			 *	
 			 *	@since 0.1.0
 			 */
-			
 			public function setReadableFields( $fields ){
 				$this->readableFields = $fields;
 			}
 			
-			/*
+			/**
 			 *	Gets the fields readable
 			 *	by the script
 			 *	
 			 *	@since 0.1.0
+			 *	@return array The readable 
+			 *	field names (column names)
 			 */
-			
 			public function getReadableFields(){
 				return $this->readableFields;
 			}
 			
-			/*
-			 *	Shortcut to CRUD methods
-			 *	inside the model
+			/**
+			 *	Shortcut to CRUD read
 			 *	
 			 *	@since 0.1.0
-			 * 
+			 *	@return array The result of read
+			 *	task
 			 */
-			
 			public function read(){
 				$this->setTask('read');
 				return $this->model->read( $this );
 			}
 			
+			/**
+			 *	Shortcut to CRUD create
+			 *	
+			 *	@since 0.1.0
+			 *	@return array The result of read
+			 *	task
+			 */
 			public function create(){
 				$this->setTask('create');
 				return $this->model->create( $this );
 			}
 			
+			/**
+			 *	Shortcut to CRUD update
+			 *	
+			 *	@since 0.1.0
+			 *	@return array The result of update
+			 *	task
+			 */
 			public function update(){
 				$this->setTask('update');
 				return $this->model->update( $this );
 			}
 			
+			/**
+			 *	Shortcut to CRUD delete
+			 *	
+			 *	@since 0.1.0
+			 *	@return array The result of delete
+			 *	task
+			 */
 			public function delete(){
 				$this->setTask('delete');
 				return $this->model->delete( $this );
 			}
 			
-			/*
-			 *	Set the Id for use
+			/**
+			 *	Set the resource Id for use
 			 *	with updates, reads or deletes
+			 *	Effectively, this value is 
+			 *	the value of the primary key.
+			 * 
+			 *	@param int $id The Id
 			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public function setId( $id ){
 				$this->resourceId = $id;
 			}
 			
-			/*
+			/**
 			 *	Get the Id for use
 			 *	with updates, reads or deletes
 			 * 
 			 *	@since 0.1.0
+			 *	@return int The resource Id
 			 */
-			
 			public function getId(){
 				return $this->resourceId;
 			}

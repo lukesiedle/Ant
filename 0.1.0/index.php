@@ -1,12 +1,12 @@
 <?php
 	
-	/*
+	/**
 	 *	
 	 *	All requests regardless
 	 *	of client arrive here
 	 * 
 	 *	@package Ant
-	 *  @require PHP 5.3+
+	 *  @requires PHP 5.3+
 	 *	@since 0.1.0
 	 */
 	 

@@ -2,13 +2,16 @@
 
 	namespace Ant\Controller\User\State;
 	
-	/*
+	/**
 	 *	Authorize the user by type
 	 *	with return url to home.	
 	 * 
+	 *	@param array $vars The
+	 *	arguments, including the type
+	 *	of authorization 'google' 'facebook'
+	 *	
 	 *	@since 0.1.0
 	 */
-	
 	function authorize( $vars ){
 		
 		if( !isset($vars['type']) ){

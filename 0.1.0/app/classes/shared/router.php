@@ -1,6 +1,6 @@
 <?php
 	
-	/*
+	/**
 	 *	The Router defines
 	 *	what scripts should
 	 *	be executed, depending 
@@ -10,7 +10,6 @@
 	 *	@subpackage Router
 	 *	@since 0.1.0
 	 */
-
 	namespace Ant {
 		
 		use \Ant\Application as App;
@@ -29,15 +28,16 @@
 							$channel		= false,
 							$stopRouting	= false;
 			
-			/*
+			/**
 			 *	The principal function to
 			 *	start routing the application.
 			 *	Usually used from a shortcut
 			 *	within @subpackage Application
 			 *	
+			 *	@param string $client The client 'web' 'mobile'
+			 *	
 			 *	@since 0.1.0
 			 */
-			
 			public static function route( $client ){
 				
 				// Set some useful vars and paths //
@@ -70,14 +70,13 @@
 				self :: loadRouteIndex();
 			}
 			
-			/*
+			/**
 			 *	Set the query string which
 			 *	would have been misinterpreted due	
 			 *	to .htaccess creating its own.
 			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public static function setQueryString(){
 				$array = parse_url( $_SERVER['REQUEST_URI'] );
 				parse_str( $array['query'], $parts );
@@ -86,15 +85,17 @@
 				self :: $path = $array['path'];
 			}
 			
-			/*
+			/**
 			 *	Attempt to load a channel
 			 *	if it exists. Channeling is used
 			 *	when the same route is needed
 			 *	but different output is required.
 			 *	
+			 *	@param string $channel The channel
+			 *	'ajax'
+			 *	
 			 *	@since 0.1.0
 			 */
-			
 			public static function loadChannel( $channel = null ){
 				if( is_null($channel) ){
 					$channel = $_GET['channel'];
@@ -120,38 +121,37 @@
 				return false;
 			}
 			
-			/*
+			/**
 			 *	Attempt to reset and load the specified
 			 *	channel, for example, during an error 404.
+			 *	
+			 *	@param string $channel The channel, 'ajax'
 			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public static function resetChannel( $channel ){
 				self :: $channel = self :: loadChannel( $channel );
 			}
 			
-			/*
+			/**
 			 *	Get the current channel
 			 *	in use
 			 * 
 			 *	@since 0.1.0
+			 *	@return string The current channel
 			 */
-			
 			public static function getChannel(){
 				return self :: $channel;
 			}
 			
-			/*
+			/**
 			 *	Get the current public path 
 			 *	to the application, i.e. not 
 			 *	necessarily the root
-			 * 
+			 *	
 			 *	@since 0.1.0
-			 *	@return string Public path to application
+			 *	@return string Current public path to application
 			 */
-			
-			// Get the path minus any query string params //
 			public static function getAppPath(){
 				$http = $_SERVER['HTTPS'];
 				if( !$http ){
@@ -160,14 +160,13 @@
 				return  $http . $_SERVER['SERVER_NAME'] . self :: $path;
 			}
 			
-			/*
+			/**
 			 *	Get the public path to the root
 			 *	of the application
 			 * 
 			 *	@since 0.1.0
-			 *	@return string Public path to application
+			 *	@return string Public path to application root
 			 */
-			
 			public static function getPublicRoot( $https = false ){
 				$http = 'http://';
 				if( $https ){
@@ -176,7 +175,7 @@
 				return  $http . $_SERVER['SERVER_NAME'] . PUBLIC_ROOT;
 			}
 			
-			/*
+			/**
 			 *	Load the route map if it exists.
 			 *	This file is always named 'route.xml'
 			 *	within the shared client view.
@@ -185,11 +184,11 @@
 			 *	which creates certain variables based
 			 *	on the depth and contents of the request.
 			 * 
+			 *	@param string $file The xml map
+			 * 
 			 *	@since 0.1.0
 			 *	@return bool True for map exists, or false
-			 * 
 			 */
-			
 			public static function loadRouteMap( $file ){
 				
 				// There is a different route map for every client //
@@ -200,33 +199,36 @@
 				return false;
 			}
 			
-			/*
+			/**
 			 *	Plan the route if a route map exists,
 			 *	using the variables created from the map.
 			 *	Required variables include:
 			 *	module, template, frame, doctitle
 			 *	
-			 *	Context is determined here
-			 * 
+			 *	Context is determined here.
+			 *	
 			 *	@since 0.1.0
 			 */
-			
 			public static function planRoute(){
 				self :: parseRouteXml( self :: $routeXml, App :: get()->request, 0 );
 				self :: $routeVars		= (object) self :: $routeVars;
 				self :: $requestVars	= (object) self :: $requestVars;
 			}
 			
-			/*
+			/**
 			 *	XML parsing function used in route planning.
 			 *	This is the function which considers
 			 *	every conditional laid out in the xml
 			 *	and creates request or route vars
 			 *	accordingly.
 			 *	
+			 *	@param object $xml The xml map object of the
+			 *	current iteration
+			 *	@param array $request The request variables
+			 *	@param int $i The current iteration
+			 *	
 			 *	@since 0.1.0
 			 */
-			
 			public static function parseRouteXml( $xml, $request, $i ){
 				
 				if( self :: $stopRouting ){
@@ -325,18 +327,18 @@
 				}
 			}
 			
-			/*
-			 *	Set the route context
+			/**
+			 *	Set the route context, 'article' 'user'
+			 *	
+			 *	@param string $context
 			 * 
 			 *	@since 0.1.0
 			 */
-			
-			// Context can be overriden here //
 			public static function setRouteContext( $context ){
 				self :: $context = $context;
 			}
 			
-			/*
+			/**
 			 *	Load the route index based on the client.
 			 *	This is contained in the shared/views
 			 *	folder and is required. The function
@@ -348,7 +350,6 @@
 			 *	@return mixed The return variable of
 			 *	the index function
 			 */
-			
 			public static function loadRouteIndex(){
 				
 				require('app/modules/shared/views/' . self :: $client . '/index.php');
@@ -357,7 +358,7 @@
 				return $fn( self :: getRequestVars() );
 			}
 			
-			/*
+			/**
 			 *	Load the route view based on the client,
 			 *	and the current context. The module/view
 			 *	to be called is set within the route map.
@@ -366,16 +367,15 @@
 			 *	to be declared if required.
 			 *	
 			 *	Examples of context:
-			 *	'home' 'news' 'about'
+			 *	'home' 'news' 'about' 'user' 'article'
 			 *	
-			 *	@note This function needs to be manually 
+			 *	This function needs to be manually 
 			 *	called from within the index.
 			 *	
 			 *	@since 0.1.0
 			 *	@return mixed | CollectionSet The collections
 			 *	of the view to be passed to templating.
 			 */
-			
 			public static function loadRouteView(){
 				
 				$mod = self :: getModule();				
@@ -398,21 +398,27 @@
 				
 			}
 			
-			/*
+			/**
 			 *	Load the shared view based on the client, 
 			 *	regardless of context. The shared view
 			 *	would contain functionality that 
 			 *	is global, and would usually be named 
 			 *	something like 'frame.php'
 			 *	
-			 *	@note This function needs to be manually 
+			 *	This function needs to be manually 
 			 *	called from within the index.
+			 *	
+			 *	@param string $view The view function
+			 *	@param mixed $contextView The values return
+			 *	by the view, allowing them to be accessed	
+			 *	in the shared view, e.g. 'frame.php'
+			 *	@param string $client Force a specific client	
+			 *	view.	
 			 *	
 			 *	@since 0.1.0
 			 *	@return mixed | CollectionSet The collections
 			 *	of the view to be passed to templating.
 			 */
-			
 			public static function loadSharedView( $view, $contextView = null, $client = null ){
 				
 				if( !$client ){
@@ -428,56 +434,52 @@
 				
 			}
 			
-			/*
+			/**
 			 *	Get the route variables, as defined
 			 *	in route.xml. Example:
 			 *	'view' 'client'
 			 *	
 			 *	@since 0.1.0
-			 *	@return stdClass The route variables
+			 *	@return object The route variables
 			 */
-			
 			public static function getRouteVars(){
 				return self :: $routeVars;
 			}
 			
-			/*
+			/**
 			 *	Get the request variables. Example:
 			 *	'id' 'title' 'action'
 			 * 			 
 			 *	@since 0.1.0
 			 *	@return stdClass The route variables
 			 */
-			
 			public static function getRequestVars(){
 				return self :: $requestVars;
 			}
 			
-			/*
+			/**
 			 *	Get the current module, as
 			 *	defined in route.xml.
 			 * 			 
 			 *	@since 0.1.0
 			 *	@return string The module
 			 */
-			
 			public static function getModule(){
 				return self :: $routeVars->module;
 			}
 			
-			/*
-			 *	Get the current template, as
+			/**
+			 *	Get the current template file, as
 			 *	defined in route.xml.
 			 * 			 
 			 *	@since 0.1.0
 			 *	@return string The template
 			 */
-			
 			public static function getTemplate(){
 				return self :: $routeVars->template;
 			}
 			
-			/*
+			/**
 			 *	Get the current request context,
 			 *	as defined in route.xml.
 			 *	Example : 'home' 'news' 'about'
@@ -485,43 +487,41 @@
 			 *	@since 0.1.0
 			 *	@return string The request context
 			 */
-			
 			public static function getContext(){
 				return self :: $routeVars->context;
 			}
 			
-			/*
+			/**
 			 *	Get the document title
 			 *	set inside the route.
 			 * 			 
 			 *	@since 0.1.0
 			 *	@return string The title
 			 */
-			
 			public static function getDocTitle(){
 				return self :: $routeVars->doctitle;
 			}
 			
-			/*
+			/**
 			 *	Set the document title
 			 *	in special cases, example '404 error'
-			 * 			 
+			 *	
+			 *	@param string $title The document title
+			 *  			 
 			 *	@since 0.1.0
 			 *	@return string The title
 			 */
-			
 			public static function setDocTitle( $title ){
 				self :: $routeVars->doctitle = $title;
 			}
 			
-			/*
+			/**
 			 *	Get the controllers set
 			 *	inside the route.
-			 * 			 
+			 * 	
 			 *	@since 0.1.0
-			 *	@return string The title
+			 *	@return array The controller names
 			 */
-			
 			public static function getControllers(){
 				return self :: $routeVars->controller;
 			}

@@ -1,16 +1,5 @@
 <?php
 	
-	/*
-	 *	Log the user in based 
-	 *	on username/password combination
-	 *	
-	 *	This is different to authorization,
-	 *	logging the user in via an OAuth
-	 *	protocol like Facebook Connect	
-	 *	
-	 *	@since 0.1.0
-	 */
-
 	namespace Ant\Controller\User\Registration;
 	
 	use \Ant\Request as Request;
@@ -19,9 +8,22 @@
 	use \Ant\Cookie as Cookie;
 	use \Ant\Configuration as Config;
 	use \Ant\User as User;
-		
+	
+	/**
+	 *	Log the user in based 
+	 *	on username/password combination
+	 *	
+	 *	This is different to authorization,
+	 *	logging the user in via an OAuth
+	 *	protocol like Facebook Connect	
+	 *	
+	 *	@param array $vars The args
+	 * 
+	 *	@since 0.1.0
+	 */
 	function login( $vars ){
 		
+		// Must be a post //
 		if( ! $request = Request :: get('post') ){
 			return;
 		}

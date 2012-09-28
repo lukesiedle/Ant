@@ -1,16 +1,25 @@
 <?php
 	
-	/*
-	 *	Handles CRUD resource
-	 *	requests.
-	 *	
-	 *	@since 0.1.0
-	 */
-
+	
 	namespace Ant\Controller\Application;
 	use \Ant\Request as Request;
 	use \Ant\Controller as Controller;
 	
+	/**
+	 *	Handles CRUD resource
+	 *	requests and calls the intention
+	 *	controller if one exists.
+	 * 
+	 *	May throw errors which the resource
+	 *	channel is designed to catch.
+	 *	
+	 *	@param array $args The arguments
+	 *	including 'request'
+	 * 	
+	 *	@since 0.1.0
+	 *	@return array The data 
+	 *	from the resource
+	 */
 	function resource( $args ){
 		
 		$request = (array) $args['request'];

@@ -1,17 +1,21 @@
 <?php
 
-	/*
-	 *	Get the basic user
-	 *	query back, and modify
-	 *	for login
-	 * 
-	 *	@package Ant
-	 *	@subpackage User
-	 *	@since 0.1.0
-	 */
-	 
 	namespace Ant\Query\User {
 		
+		/**
+		 *	Get the basic user
+		 *	query back, and modify
+		 *	for login
+		 * 
+		 *	@param Query $query A new query object
+		 *	@param string $_ The table prefix
+		 *	@param array $args Arguments including 
+		 *	'request'
+		 * 
+		 *	@package Ant
+		 *	@subpackage User
+		 *	@since 0.1.0
+		 */
 		function getUserByLogin( $query, $_ , $args ){
 			
 			$query = \Ant\Controller :: query('User.getUser');

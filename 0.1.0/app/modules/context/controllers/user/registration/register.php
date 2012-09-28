@@ -1,31 +1,16 @@
 <?php
 
-	/*
-	 *	Registers the user
-	 *	based on request data
-	 * 
-	 *	@since 0.1.0
-	 *	
-	 */
-
 	namespace Ant\Controller\User\Registration;
 	
 	use \Ant\User as User;
 	
-	function register( $args ){
-		return false;
-	}
-	
-	/*
-	 *	Filter the request
-	 * 
+	/**
+	 *	The register intention, used 
+	 *	after a new user resource is
+	 *	created successfully.
+	 *	
+	 *	@since 0.1.0
 	 */
-	
-	function registerFilter( $request ){
-		return array(
-			'user_first_name'	=> 'Luke',
-			'user_last_name'	=> 'Siedle',
-			'user_email'		=> 'ljsiedle@gmail.com',
-		);
+	function register( $args ){
+		
 	}
-	

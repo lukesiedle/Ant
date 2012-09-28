@@ -1,12 +1,11 @@
 <?php
 	
-	/*
+	/**
 	 *	MySQL configuration
 	 *	local and remote.
 	 * 
 	 *	@package Ant
 	 *	@subpackage Configuration
-	 *	@type Client
 	 *	@since 0.1.0	 
 	 */
 	

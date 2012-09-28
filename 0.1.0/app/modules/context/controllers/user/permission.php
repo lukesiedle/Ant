@@ -1,12 +1,17 @@
 <?php
 
-	/*
-	 *	Controls user permissions
-	 *	
-	 */
-
 	namespace Ant\Controller\User;
 	
+	/**
+	 *	Controls permissions for the 
+	 *	resource 'User'
+	 *	
+	 *	@param array $args Args include 
+	 *	'request' object and Resource object
+	 *	
+	 *	@return array Permissions and readable 
+	 *	fields
+	 */
 	function permission( $args ){
 		
 		$user = \Ant\User :: getCurrentUser();

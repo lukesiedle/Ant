@@ -1,6 +1,6 @@
 <?php
 	
-	/*
+	/**
 	 *	Template handles general
 	 *	data to string operations,
 	 *	regular expression replacement.
@@ -10,7 +10,6 @@
 	 *	@type Shared
 	 *	@since 0.1.0
 	 */
-
 	namespace Ant {
 		
 		Class Template {
@@ -28,12 +27,14 @@
 			public $output = '';
 			public $template;
 			
-			/*
+			/**
 			 *	Instantiation of new template
+			 *	
+			 *	@param string $pathToFile Path to 
+			 *	the template file
 			 *	
 			 *	@since 0.1.0
 			 */
-			
 			public function __construct( $pathToFile = null ){
 				
 				// Load the cache //
@@ -58,15 +59,19 @@
 				return true;
 			}
 			
-			/*
+			/**
 			 *	Load the self template
 			 *	into the template passed
 			 *	as an argument, according
 			 *	to a search paramater
 			 *	
+			 *	@param Template A template object.
+			 *	The self template will be loaded
+			 *	into this object using a search.
+			 *	@param string $search The search key
+			 *	
 			 *	@since 0.1.0
 			 */
-			
 			public function loadInto( $template, $search ){
 				
 				$template->replace(array(
@@ -74,13 +79,20 @@
 				));
 			}
 			
-			/*
+			/**
 			 *	Dual-context function for 
 			 *	string replacement.
 			 *	
+			 *	@param array $data The key
+			 *	value pairs to replace in 
+			 *	the template
+			 *	@param string $str The target string
+			 *	if scope is static. 
+			 *	@param string $ns A namespace to prefix
+			 *	the searches with
+			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public function replace( $data, $str = null, $ns = null ){
 				
 				$search = array_keys($data);
@@ -105,93 +117,110 @@
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Sets the output string
 			 * 
+			 *	@param string $str The string
+			 *	for output
+			 *	
 			 *	@since 0.1.0
 			 *	@return object The object for chaining
+			 *	
 			 */
-			
 			public function setOutput( $str ){
 				$this->output = $str;
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Returns the original template
-			 * 
+			 *	string, before replacements.
+			 *	
 			 *	@since 0.1.0
 			 *	@return string The template
 			 */
-			
 			public function get(){
 				return $this->template;
 			}
 			
-			/*
+			/**
 			 *	Returns the output string
-			 * 
+			 *			 
 			 *	@since 0.1.0
 			 *	@return string The output
 			 */
-			
 			public function getOutput(){				
 				return $this->output;
 			}
 			
-			/*
+			/**
 			 *	Set the path that will 
-			 *	be used for the map.
+			 *	be used to load the template
+			 *	and also the xml map.
+			 *	
+			 *	@param string $path The path
 			 * 
 			 *	@since 0.1.0
 			 *	@return object The object for chaining
 			 */
-			
 			public function setPath( $path ){
 				$this->path = $path;
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Get the xml map for mapping
-			 *	data to the template
-			 * 
+			 *	data to the template.
+			 *	
 			 *	@since 0.1.0
-			 *	@return object XML			 
+			 *	@return object XML object 
 			 */
-			
 			public function getMap(){
 				if( file_exists($path = $this->path . '.xml')){
 					return \simplexml_load_file( $path );
 				}
 			}
 			
-			/*
+			/**
 			 *	Map the passed in collection set 
 			 *	to the output string
+			 * 
+			 *  @param CollectionSet The collection set
+			 *	which contains data to map to the template			 
+			 *	using the XML map as a guide.
 			 * 
 			 *	@since 0.1.0
 			 *	@return object The object for chaining
 			 */
-			
 			public function map( CollectionSet $collections ){
 				$xml = $this->getMap();
 				if( $xml ){
-					$this->setOutput($this->loopMap( $xml, $collections->getCollections(), $this->getOutput() ));
+					$this->setOutput(
+						$this->loopMap( 
+							$xml, 
+							$collections->getCollections(), 
+							$this->getOutput() 
+						)
+					);
 					return $this;
 				}
 			}
 			
-			/*
+			/**
 			 *	Loop through the map recursively,
 			 *	applying the data in each template
 			 *	using string replacement, and 
 			 *	inserting into the output string
-			 *	 
+			 *	
+			 *	@param object $xml The XML object to apply
+			 *	in the current loop
+			 *	@param array $collections The collections
+			 *	@param string $html The html to apply in
+			 *	the current loop
+			 *		
 			 *	@since 0.1.0
 			 *	@return string The resulting string
 			 */
-			
 			public function loopMap( $xml, Array $collections, $html = null ){
 				
 				foreach( $xml as $tag => $each ){
@@ -275,6 +304,17 @@
 				
 			}
 			
+			/**
+			 *	Evaluate and run the specified controller
+			 *	according to the bool prefix. Controllers
+			 *	are used to show/hide certain templates
+			 * 
+			 *	@param string $controller The controller
+			 *	that was set inside the XML map.
+			 * 
+			 *	@since 0.1.0
+			 *	@return bool The result
+			 */
 			public static function checkController( $controller ){
 				
 				$controller = (string) $controller;
@@ -296,14 +336,17 @@
 				return $expectBool == $result;
 			}
 			
-			/*
+			/**
 			 *	Add a Collection to globals
 			 *	for replacement at the end
 			 *	of the templating cycle.
-			 *	 
+			 *	
+			 *	@param Collection The collection	
+			 *	@param string $nsPrefix The prefix to apply
+			 *	before the Collection namespace
+			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public static function addGlobals( Collection $collection, $nsPrefix = '' ){
 				
 				$ns = $nsPrefix . $collection->getNameSpace();
@@ -328,14 +371,15 @@
 				});
 			}
 			
-			/*
+			/**
 			 *	Insert all globals into
 			 *	the specified string.
-			 *	 
+			 *	
+			 *	@param string $str The string
+			 *  
 			 *	@since 0.1.0
 			 *	@return string The altered string
 			 */
-			
 			public static function replaceGlobals( $str ){
 				foreach( self :: $globals as $ns => $each ){
 					foreach( array_keys($each) as $key ){
@@ -348,14 +392,16 @@
 				return $str;
 			}
 			
-			/*
+			/**
 			 *	Get the loop template based 
 			 *	on the path.
 			 *	 
+			 *	@param string $path The path 
+			 *	to the template file
+			 * 
 			 *	@since 0.1.0
 			 *	@return string The template string
 			 */
-			
 			public static function getLoopTemplate( $path ){
 				
 				// Create the path //
@@ -372,15 +418,17 @@
 				
 			}
 			
-			/*
+			/**
 			 *	Add the template to global 
 			 *	storage array. Useful
 			 *	for future caching.
-			 *	 
+			 *  
+			 *	@param string $path The path
+			 *	to the template file
+			 * 
 			 *	@since 0.1.0
 			 *	@return string The template string
 			 */
-			
 			public static function addTemplate( $path ){
 				if( !isset( self :: $templates[ $path ] )){
 					self :: $templates[ $path ] = file_get_contents( $path );
@@ -388,13 +436,12 @@
 				return self :: $templates[ $path ];
 			}
 			
-			/*
+			/**
 			 *	Load the cache based on the
 			 *	current client.
 			 *	 
 			 *	@since 0.1.0
 			 */
-			
 			public static function loadCache(){
 				
 				// Prevent local caching //
@@ -414,7 +461,7 @@
 				self :: $cacheLoaded = true;
 			}
 			
-			/*
+			/**
 			 *	Write the cache based on the
 			 *	current set of templates
 			 *	in memory. Writes to a file
@@ -422,7 +469,6 @@
 			 *	 
 			 *	@since 0.1.0
 			 */
-			
 			public static function writeCache(){
 				if( Application :: config()->template_cache_path ){
 					$h = fopen( Application :: config()->template_cache_path, 'w+' );
@@ -431,26 +477,32 @@
 				}
 			}
 			
-			/*
+			/**
 			 *	Load and add a template based
 			 *	on a path
-			 *	 
+			 *	
+			 *	@param string $path The path to
+			 *	the file
+			 *	
 			 *	@since 0.1.0
 			 *	@return string The template string
 			 */
-			
 			public static function loadFile( $path ){
 				return self :: addTemplate( $path );
 			}
 			
-			/*
-			 *	Load a template inside the context.
-			 *	Example: 'home' 'user' 'about'
-			 *	 
+			/**
+			 *	Load a template inside the app context.
+			 *	E.g. 'home' 'user' 'about'
+			 *	
+			 *	@param string $tpl The template inside the context
+			 *	Defaults to the context name.
+			 *	@param string $context The context to use.
+			 *	Defaults to the current context.
+			 * 
 			 *	@since 0.1.0
 			 *	@return object The template
 			 */
-			
 			public static function loadContextTemplate( $tpl = null, $context = null ){
 				
 				if( !$tpl ){
@@ -466,13 +518,14 @@
 				
 			}
 			
-			/*
-			 *	Load the view template
-			 *	 
+			/**
+			 *	Load the view template, according
+			 *	to the current context and 
+			 *	specified view.
+			 *				 
 			 *	@since 0.1.0
 			 *	@return object The template
 			 */
-			
 			public static function loadViewTemplate(){
 				
 				$view = Router :: getTemplate();
@@ -483,28 +536,31 @@
 			}
 			
 			
-			/*
+			/**
 			 *	Load a template inside the shared space.
-			 *	 
+			 *	
+			 *	@param string $tpl The template name
+			 *  
 			 *	@since 0.1.0
 			 *	@return object The template
 			 */
-			
 			public static function loadSharedTemplate( $tpl ){
 				$path = self :: getPath() . 'shared/' . $tpl;
 				
 				return new self( $path );
 			}
 			
-			/*
+			/**
 			 *	Load a template inside template space,
 			 *	optionally returning as a string 
 			 *	by default.
-			 *	 
+			 *	
+			 *	@param string $tpl The template string
+			 *	@param string $return The type to return
+			 * 
 			 *	@since 0.1.0
 			 *	@return object The template / string The html
 			 */
-			
 			public static function getTemplate( $tpl, $return = 'string' ){
 				$path	= self :: getPath() . $tpl;
 				$tpl	= new self( $path );
@@ -514,14 +570,15 @@
 				return $tpl;
 			}
 			
-			/*
+			/**
 			 *	Get the path to the templates
 			 *	directory, optionally in context.
 			 *	 
+			 *	@param string $context
+			 * 
 			 *	@since 0.1.0
 			 *	@return string The templates directory
 			 */
-			
 			public static function getPath( $context = null ){
 				$path = '';
 				if( $context ){
@@ -534,25 +591,26 @@
 						. '/' . $path;
 			}
 			
-			/*
+			/**
 			 *	Set the buffer. The buffer
 			 *	is the object Application looks
 			 *	for in order to generate output
-			 *	 
+			 *	
+			 *	@param Template The template object
+			 *  
 			 *	@since 0.1.0
 			 */
-			
 			public static function setBuffer( $obj ){
 				self :: $buffer = $obj;
 			}
 			
-			/*
-			 *	Creates final output
-			 *	
+			/**
+			 *	Creates final output from
+			 *	the buffer
+			 * 	
 			 *	@since 0.1.0
 			 *	@return string The output string
 			 */
-			
 			public static function output(){
 				
 				if( self :: $buffer ){					
@@ -567,22 +625,22 @@
 					$output = Template :: replaceGlobals( $output );
 					
 					// Strip leftovers //
-					$output = preg_replace("%{(\w\S*|\\\\\w\S*)}%", "", $output );					
+					$output = preg_replace("%{(\w\S*|\\\\\w\S*)}%", "", $output );
 					
+					// Write the cache for performance sake //
 					self :: writeCache();
-
+					
 				}
 				
 				return $output;
 			}
 			
-			/*
+			/**
 			 *	Get the buffer if it exists
 			 *	
 			 *	@since 0.1.0
 			 *	@return string The buffer template object
 			 */
-			
 			public static function getBuffer(){
 				if( self :: $buffer ){
 					return self :: $buffer;
@@ -590,12 +648,12 @@
 				return false;
 			}
 			
-			/*
-			 *	Load languages into globals
+			/**
+			 *	Load current language
+			 *	into globals
 			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public static function loadLanguageGlobals(){
 				
 				$dir = 'config/i18n/languages/' 
@@ -620,13 +678,12 @@
 				Template :: addGlobals( new Collection( $lang, 'LANG' ) );
 			}
 			
-			/*
+			/**
 			 *	Return a language phrase from memory
 			 *	
 			 *	@since 0.1.0
 			 *	@return String The language string
 			 */
-			
 			public static function phrase( $str ){
 				return self :: $globals['LANG'][ $str ];
 			}
