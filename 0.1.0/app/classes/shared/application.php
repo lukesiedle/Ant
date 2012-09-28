@@ -19,14 +19,16 @@
 			
 			public static $app;
 			
-			/*
-			 *	Initializes variables
-			 *	for later use. Includes the default
-			 *	configuration file.
+			/**
+			 *	Initializes variables for later use. 
+			 *	Includes the default configuration file.
+			 *	
+			 *	@param string $requestVar The name of 
+			 *	the request variable used to store
+			 *	the request.
 			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public static function initialize( $requestVar = 'request' ){
 				
 				// Setup a stdClass object for storage //
@@ -56,38 +58,37 @@
 			}
 			
 			
-			/*
+			/**
 			 *	Returns the application storage
 			 *	object.
 			 * 
 			 *	@since 0.1.0
 			 *	@return object The storage object
 			 */
-			
 			public static function get(){
 				return self :: $app;
 			}
 			
-			/*
+			/**
 			 *	Extends the application storage
 			 *	object.
 			 * 
+			 *	@param array $arr The array to store
+			 * 
 			 *	@since 0.1.0			  
 			 */
-			
 			public static function set( Array $arr ){
 				foreach( $arr as $k => $v ){
 					self :: $app->{ $k } = $v;
 				}
 			}
 			
-			/*
+			/**
 			 *	Detects and sets the environment (local or remote)
 			 *	based on request.
 			 * 
 			 *	@since 0.1.0	  
 			 */
-			
 			public static function setEnvironment(){
 				
 				self :: $app->local = false;
@@ -102,13 +103,14 @@
 				}
 			}
 			
-			/*
+			/**
 			 *	Detects and sets the client (api,mobile,tablet,web)
 			 *	based on request, headers, mobile detection.
 			 * 
+			 *	@param string $force Force the client type
+			 * 
 			 *	@since 0.1.0	  
 			 */
-			
 			public static function setClient( $force = null ){
 				
 				// Requier request configuration //
@@ -148,35 +150,32 @@
 
 			}
 			
-			/*
+			/**
 			 *	Returns the current client (api,mobile,tablet,web)
 			 * 
 			 *	@since 0.1.0	  
 			 *	@return string The current client
 			 */
-			
 			public static function getClient(){
 				return self :: $app->client;
 			}
 			
-			/*
+			/**
 			 *	Detects if the client is mobile using 
 			 *	the TERA / WURFL Library.
 			 * 
 			 *	@since 0.1.0	  
 			 */
-			
 			public static function detectMobileClient(){
 				// Tera / Wurfl ... //
 			}
 			
-			/*
+			/**
 			 *	Loads shared client includes
 			 *	as well as client-specific includes
 			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public static function setClientSettings(){
 				
 				// Global includes like data manipulation classes //
@@ -192,13 +191,14 @@
 
 			}
 			
-			/*
+			/**
 			 *	Sets the current language according
 			 *	to user-established variable in cookies/session.
 			 * 
+			 *	@param string $lang The language name
+			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public static function setLanguage( $lang = 'en_all' ){
 				self :: $app->lang = $lang;
 				
@@ -206,39 +206,39 @@
 				Template :: loadLanguageGlobals();
 			}
 			
-			/*
+			/**
 			 *	Returns the current language
 			 * 
 			 *	@since 0.1.0
 			 *	@return string The language shortcode
 			 */
-			
 			public static function getLanguage(){
 				return self :: $app->lang;
 			}
 			
-			/*
+			/**
 			 *	Sets the current template theme
 			 *	Here for forward-compatibility	
 			 *	
+			 *	@param string $theme The theme name
+			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public static function setTheme( $theme = 'default' ){
 				self :: $app->theme = $theme;
 			}
 			
-			/*
+			/**
 			 *	Gets the current theme
 			 *	
 			 *	@since 0.1.0
+			 *	@return string The theme name
 			 */
-			
 			public static function getTheme(){
 				return self :: $app->theme;
 			}
 			
-			/*
+			/**
 			 *	Sets the current locale (country, timezone)
 			 *	based on geolocation / session, cookies
 			 * 
@@ -246,7 +246,6 @@
 			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public static function setLocale(){
 				
 				self :: $app->location		= array(
@@ -268,13 +267,12 @@
 
 			}
 			
-			/*
+			/**
 			 *	Allocate resources based
 			 *	on the current client designation
 			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public static function allocateResources(){
 
 				// Require default resources //
@@ -289,25 +287,23 @@
 				
 			}
 			
-			/*
+			/**
 			 *	Placeholder function 
 			 *	for routing the application
 			 *	
 			 *	@since 0.1.0
 			 */
-			
 			public static function route(){
 				// Routes the app  //
 				Router :: route( self :: $app->client );
 			}
 			
-			/*
+			/**
 			 *	Set headers defined 
 			 *	within Document
 			 *	
 			 *	@since 0.1.0
 			 */
-			
 			public static function setHeaders(){
 				
 				// Sets headers if any were defined in Document //
@@ -316,13 +312,12 @@
 				}
 			}
 			
-			/*
+			/**
 			 *	Flush the output and 
 			 *	release any resources
 			 *	
 			 *	@since 0.1.0
 			 */
-			
 			public static function flush(){
 				
 				// Prepare the document parts for output //
@@ -337,13 +332,14 @@
 				echo Template :: output();
 			}
 			
-			/*
+			/**
 			 *	Connect to the configured
 			 *	database and set the table prefix.
 			 *	
+			 *	@param array $config The mysql configuration
+			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public static function connect( Array $config ){
 				
 				$time = microtime();
@@ -379,49 +375,50 @@
 				
 			}
 
-			/*
+			/**
 			 *	Shortcut method to return 
 			 *	the configuration
 			 *	
 			 *	@since 0.1.0
 			 *	@return object The Configuration object
 			 */
-			
 			public static function config(){
 				return ( object ) Configuration :: get();
 			}
 			
-			/*
+			/**
 			 *	Shortcut method to output
 			 *	an array to the screen in <pre> tags	
 			 * 
+			 *	@param array $data The data to output
+			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public static function out( $data ){
 				return \Library\Arr\out( $data );
 			}
 			
-			/*
+			/**
 			 *	Shortcut method to return 
 			 *	the request variables from Router
 			 * 
 			 *	@since 0.1.0
 			 *	@return object Router request variables
 			 */
-			
 			public static function request(){
 				return Router :: getRequestVars();
 			}
 			
-			/*
+			/**
 			 *	Redirect the application making 
 			 *	sure the session gets written and
 			 *	the application exits.
+			 *	
+			 *	@param string $url The URL (relative to 
+			 *	PUBLIC_ROOT)
 			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public static function redirect( $url = null ){
 				if( session_id() ){
 					// Make sure we write any session before redirect //
@@ -438,20 +435,20 @@
 				exit;
 			}
 			
-			/*
+			/**
 			 *	Set an error 
 			 * 
-			 *	@since 0.1.0
-			 * 
-			 *	@note
 			 *	This function actually
 			 *	usurps control of the 
 			 *	application, performing
 			 *	the final few tasks of the
 			 *	index, and exiting the script.
 			 * 
+			 *	@param string $code The error code
+			 *	@param string $msg The message
+			 * 
+			 *	@since 0.1.0
 			 */	
-			
 			public static function setError( $code = '404', $msg = null ){
 				
 				switch( $code ){

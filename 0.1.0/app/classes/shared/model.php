@@ -11,15 +11,16 @@
 		
 		Class Model {
 			
-			/*
+			/**
 			 *	Make the model
 			 *	Uses the specific model
 			 *	if it exists, or the generic
 			 *	
+			 *	@param string $modelName The model name
+			 * 
 			 *	@since 0.1.0
 			 *	@return object The model
 			 */
-			
 			public static function make( $modelName ){
 				$modelPath = 'app/classes/models/' . $modelName . '.php';
 				if( file_exists( $modelPath )){
@@ -30,62 +31,66 @@
 				return new Model( $modelName );
 			}
 			
-			/*
+			/**
 			 *	Constructor
 			 *	Store the model name
+			 *	
+			 *	@param string $modelName The model name
 			 * 
 			 *	@since 0.1.0
-			 * 
 			 */
-			
 			public function __construct( $modelName ){
 				$this->modelName = strtolower( $modelName );
 			}
 			
-			/*
+			/**
 			 *	Get the model name
-			 * 
+			 *	
 			 *	@since 0.1.0
 			 *	@return string The model name
 			 */
-			
 			public function getName(){
 				return $this->modelName;
 			}
 			
-			/*
+			/**
 			 *	Execute the specified
 			 *	task attached to a 
 			 *	resource
 			 * 
+			 *	@param Resource $resource The resource
+			 *	containing data and instructions
+			 * 
 			 *	@since 0.1.0
 			 *	@return mixed The task result
 			 */
-			
 			public function task( $resource ){
 				return $this->{ $resource->getTask() }( $resource );
 			}
 			
-			/*
-			 *	Check the task, then execute
+			/**
+			 *	Set the task, then execute
 			 *	with resource.
 			 * 
+			 *	@param string $task The resource task
+			 *  @param resource $resource The resource object
+			 *	
 			 *	@since 0.1.0
 			 *	@return mixed The task result
 			 */
-			
 			public function doTask( $task, $resource ){
-				$resource->checkTask( $task );
+				$resource->setTask( $task );
 				return $this->task( $resource );
 			}
 			
-			/*
+			/**
 			 *	The default create task
+			 * 
+			 *	@param Resource $resource
 			 * 
 			 *	@since 0.1.0
 			 *	@return Collection The data created
 			 */
-			
 			public function create( $resource ){
 				
 				// Create a collection from the resource //
@@ -104,13 +109,14 @@
 				return $collection;
 			}
 			
-			/*
+			/**
 			 *	The default read task
+			 * 
+			 *	@param Resource $resource
 			 * 
 			 *	@since 0.1.0
 			 *	@return Collection The data read
 			 */
-			
 			public function read( $resource ){			
 				
 				$query = \Ant\Controller :: query( $this->modelName . '.crud.read', array(
@@ -145,13 +151,14 @@
 				return $collection->toArray();
 			}
 			
-			/*
+			/**
 			 *	The default update task
-			 * 
+			 *
+			 *	@param Resource $resource
+			 *  
 			 *	@since 0.1.0
 			 *	@return Collection The data updated/read
 			 */
-			
 			public function update( $resource ){
 				
 				$data	= $resource->getData();
@@ -177,13 +184,14 @@
 				return $rs->read();
 			}
 			
-			/*
+			/**
 			 *	The default delete task
 			 * 
+			 *	@param Resource $resource
+			 *	
 			 *	@since 0.1.0
 			 *	@return bool The success
 			 */
-			
 			public function delete( $resource ){
 				
 			}

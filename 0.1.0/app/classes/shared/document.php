@@ -1,12 +1,11 @@
 <?php
 	
-	/*
+	/**
 	 *	The Document wrapper 
 	 *	class.
 	 * 
 	 *	@since 0.1.0
 	 */
-
 	namespace Ant {
 		
 		Class Document {
@@ -20,62 +19,73 @@
 			public static $processedJavascripts;
 			public static $headers = array();
 			
-			/*
+			/**
 			 *	Set the document title
 			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public static function setTitle( $str ){
 				self :: $title = $str;
 			}
 			
-			/*
+			/**
 			 *	Get the document title
 			 * 
 			 *	@since 0.1.0
 			 *	@return string The title
 			 */
-			
 			public static function getTitle(){
 				return self :: $title;
 			}
 			
-			/*
+			/**
 			 *	Add a JavaScript file to the 
 			 *	Document.
+			 *	
+			 *	@param string $src The source of the file
+			 *	on the server
+			 *	@param string $namespace The group the file
+			 *	belongs to.
 			 * 
 			 *	@since 0.1.0			 
 			 */
-			
 			public static function addJavascript( $src, $namespace = 'default' ){
 				self :: $javascripts[ $src ] = $namespace;
 			}
 			
-			/*
+			/**
 			 *	Remove a JavaScript file to the 
 			 *	Document.
 			 * 
+			 *	@param string $src The source of the file
+			 *	on the server
+			 *	
 			 *	@since 0.1.0			 
 			 */
-			
 			public static function removeJavascript( $src ){
 				unset( self :: $javascripts[ $src ] );
 				unset( self :: $javascriptsPostLoad[ $src ] );
 			}
 			
-			/*
+			/**
 			 *	Add a Stylesheet to the Document.
+			 * 
+			 *	@param string $src The source of the file
+			 *	on the server
+			 *	@param string $namespace The group the file
+			 *	belongs to.
 			 * 
 			 *	@since 0.1.0			 
 			 */
-			
 			public static function addStylesheet( $src, $namespace = 'default' ){
 				self :: $stylesheets[ $src ] = $namespace;
 			}
 			
-			/*
+			/**
 			 *	Remove a Stylesheet to the Document.
+			 * 
+			 *  @param string $src The source of the file
+			 *	on the server
 			 * 
 			 *	@since 0.1.0			 
 			 */
@@ -84,13 +94,13 @@
 				unset( self :: $stylesheets[ $src ] );
 			}
 			
-			/*
+			/**
 			 *	Prepare the Stylesheets based 
 			 *	on an optional callback.
 			 * 
-			 *	@since 0.1.0			 
+			 *	@since 0.1.0			
+			 *	@return array The stylesheets, namespaced
 			 */
-			
 			public static function prepareStylesheets(){
 				
 				self :: $processedStylesheets = self :: $stylesheets;
@@ -111,13 +121,13 @@
 				return self :: $processedStylesheets;
 			}
 			
-			/*
+			/**
 			 *	Prepare the JavaScripts based 
 			 *	on an optional callback.
 			 * 
 			 *	@since 0.1.0			 
+			 *	@return array The JavaScript files, namespaced
 			 */
-			
 			public static function prepareJavascripts(){
 				
 				self :: $processedJavascripts = self :: $javascripts;
@@ -139,23 +149,22 @@
 				return self :: $processedJavascripts;
 			}
 			
-			/*
+			/**
 			 *	Prepare the document with the 
 			 *	various includes
 			 * 
 			 *	@since 0.1.0			 
+			 * 
 			 */
-			
 			public static function prepare(){
 				self :: createHtmlIncludes();
 			}
 			
-			/*
+			/**
 			 *	Create the includes in the buffer
 			 * 
 			 *	@since 0.1.0	 
 			 */
-			
 			public static function createHtmlIncludes(){
 				
 				$styles			= self :: prepareStylesheets();
@@ -191,53 +200,56 @@
 				
 			}
 			
-			/*
+			/**
 			 *	Store the callback for preparing stylesheets
 			 * 
+			 *	@param Closure $fn The callback
+			 *	
 			 *	@since 0.1.0	 
 			 */
-			
 			public static function onPrepareStylesheets( \Closure $fn ){
 				self :: $onPrepareStylesheets = $fn;
 			}
 			
-			/*
+			/**
 			 *	Store the callback for preparing JavaScripts
+			 * 
+			 *	@param Closure $fn The callback
 			 * 
 			 *	@since 0.1.0	 
 			 */
-			
 			public static function onPrepareJavascripts( \Closure $fn ){
 				self :: $onPrepareJavascripts = $fn;
 			}
 			
-			/*
+			/**
 			 *	Add a header
+			 * 
+			 *	@param string $header The header string
 			 * 
 			 *	@since 0.1.0	 
 			 */
-			
 			public static function addHeader( $header ){
 				self :: $headers[strtolower($header)] = $header;
 			}
 			
-			/*
+			/**
 			 *	Remove a header
 			 * 
+			 *	@param string $header The header
+			 *	
 			 *	@since 0.1.0	 
 			 */
-			
 			public static function removeHeader( $header ){
 				unset( self :: $headers[ strtolower($header)]);
 			}
 			
-			/*
+			/**
 			 *	Get all the headers
 			 * 
 			 *	@since 0.1.0
 			 *	@return array The list of headers
 			 */
-			
 			public static function getHeaders(){
 				return array_values( self :: $headers );
 			}

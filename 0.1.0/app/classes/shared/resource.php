@@ -202,14 +202,13 @@
 						break;
 				}
 				
-				return true;
-				
 			}
 			
 			/*
 			 *	Basic PHP native validation
 			 * 
 			 *	@since 0.1.0
+			 *	@return array The failed fields
 			 */
 			
 			private static function validate( $value, $key, $type ){

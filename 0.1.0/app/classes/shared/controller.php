@@ -1,6 +1,6 @@
 <?php
 
-	/*
+	/**
 	 *	Controller handles lazy-loading
 	 *	of methods based on context.
 	 *	Handles similar functionality
@@ -10,21 +10,27 @@
 	 *	@subpackage Controller
 	 *	@since 0.1.0
 	 */
-
 	namespace Ant {
 	
 		Class Controller {
 			
-			/*
+			/**
 			 *	Call a method, requiring
 			 *	if it doesn't exist. The method
 			 *	may exist with the context class,
-			 *	but it may be necessary to include
-			 *	it from the controllers directory.
+			 *	or it will be included 
+			 *	from the controllers directory.
+			 * 
+			 *	Couples with Database class to get 
+			 *	the table prefix.
+			 *	
+			 *	@params string $method A period-separated string
+			 *	@params array $args The arguments to be passed.
+			 *	Request is always passed in by default $args['request']			 
 			 * 
 			 *	@since 0.1.0
+			 *	@return mixed The result
 			 */
-			
 			public static function call( $method, Array $args = array()){
 				
 				$opt = explode( '.', strtolower($method) );
@@ -68,12 +74,17 @@
 				return $methodPath( $args );
 			}
 			
-			/*
-			 *	Call a query
+			/**
+			 *	Call a query method. Lazy-loads
+			 *	a method defined in app/modules/context/queries
 			 *	
+			 *	@params string $method A period-separated string
+			 *	@params array $args The arguments to be passed.
+			 *	Request is always passed in by default $args['request']			 
+			 * 
 			 *	@since 0.1.0
+			 *	@return Query The query
 			 */
-			
 			public static function query( $queryName, Array $args = array() ){
 				
 				$opt = explode( '.', strtolower($queryName) );

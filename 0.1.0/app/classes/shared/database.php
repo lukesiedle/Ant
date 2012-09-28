@@ -1,6 +1,6 @@
 <?php
 	
-	/*
+	/**
 	 *	Database is a helper
 	 *	class for getting data
 	 *	from a Collection into 
@@ -11,7 +11,6 @@
 	 *	@subpackage Database
 	 *	@since 0.1.0
 	 */
-
 	namespace Ant {
 		
 		use \Library\MySQL as MySQL;
@@ -21,58 +20,61 @@
 			
 			public static $tablePrefix = '';
 			
-			/*
+			/**
 			 *	Instantiate the Database object
+			 * 
+			 *	@param Query $query The query
 			 * 
 			 *	@since 0.1.0
 			 * 
 			 */
-			
 			public function __construct( Query $query ){
 				$this->query = $query;
 			}
 			
-			/*
+			/**
 			 *	Execute the query and return
 			 *	the result
 			 * 
 			 *	@since 0.1.0
 			 *	@return bool OR Collection The result
 			 */
-			
 			public function execute(){
 				return self :: query( $this->query );
 			}
 			
-			/*
+			/**
 			 *	Set the table prefix
+			 * 
+			 *	@param string $prefix The global table prefix
 			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public static function setTablePrefix( $prefix ){
 				self :: $tablePrefix = $prefix;
 			}
 			
-			/*
+			/**
 			 *	Get the table prefix
 			 * 
 			 *	@since 0.1.0
-			 *	@return string The prefix
+			 *	@return string The global table prefix
 			 */
-			
 			public static function getTablePrefix(){
 				return self :: $tablePrefix;
 			}
 			
-			/*
+			/**
 			 *	Insert records from a Collection,
 			 *	with an optional callback that will
 			 *	return the Id for every insert.
 			 *	
+			 *	@param Collection $col The data
+			 *	@param Closure $fnCallback The callback - passes
+			 *	back the inserted Id as an argument.	
+			 * 
 			 *	@since 0.1.0			 
 			 */
-			
 			public static function insert( Collection $col, $fnCallback = null ){
 				
 				$rows		= array();
@@ -149,14 +151,17 @@
 				}
 			}
 			
-			/*
+			/**
 			 *	Update records (of a single row),
-			 *	with optional conditions.
+			 *	with conditions.
 			 * 
+			 *	@param Collection $col The data to update
+			 *	@param array $conditions The conditional data
+			 *	key-value pairs	
+			 *	
 			 *	@since 0.1.0			 
 			 */
-			
-			public static function update( Collection $col, $conditions = array() ){
+			public static function update( Collection $col, $conditions ){
 				$data	= $col->toArrayShallow();
 				$query	= Query :: setUpdate( 
 					__ :: first( $data ), 
@@ -166,12 +171,17 @@
 				MySQL :: doQuery( $query );
 			}
 			
-			/*
+			/**
 			 *	Update records (of a multiple rows)
 			 * 
+			 *	@param Collection $col The data to update
+			 *	@param string $idKey The key which represents the
+			 *	primary key in the database
+			 *	@param array $conditions The specific conditions
+			 *	to apply to the update
+			 *	
 			 *	@since 0.1.0			 
 			 */
-			
 			public static function updateMulti( Collection $col, $idKey, $conditions = array() ){
 				
 				$col->each( function( $record ) use( $conditions, $idKey, $col ){
@@ -196,12 +206,15 @@
 				});
 			}
 			
-			/*
+			/**
 			 *	Delete records
+			 * 
+			 *	@param Collection $col The collection (for getting
+			 *	the table name)
+			 *	@param array $conditions The conditions to use
 			 * 
 			 *	@since 0.1.0			 
 			 */
-			
 			public static function delete( Collection $col, Array $conditions ){
 				
 				$query	= Query :: setDelete( 
@@ -212,13 +225,14 @@
 				MySQL :: doQuery( $query );
 			}
 			
-			/*
+			/**
 			 *	Select records, using query
 			 * 
+			 *	@param Query $query The query to use for select
+			 *	
 			 *	@since 0.1.0			 
-			 *	@return bool false OR Collection
+			 *	@return Collection The resulting data
 			 */
-			
 			public static function query( Query $query ){
 				if( $result = MySQL :: doFetchQuery( $query )){
 					return new Collection ( $result );
@@ -227,14 +241,15 @@
 				return new Collection;
 			}
 			
-			/*
+			/**
 			 *	Get the table schema to compare
 			 *	collection data
+			 * 
+			 *	@param string $tableName The table name
 			 * 
 			 *	@since 0.1.0			 
 			 *	@return array The schema
 			 */
-			
 			public static function getSchema( $tableName ){			
 				$query = new Query( "DESCRIBE " . self :: $tablePrefix . $tableName );
 				$data = MySQL :: doFetchQuery($query);
@@ -245,13 +260,15 @@
 				return $columns;
 			}
 			
-			/*
+			/**
 			 *	Compare the collection data 
 			 *	to the table schema
 			 * 
+			 *	@param array $keys The keys
+			 *	@param string $tableName The table name
+			 *	
 			 *	@since 0.1.0
 			 */
-			
 			public static function checkSchema( $keys, $tableName ){
 				
 				// Only check schema locally //

@@ -1,6 +1,6 @@
 <?php
 	
-	/*
+	/**
 	 *	Collection is a useful 
 	 *	means of storing data and 
 	 *	is tightly coupled to Ant
@@ -18,7 +18,6 @@
 	 *	@require Underscore.php
 	 *	@since 0.1.0
 	 */
-	
 	namespace Ant {
 		
 		// Underscore alias //
@@ -31,12 +30,14 @@
 					$primaryKey,
 					$namespace;
 			
-			/*
+			/**
 			 *	Instantiation of collection
-			 *	
+			 *
+			 *	@param array $arr The array data
+			 *	@param string $namespace The data namespace
+			 *		
 			 *	@since 0.1.0
 			 */
-			
 			public function __construct( $arr = array(), $namespace = 'stdCollection' ){
 				$this->namespace	= $namespace;
 				if( is_string($arr)){
@@ -52,7 +53,7 @@
 				return;
 			}
 			
-			/*
+			/**
 			 *	Clone magic method for 
 			 *	ensuring joins and 
 			 *	child collections are 
@@ -60,7 +61,6 @@
 			 *	
 			 *	@since 0.1.0
 			 */
-			
 			function __clone(){
 				
 				$cloneRecords = array();
@@ -87,13 +87,14 @@
 				};
 			}
 			
-			/*
+			/**
 			 *	Create records based on
 			 *	data 
 			 *	
+			 *	@param array $data The array data
+			 *			
 			 *	@since 0.1.0
 			 */
-			
 			private function createRecords( $data ){
 				foreach( $data as $each ){
 					$this->records[ $this->index ] = new CollectionRecord( $this->index, $each, $this );
@@ -101,72 +102,72 @@
 				}
 			}
 			
-			/*
+			/**
 			 *	Get the current number
 			 *	of records in the collection
 			 *	
 			 *	@since 0.1.0
 			 *	@return int The record total
 			 */
-			
 			public function length(){
 				return $this->index;
 			}
 			
-			/*
+			/**
 			 *	Get the first record
 			 *	
 			 *	@since 0.1.0
-			 *	@return CollectionRecord
+			 *	@return CollectionRecord The first record
 			 */
-			
 			public function first(){
 				return __ :: first( $this->records );
 			}
 			
-			/*
+			/**
 			 *	Get the last record
 			 *	
 			 *	@since 0.1.0
-			 *	@return CollectionRecord
+			 *	@return CollectionRecord The last record
 			 */
-			
 			public function last(){
 				return __ :: last( $this->records );
 			}
 
-			/*
+			/**
 			 *	Get a specific record
 			 *	based on index
-			 *	
+			 *
+			 *	@param int $index The index 
+			 *		
 			 *	@since 0.1.0
 			 *	@return CollectionRecord
 			 */
-			
 			public function at( $index ){
 				return $this->records[ $index ];
 			}
 			
-			/*
+			/**
 			 *	Loop through the records
 			 *	executing a Closure
 			 *	
+			 *	@param closure $fn The function
+			 * 
 			 *	@since 0.1.0
 			 */
-			
-			public function each( $fn ){
+			public function each( \Closure $fn ){
 				return __ :: each( $this->records, $fn );
 			}
 			
-			/*
+			/**
 			 *	Search within the collection
 			 *	for a value
 			 *	
+			 *	@param array $search The search array
+			 *	
 			 *	@since 0.1.0
-			 *	@return Collection 
-			 *	A Collection containing results
+			 *	@return Collection A Collection 
+			 *	containing results
 			 */
-			
 			public function find( $search ){
 				$rec = array();
 				$this->each( function( $record ) use( $search, & $rec ){
@@ -185,14 +186,15 @@
 				return new Collection( $rec );
 			}
 			
-			/*
+			/**
 			 *	Convert the collection to 
 			 *	an object
 			 *	
+			 *	@param int $x The index
+			 * 
 			 *	@since 0.1.0
 			 *	@return stdClass
 			 */
-			
 			public function toObject( $x = null ){
 				$data = array();
 				__ :: each( $this->records, function( $record, $i ) use( & $data ){
@@ -204,14 +206,15 @@
 				return $data;
 			}
 			
-			/*
+			/**
 			 *	Convert the collection to 
 			 *	an array
 			 *	
+			 *	@param int $x The index
+			 * 
 			 *	@since 0.1.0
 			 *	@return array
 			 */
-			
 			public function toArray( $x = null ){
 				
 				$data = array();
@@ -224,14 +227,15 @@
 				return $data;
 			}
 			
-			/*
+			/**
 			 *	Convert the collection to 
 			 *	a shallow array
 			 *	
+			 *	@param int $x The index
+			 * 
 			 *	@since 0.1.0
-			 *	@return array
+			 *	@return array The collection data
 			 */
-			
 			public function toArrayShallow( $x = null ){
 				$data = array();
 				__ :: each( $this->records, function( $record, $i ) use ( & $data ){
@@ -243,29 +247,31 @@
 				return $data;
 			}
 			
-			/*
+			/**
 			 *	Get the namespace of 
 			 *	the collection
 			 *	
 			 *	@since 0.1.0
 			 *	@return string The namespace
 			 */
-			
 			public function getNamespace(){
 				return $this->namespace;
 			}
 			
-			/*
+			/**
 			 *	Join another collection
 			 *	to a record. If the index
 			 *	is not specified, the
 			 *	collection is joined to 
 			 *	every single record.
 			 *	
+			 *	@param Collection $col The collection
+			 *	@param int $index The record index to join to
+			 *	otherwise the collection is joined to each record
+			 *	
 			 *	@since 0.1.0
 			 *	@return object The object for chaining
 			 */
-			
 			public function join( Collection $col, $index = null ){
 				
 				// Join to every record //
@@ -279,15 +285,18 @@
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Remove joins by current primary key. 
 			 *	If the index is not specified, all joins
 			 *  are removed.
 			 *	
+			 *	@param string $namespace The namespace
+			 *	@param int $index A specific index to unjoin
+			 *	the collection from
+			 *	
 			 *	@since 0.1.0
 			 *	@return object The object for chaining
 			 */
-			
 			public function unjoin( $namespace , $index = null ){
 				
 				// Remove joins from every record //
@@ -303,40 +312,41 @@
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Set the primary key. The primary
 			 *	key is the key that all joins
 			 *	within a collection have in
 			 *	common. Example 'user_id'
 			 *	
+			 *	@param string $key The primary key, 'user_id', 'article_id'
+			 * 
 			 *	@since 0.1.0
 			 *	@return object The object for chaining
 			 */
-			
 			public function setPrimaryKey( $key ){
 				$this->primaryKey = $key;
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Get the primary key. 
 			 *	
 			 *	@since 0.1.0
 			 *	@return object The object for chaining
 			 */
-			
 			public function getPrimaryKey(){
 				return $this->primaryKey;
 			}
 			
-			/*
+			/**
 			 *	Extend the collection's
 			 *	records
 			 *	
+			 *	@param array $data The data to add
+			 * 
 			 *	@since 0.1.0
 			 *	@return object The object for chaining
 			 */
-			
 			public function add( $data ){
 				
 				if( $data instanceof Collection ){
@@ -353,28 +363,26 @@
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Clear the records and reset
 			 *	the index
 			 *	
 			 *	@since 0.1.0
 			 *	@return object The object for chaining
 			 */
-			
 			public function clear(){
 				$this->records = array();
 				$this->index = 0;
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Check if the collection has joins
 			 *	
 			 *	@since 0.1.0
 			 *	@return bool True if the collection
 			 *	has joins
 			 */
-			
 			public function hasJoins(){
 				$hasJoins = false;
 				$this->each( function( $record ) use( & $hasJoins ) {
@@ -386,49 +394,34 @@
 				return $hasJoins;
 			}
 			
-			/*
-			 *	Save the collection. This creates
-			 *	a store out of the collection
-			 *	and saves it.
-			 *	
-			 *	@since 0.1.0
-			 *	@return Store The store object
-			 */
-			
-			public function save( String $idKey ){
-				$store = new Store( $this, $idKey );
-				$store->save();
-				return $store;
-			}
-			
-			/*
+			/**
 			 *	Shortcut method to output
 			 *	a collection's data to the screen
 			 *	
 			 *	@since 0.1.0
 			 */
-			
 			public function output(){
 				Application :: out( $this->toArray() );
 			}
 			
-			/*
+			/**
 			 *	Create a placeholder
 			 *	collection that will
 			 *	iterate once, useful
 			 *	for conditioning in
 			 *	templates.
 			 *	
+			 *	@param string $namespace The namespace	
+			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public static function create( $namespace ){
 				return new Collection(array( 1 ), $namespace );
 			}
 			
 		}
 		
-		/*
+		/**
 		 *	The collection record
 		 *	is a single array of data
 		 *	that represents a unit within
@@ -445,7 +438,6 @@
 		 *	@subpackage CollectionRecord
 		 *	@since 0.1.0
 		 */
-		
 		Class CollectionRecord {
 			
 			private $data		= array(),
@@ -453,13 +445,16 @@
 					$hasJoins	= false,
 					$index;
 			
-			/*
+			/**
 			 *	Instantiate the record, using
 			 *	the index, data and collection.
-			 *	
+			 *
+			 *	@param int $index The index of the record
+			 *	@param array $data The array data 
+			 *	@param Collection $col The parent collection
+			 * 	
 			 *	@since 0.1.0
 			 */
-			
 			public function __construct( $index, Array $data, Collection $col ){
 				$this->add( $data );
 				$this->index = $index;
@@ -467,15 +462,16 @@
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Convert the record to 
 			 *	an array, including joins
 			 *	unless 'shallow' is specified.
 			 *	
+			 *	@param string $depth Choose 'deep' to include joins
+			 * 
 			 *	@since 0.1.0
 			 *	@return array The record data
 			 */
-			
 			public function toArray( $depth = 'deep' ){
 				$nm = $this->collection->getNamespace();
 				$array = $this->data;
@@ -487,7 +483,7 @@
 				return $array;
 			}
 			
-			/*
+			/**
 			 *	Convert the record to 
 			 *	a shallow array. This will
 			 *	exclude the joins.
@@ -495,20 +491,20 @@
 			 *	@since 0.1.0
 			 *	@return array The record data
 			 */
-			
 			public function toArrayShallow(){
 				return $this->toArray( 'shallow' );
 			}
 			
-			/*
+			/**
 			 *	Convert the record to 
 			 *	an object, including joins
 			 *	unless 'shallow' is specified.
 			 *	
+			 *	@param string $depth Choose 'deep' to include joins
+			 * 
 			 *	@since 0.1.0
 			 *	@return array The record data
 			 */
-			
 			public function toObject( $depth = 'deep' ){
 				$nm = $this->collection->getNamespace();
 				$obj = ( object ) $this->data;
@@ -520,24 +516,24 @@
 				return $obj;
 			}
 			
-			/*
+			/**
 			 *	Return the current index
 			 *	
 			 *	@since 0.1.0
 			 *	@return int The index
 			 */
-			
 			public function getIndex(){
 				return $this->index;
 			}
 			
-			/*
+			/**
 			 *	Extend the data array
 			 *	
+			 *	@param array $data The data to add
+			 * 
 			 *	@since 0.1.0
 			 *	@return object The object for chaining
 			 */
-			
 			public function add( Array $data ){
 				
 				// Can't use array_merge due to renumbering //
@@ -548,26 +544,28 @@
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Join a collection to the record
-			 *	
+			 *
+			 *	@param Collection $col The collection to join
+			 * 	
 			 *	@since 0.1.0
 			 *	@return object The object for chaining
 			 */
-			
 			public function join( Collection $col ){
 				$this->joins[ $col->getNamespace() ] = $col;
 				$this->hasJoins = true;
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Remove a joined collection from the record
-			 *	
+			 *
+			 *	@param string $namespace The collection namespace	
+			 * 	
 			 *	@since 0.1.0
 			 *	@return object The object for chaining
 			 */
-			
 			public function unjoin( $namespace ){
 				unset( $this->joins[ $namespace ] );
 				if( count($this->joins) == 0 ){
@@ -576,54 +574,52 @@
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Check if the record has joins
-			 *	
+			 * 
 			 *	@since 0.1.0
 			 *	@return bool True if record has joins
 			 */
-			
 			public function hasJoins(){
 				return $this->hasJoins;
 			}
 			
-			/*
+			/**
 			 *	Return the record's collection
 			 *	
 			 *	@since 0.1.0
 			 *	@return Collection
 			 */
-			
 			public function getCollection(){
 				return $this->collection;
 			}
 			
-			/*
+			/**
 			 *	Set the record's joins
-			 *	
+			 *
+			 *	@params array $joins The joins
+			 * 	
 			 *	@since 0.1.0
 			 *	@return object The object for chaining
 			 */
-			
 			public function setJoins( $joins ){
 				$this->joins = $joins;
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Get the record's joins
 			 *	
 			 *	@since 0.1.0
 			 *	@return array The joins
 			 */
-			
 			public function getJoins(){
 				return $this->joins;
 			}
 			
 		}
 		
-		/*
+		/**
 		 *	CollectionSet hosts a number
 		 *	of collections, tightly coupled
 		 *	to templating in Ant.
@@ -633,18 +629,16 @@
 		 *	@type Shared
 		 *	@since 0.1.0
 		 */
-		
 		Class CollectionSet {
 			
 			private $collections = array();
 			
-			/*
+			/**
 			 *	Instantiation of the set, uses
 			 *	passed in collections.
 			 *		
 			 *	@since 0.1.0
 			 */
-			
 			public function __construct( $array ){
 				if( !is_array($array)){
 					$array = func_get_args();
@@ -654,31 +648,29 @@
 				}
 			}
 			
-			/*
+			/**
 			 *	Return the collections
 			 *		
 			 *	@since 0.1.0
+			 *	@return array The collections
 			 */
-			
 			public function getCollections(){
 				return $this->collections;
 			}
 			
-			/*
+			/**
 			 *	Convert the collection set
 			 *	to an array
 			 *		
 			 *	@since 0.1.0
+			 *	@return array The collective data
 			 */
-			
 			public function toArray(){
 				$array = array();
 				foreach( $this->collections as $key => $col ){
 					$array[ $key ] = $col->toArray();
 				}
 				return $array;
-			}
-			
+			}	
 		}
-
 	}

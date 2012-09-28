@@ -30,12 +30,13 @@
 				$queryData	= array(),
 				$isPrepared = false;
 			
-			/*
+			/**
 			 *	Instantiate the query
 			 * 
+			 *	@param string $query A manual query
+			 *	
 			 *	@since 0.1.0
 			 */
-			
 			public function __construct( $query = null ){
 				if( $query ){
 					$this->query		= $query;
@@ -43,29 +44,29 @@
 				}
 			}
 			
-			/*
+			/**
 			 *	Create or extend bind data
 			 *	to be used in the PDO transaction,
 			 *	for inserting values safely into
 			 *	queries.
 			 * 
+			 *	@param array $arr Key value binding
+			 * 
 			 *	@since 0.1.0
 			 *	@return object For chaining
 			 */
-			
 			public function bind( $arr ){
 				$this->binding = array_merge( $this->binding, $arr );
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Prepare the query for passing	
 			 *	to MySQL/PDO wrapper class.
-			 * 
+			 *	
 			 *	@since 0.1.0
 			 *	@return string The query
 			 */
-			
 			public function prepare(){
 				
 				if( $this->isPrepared ){
@@ -85,9 +86,12 @@
 						
 			}
 			
-			/*
+			/**
 			 *	Add a select statement
 			 * 
+			 *	@param string $cols The select columns
+			 *	@param string $tableName The table name
+			 *	
 			 *	@since 0.1.0
 			 *	@return object For chaining
 			 */
@@ -107,38 +111,40 @@
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Set the table name
 			 * 
+			 *	@param string $tableName The table name
+			 * 
 			 *	@since 0.1.0
-			 *	@deprecate Not in use
+			 *	@deprecated Not in use
 			 *	@return object For chaining
 			 */
-			
 			public function setTableName( $tableName ){
 				$this->tableName = $tableName;
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Add a join statement
-			 * 
+			 *	
+			 *	@param string $join The join statement
+			 *	@param string $type The join type, 'LEFT', 'RIGHT'
+			 *	
 			 *	@since 0.1.0
 			 *	@return object For chaining
 			 */
-			
 			public function join( $join, $type = 'JOIN' ){
 				$this->joins .= "\n " . $type . " " . $join . " ";
 				return $this;
 			}
 			
-			/*
+			/**
 			 *	Add a where statement
-			 * 
+			 *	
 			 *	@since 0.1.0
 			 *	@return object For chaining
 			 */
-			
 			public function where( $where, $binding = array(), $op = '&&' ){
 				
 				$this->bind( $binding );

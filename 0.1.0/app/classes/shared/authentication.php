@@ -25,27 +25,30 @@
 			
 			function __construct( $type ){ }
 			
-			/*
+			/**
 			 *	Check if authorization
 			 *	of the type has already
 			 *	occurred.
+			 *	
+			 *	@param string $type The type of auth 'facebook', 'google'
 			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public static function isAuthorized( $type ) {
 				return isset( self :: $authorizations[$type] );
 			}
 			
-			/*
+			/**
 			 *	Authorize the type
 			 *	and an optional post
 			 *	return url.
 			 *	
+			 *	@param string $type The type of auth 'facebook', 'google'
+			 *	@param string $postReturnUrl The url to return to 
+			 * 
 			 *	@since 0.1.0
 			 *	@return array Basic auth data
 			 */
-			
 			public static function authorize( $type, $postReturnUrl = null ){
 				if( self :: isAuthorized($type)){
 					return self :: $authorizations[ $type ];
@@ -62,25 +65,25 @@
 				}
 			}
 			
-			/*
+			/**
 			 *	Shortcut URL to output
 			 *	current authorizations.	
 			 * 
 			 *	@since 0.1.0
 			 */
-			
 			public static function getAuthStatus(){
 				Application :: out( self :: $authorizations );
 			}
 			
-			/*
+			/**
 			 *	Authorize Facebook with
 			 *	optional return url
+			 * 
+			 *	@param string $postReturnUrl The url to return to
 			 * 
 			 *	@since 0.1.0
 			 *	@return array Basic auth data
 			 */
-			
 			public static function authFacebook( $postReturnUrl = null ){
 				
 				if( !$postReturnUrl ){
@@ -118,14 +121,15 @@
 				
 			}
 			
-			/*
+			/**
 			 *	Authorize Google with
 			 *	optional return url
+			 * 
+			 *	@param string $postReturnUrl The url to return to
 			 * 
 			 *	@since 0.1.0
 			 *	@return array Basic auth data
 			 */
-			
 			public static function authGoogle( $postReturnUrl = null ){
 				
 				if( ! $postReturnUrl ){
@@ -172,15 +176,18 @@
 			}
 			
 			
-			/*
+			/**
 			 *	Perform an API request 
 			 *	based on type. Optionally
 			 *	store it in the session.
 			 * 
+			 *	@param string $type Auth type 'facebook', 'google'
+			 *	@param string $request The api string
+			 *	@param bool $store Store the request in the session
+			 *	
 			 *	@since 0.1.0
 			 *	@return array API response data
 			 */
-			
 			public static function api( $type, $request, $store = false ){
 				switch( $type ){
 					case 'facebook' :
@@ -216,7 +223,4 @@
 				}
 			}	
 		}
-		
-		
-		 
 	}
