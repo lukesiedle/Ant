@@ -1,7 +1,7 @@
 # Ant required .htaccess file
 # for handling URL rewriting.
 #
-# Test 2
+# Test 3
 # @require mod_setenvif
 # @since 0.1.0	
 
