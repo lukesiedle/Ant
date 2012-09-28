@@ -39,11 +39,11 @@ Unit tests are available, and continue to be implemented with PHPUnit.
 ### Commenting a class
 
 Comment each class with a description as well as the attributes:
-@package, @subpackage, @since, @require. 
+@package, @subpackage, @since.
 
 *Example:*
-
-	/*
+	
+	/**
 	 *	Application hosts important
 	 *	data, global core methods,
 	 *	and information concerning
@@ -51,26 +51,27 @@ Comment each class with a description as well as the attributes:
 	 * 
 	 *	@package Ant
 	 *	@subpackage Application
-	 *	@since 0.1.0
-	 *	
+	 *	@since 0.1.0	
 	 */
 
 ### Commenting a class method
 
-Methods within a class only need to specify a @since attribute, as well as @return
-if the method returns something, as follows: 
+Methods within a class only need to specify @param for parameters, @since attribute, as well as @return
+if the method returns something, as follows. If you comment exactly like the following, it achieves
+compatibility with PHPDocs, and many IDEs will show aspects of the comment in the hint.
 
 *Example:*
 
-	/*
-	 *	Returns the application storage
+	/**
+	 *	Extends the application storage
 	 *	object.
-	 * 
+	 *	
+	 *	@param array $arr The data to store
+	 *	
 	 *	@since 0.1.0
 	 *	@return object The storage object
 	 */
-
-	public static function get(){
+	public static function set( $arr ){
 		return self :: $app;
 	}
 
@@ -104,14 +105,14 @@ for constants.
 Borrowing from Wordpress, avoid making arguments booleans or some type that is meaningless to the uninformed reader, 
 but rather pass a string explaining the purpose of the argument. For example :
 
-	saveComment( 'stripHTML:yes', 'emailParticipants:no' );
+	saveComment( 'stripHTML', 'emailParticipants' );
 	
 rather than:
-
+	
 	saveComment( true, false );
 	
 OR you could use an array to represent the arguments
-
+	
 	saveComment( array(
 		'stripHTML' 		=> true,
 		'emailParticipants' 	=> false
