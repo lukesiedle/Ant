@@ -25,6 +25,10 @@
 	$config['local_server_name'][]	= 'api.localhost';
 	$config['local_server_name'][]	= '127.0.0.1';
 	
+	// Hostnames for staging environment detection 
+	// @since 0.1.0 //
+	$config['staging_server_name'][] = 'staging.*';
+	
 	// Age for the login cookie to be set, 
 	// @usage User.login
 	// @since 0.1.0 //

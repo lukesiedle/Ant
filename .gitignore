@@ -1,3 +1,5 @@
 /github-pages/
 /0.1.0/app/cache/
 /0.1.0/config/installed
+/post-receive.php
+/build.sh

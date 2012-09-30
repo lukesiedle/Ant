@@ -13,8 +13,8 @@
 	function logout(){
 		
 		// Clear session and cookie //
-		\Ant\Session :: clear( 'Ant.User' );
-		\Ant\Cookie :: delete( 'Ant.User' );
+		\Ant\Session :: clear( 'User' );
+		\Ant\Cookie :: delete( 'User' );
 		
 		// Redirect home //
 		\Ant\Application :: redirect();

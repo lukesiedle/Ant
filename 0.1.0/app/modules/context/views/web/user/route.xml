@@ -20,10 +20,10 @@
 	
 	<!-- User registration and login actions -->
 	<next is="login">
-		<controller>User.login</controller>
+		<controller>User.registration.login</controller>
 	</next>
 	<next is="logout">
-		<controller>User.logout</controller>
+		<controller>User.registration.logout</controller>
 	</next>
 	
 	<next is="register">

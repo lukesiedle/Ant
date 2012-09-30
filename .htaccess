@@ -1,7 +1,6 @@
 # Ant required .htaccess file
 # for handling URL rewriting.
 # 
-# Test 21
 # @require mod_setenvif
 # @since 0.1.0	
 
@@ -19,5 +18,5 @@ RewriteRule ^(.*+)$ 0.1.0/index.php?request=$1&uri=%{REQUEST_URI} [L]
 DirectoryIndex index.php
 
 # Custom environmental variables
+SetEnvIf Host ^(127.0.0.1|localhost) IS_LOCAL=1
 SetEnvIf Host ^(127.0.0.1|localhost) IS_STAGE=1
-SetEnvIf Remote_Addr ^(127.0.0.1) IS_ADMIN=1

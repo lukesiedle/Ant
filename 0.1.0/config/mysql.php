@@ -2,8 +2,8 @@
 	
 	/**
 	 *	MySQL configuration
-	 *	local and remote.
-	 * 
+	 *	local, staging, and remote.
+	 *	
 	 *	@package Ant
 	 *	@subpackage Configuration
 	 *	@since 0.1.0	 
@@ -11,11 +11,19 @@
 	
 	namespace Ant;
 	
+	// Local mysql
 	$config['mysql_local']['host']		= 'localhost';
 	$config['mysql_local']['db']		= 'ant';
 	$config['mysql_local']['username']	= 'root';
 	$config['mysql_local']['password']	= '';
 	
+	// Staging mysql //
+	$config['mysql_stage']['host']		= '';
+	$config['mysql_stage']['db']		= 'ant';
+	$config['mysql_stage']['username']	= 'root';
+	$config['mysql_stage']['password']	= '';
+	
+	// Production mysql //
 	$config['mysql_remote']['host']		= '';
 	$config['mysql_remote']['db']		= 'ant';
 	$config['mysql_remote']['username']	= 'root';

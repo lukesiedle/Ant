@@ -12,7 +12,6 @@
 	 * 
 	 *	@package Ant
 	 *	@subpackage User
-	 *	@type Context
 	 *	@since 0.1.0
 	 */
 	namespace Ant {
@@ -30,10 +29,13 @@
 			 *	@since 0.1.0
 			 */
 			public static function setCurrentUser( $data ){
+				
 				if( $data['user_id'] ){
 					$data['guest'] = false;
 				}
+				
 				self :: $me = new self( $data, 'user' );
+				
 				self :: storeUser();
 			}
 			
@@ -45,12 +47,17 @@
 			 *	@since 0.1.0
 			 *	@return User The user store object
 			 */
-			public static function getCurrentUser(){
-				self :: loadUser();
+			public static function getCurrentUser(){				
 				if( ! self :: $me ){
+					
+					// Default to guest //
 					self :: setCurrentUser(array(
 						'guest' => 1
 					));
+					
+					// Tries to load from session //
+					self :: loadUser();
+					
 				}
 				return self :: $me;
 			}

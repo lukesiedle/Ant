@@ -1,6 +1,6 @@
 <?php
 	
-	/*
+	/**
 	 *	This is the index 
 	 *	of the client view,
 	 *	shared between this 
@@ -84,12 +84,15 @@
 				}
 			}
 			
+			
+			
 			// Check if the channel has changed 
 			// from the view, and stop here
 			// @since 0.1.0 //
 			if( $oldChannel != Router :: getChannel() ){
 				return;
 			}
+			
 			
 			// Get the CSRF tokens from memory and store them
 			// @since 0.1.0

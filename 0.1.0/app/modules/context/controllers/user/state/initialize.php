@@ -19,14 +19,16 @@
 	 *	guest or logged in
 	 */
 	function initialize( $arguments ) {
+	
 		
 		// Check if the user exists in browser cookie or session //
 		switch ( App :: getClient() ) {
 			case 'web' :
+				
 				// User is in cookie if they opted for "remember me" //
 				if ( $cookie = Cookie :: get('Ant.User') ) {
 					
-					$user = Control :: call('User.getUserFromSecret', array(
+					$user = Control :: call('User.get.userFromSecret', array(
 						'secret' => $cookie['user_secret']
 					));
 					
