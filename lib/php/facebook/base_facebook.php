@@ -518,7 +518,7 @@ abstract class BaseFacebook
     if ($scopeParams && is_array($scopeParams)) {
       $params['scope'] = implode(',', $scopeParams);
     }
-
+	
     return $this->getUrl(
       'www',
       'dialog/oauth',

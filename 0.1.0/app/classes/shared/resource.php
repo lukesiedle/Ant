@@ -134,6 +134,8 @@
 			 */
 			function compareSchema(){
 				
+				$operation = $this->task;
+				
 				switch( $this->task ){
 					
 					case 'create'	:
@@ -168,7 +170,7 @@
 							if( ! isset( $this->data[ $key ] ) ){
 								throw new \Exception('Insufficent data for ' 
 									. $operation . ' task in ' . $this->resource
-										. '. Requires ' . implode(', ', $this->crud[ $operation ], 0 ) 
+										. '. Requires ' . implode(', ', $this->crud[ $operation ] ), 0 
 								);
 							}
 						}
@@ -306,7 +308,7 @@
 			 */
 			public function setPermissions(){
 				
-				try {
+				try {					
 					
 					$perms = \Ant\Controller :: call( $this->getResource() . '.permission', array(
 						'resource'	=> $this,
@@ -320,11 +322,14 @@
 							$this->setReadableFields( $perms['read'] );
 							return $perms['allow'];
 						}
+						
 						return true;
 					}
 					
 				} catch ( \Exception $e ){
+					
 					// No permissions are defined //
+					
 					return true;
 				}
 				
@@ -461,7 +466,7 @@
 			 *	task
 			 */
 			public function create(){
-				$this->setTask('create');
+				$this->setTask('create');				
 				return $this->model->create( $this );
 			}
 			

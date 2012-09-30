@@ -420,6 +420,7 @@
 			 *	@since 0.1.0
 			 */
 			public static function redirect( $url = null ){
+				
 				if( session_id() ){
 					// Make sure we write any session before redirect //
 					session_write_close();
@@ -428,7 +429,9 @@
 				if( is_null($url) ){
 					$url = PUBLIC_ROOT;
 				} else {
-					$url = PUBLIC_ROOT . $url;
+					if( substr( $url, 0, 4 ) != 'http' ){
+						$url = PUBLIC_ROOT . $url;
+					}
 				}
 				
 				header( 'Location: ' . $url );

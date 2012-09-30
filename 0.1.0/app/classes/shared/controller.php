@@ -35,7 +35,7 @@
 				
 				$opt = explode( '.', strtolower($method) );
 				
-				$methodPath = '\Ant\\Controller\\' . implode('\\', $opt );
+				$methodPath = '\Ant\\Controller\\' . implode('\\', $opt );				
 				
 				// If there's another option, it's a submethod //
 				if( $opt[2] ){
@@ -43,17 +43,22 @@
 				}
 				
 				// Try include the context class if it exists //
-				if( ! class_exists($c = $opt[0]) ){
+				if( ! class_exists($c = $opt[0], false ) ){
 					$path = 'app/classes/context/' . $c . '.php';
+					$hasClass = false;
 					if( file_exists($path)){
+						$hasClass = true;
 						require_once( $path );
 					}
+				} else {
+					$hasClass = true;
 				}
 				
-				// Check if the method exists within the class //
-				if( method_exists('Ant\\'.$opt[0], $opt[1]) && ! $subMethod ){
+				// Check if the method exists within the class (if there is a class) //
+				if( $hasClass && method_exists('Ant\\'.$opt[0], $opt[1]) && ! $subMethod ){
 					$methodPath = 'Ant\\'.$opt[0];
 					$inClass = true;
+					
 				} else {
 					$inClass = false;
 					if( !function_exists($methodPath) ){
@@ -71,6 +76,7 @@
 				if( $inClass ){
 					return $methodPath :: $opt[1]( $args );
 				}
+				
 				return $methodPath( $args );
 			}
 			

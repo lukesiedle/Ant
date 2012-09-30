@@ -27,8 +27,9 @@
 					require_once( $modelPath );
 					$model = '\Ant\Model\\' . $modelName;
 					return new $model( $modelName );
-				}
+				}				
 				return new Model( $modelName );
+				
 			}
 			
 			/**

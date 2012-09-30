@@ -21,10 +21,19 @@
 	<!-- User registration and login actions -->
 	<next is="login">
 		<controller>User.registration.login</controller>
+		<next is="facebook">
+			<var>auth_type</var>
+			<controller>User.registration.auth</controller>
+		</next>
+		<next is="google">
+			<var>auth_type</var>
+			<controller>User.registration.auth</controller>
+		</next>
 	</next>
 	<next is="logout">
 		<controller>User.registration.logout</controller>
 	</next>
+	
 	
 	<next is="register">
 		<module>register</module>

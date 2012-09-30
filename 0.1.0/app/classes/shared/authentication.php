@@ -80,7 +80,7 @@
 			 *	optional return url
 			 * 
 			 *	@param string $postReturnUrl The url to return to
-			 * 
+			 *	
 			 *	@since 0.1.0
 			 *	@return array Basic auth data
 			 */
@@ -93,14 +93,15 @@
 				$config = Configuration :: get('facebook_app');
 				
 				self :: $facebook = $facebook = new \Facebook(array(
-					'appId'		=> $config->app_id,
-					'secret'	=> $config->app_secret
+					'appId'		=> $config['app_id'],
+					'secret'	=> $config['app_secret']
 				));
 				
 				if( $auth = Session :: get('authentication')->facebook ){
 					self :: $authorizations['facebook'] = $auth;
 					return $auth;
 				} else {
+					
 					if( $user = $facebook->getUser() ){
 						Session :: add('authentication', array(
 							'facebook' => $user
@@ -109,10 +110,10 @@
 						return $user;
 					}
 					
-					header( 'Location:' . $facebook->getLoginUrl(array(
+					Application :: redirect( $facebook->getLoginUrl(array(
 						// Pass the redirect to a javascript file to remove the hash //
-						'redirect_uri'	=> Router :: getPublicRoot() . '?channel=auth&redir=' . urlencode($postReturnUrl),
-						'scope'			=> implode( ', ', $config->scope )
+						'redirect_uri'	=> Router :: getPublicRoot() . '/index.php?channel=auth&redir=' . urldecode($postReturnUrl),
+						'scope'			=> implode( ',', $config->scope )
 					)));
 					
 					exit;

@@ -13,7 +13,7 @@
 	namespace Ant;
 
 	$config['facebook_app']['app_id'] = "203898496325452";
-	$config['facebook_app']['app_secret'] = "22cf64465d622757f77fdcae616750ce";
+	$config['facebook_app']['app_secret'] = "b3fc5e22019552a7cd6615d8efd32bf8";
 	$config['facebook_app']['scope'][] = "user_events";
 	$config['facebook_app']['scope'][] = "friends_events";
 	
