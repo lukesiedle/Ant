@@ -2,11 +2,10 @@
 	
 	/**
 	 *	
-	 *	All requests regardless
-	 *	of client arrive here
-	 * 
+	 *	All requests are 
+	 *	interpreted here
+	 *	
 	 *	@package Ant
-	 *  @requires PHP 5.3+
 	 *	@since 0.1.0
 	 */
 	 
@@ -19,10 +18,10 @@
 	
 	// Check the PHP version //
 	if( (float)substr(phpversion(), 0, 3) < 5.3 ){
-		throw new Exception('You need PHP 5.3.0+ to run the Ant framework.');
+		throw new Exception('You need PHP 5.3.0+ to run this framework.');
 	}
 	
-	// Version // 
+	// Version //
 	define( 'VERSION', '0.1.0' );
 	
 	// Application root //
