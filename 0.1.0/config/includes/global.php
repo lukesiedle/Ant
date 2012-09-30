@@ -76,3 +76,15 @@
 	// Underscore Library
 	// @since 0.1.0 //
 	require( LIB_PATH . '/php/underscore.php' );
+	
+	/**
+	 *	Autoload application-specific
+	 *	classes
+	 *	
+	 *	@since 0.1.0
+	 */
+	function __autoload( $class ){
+		$opts = explode( '\\', $class );
+		$file = strtolower( $opts[ count( $opts )-1 ] );
+		require_once('app/classes/context/' . $file . '.php' );
+	}
