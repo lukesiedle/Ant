@@ -11,11 +11,11 @@
 	 *	@param array $vars Data passed to
 	 *	the controller. Requires an id is
 	 *	passed as an int or array.
-	 * 
+	 *	
 	 *	@since 0.1.0
 	 *	@return Collection The user(s)
 	 */
-	function userById( $vars ){
+	function byId( $vars ){
 		
 		if( ! isset($vars['id'])){
 			throw new Exception( 'User Id must be specified' );

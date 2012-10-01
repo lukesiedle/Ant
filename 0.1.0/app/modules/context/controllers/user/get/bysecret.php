@@ -19,7 +19,7 @@
 	 *	@since 0.1.0
 	 *	@return bool false | Collection The user data
 	 */
-	function userFromSecret( $vars ){
+	function bySecret( $vars ){
 		
 		// Load the base query //
 		$query = Control :: query('User.getUser');
