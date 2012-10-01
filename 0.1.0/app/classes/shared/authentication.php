@@ -66,16 +66,6 @@
 			}
 			
 			/**
-			 *	Shortcut URL to output
-			 *	current authorizations.	
-			 * 
-			 *	@since 0.1.0
-			 */
-			public static function getAuthStatus(){
-				Application :: out( self :: $authorizations );
-			}
-			
-			/**
 			 *	Authorize Facebook with
 			 *	optional return url
 			 * 
@@ -222,6 +212,18 @@
 					case 'google' :
 						break;
 				}
-			}	
+			}
+			
+			/**
+			 *	Clears authentication session
+			 *	vars.
+			 * 
+			 *	@since 0.1.0
+			 */
+			public static function clearSession(){
+				Session :: clear('authentication');
+				Session :: clear('facebook');
+				Session :: clear('google');
+			}
 		}
 	}
