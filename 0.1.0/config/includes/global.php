@@ -24,10 +24,6 @@
 	// @since 0.1.0 //
 	require('app/classes/shared/resource.php');
 	
-	// Model
-	// @since 0.1.0 //
-	require('app/classes/shared/model.php');
-	
 	// Request Class
 	// @since 0.1.0 //
 	require('app/classes/shared/request.php');
