@@ -64,7 +64,7 @@
 			public function setSchema(){				
 				
 				// Get the XML schema //
-				$schemaFile = 'app/classes/models/schema/' 
+				$schemaFile = 'app/schema/' 
 						. $this->resource . '.xml';
 				
 				// Don't load xml more than once //
