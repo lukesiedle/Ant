@@ -18,6 +18,7 @@
 			
 			public $keys = array();
 			public static $xml = array();
+			public static $storage = array();
 			
 			/**
 			 *	Constructor initializes
@@ -32,11 +33,8 @@
 			 */
 			public function __construct( $resource, $data = array()){
 				
-				$this->resource = $resource;
+				$this->resource = strtolower( $resource );
 				$this->data		= $data;
-				
-				// Generate a default or custom model //
-				$this->model	= Model :: make( $resource );
 				
 				// Get the schema of this resource //
 				$this->setSchema();
@@ -516,55 +514,6 @@
 			}
 			
 			/**
-			 *	Shortcut to CRUD read
-			 *	
-			 *	@since 0.1.0
-			 *	@return array The result of read
-			 *	task
-			 */
-			public function read(){
-				$this->setTask('read');
-				return $this->model->read( $this );
-			}
-			
-			/**
-			 *	Shortcut to CRUD create
-			 *	
-			 *	@since 0.1.0
-			 *	@return array The result of read
-			 *	task
-			 */
-			public function create(){
-				$this->setTask('create');				
-				return $this->model->create( $this );
-			}
-			
-			/**
-			 *	Shortcut to CRUD update
-			 *	
-			 *	@since 0.1.0
-			 *	@return array The result of update
-			 *	task
-			 */
-			public function update(){
-				
-				$this->setTask('update');
-				return $this->model->update( $this );
-			}
-			
-			/**
-			 *	Shortcut to CRUD delete
-			 *	
-			 *	@since 0.1.0
-			 *	@return array The result of delete
-			 *	task
-			 */
-			public function delete(){
-				$this->setTask('delete');
-				return $this->model->delete( $this );
-			}
-			
-			/**
 			 *	Set the resource Id for use
 			 *	with updates, reads or deletes
 			 *	This doesn't have to be the primary
@@ -588,6 +537,191 @@
 			 */
 			public function getId(){
 				return $this->resourceId;
+			}
+			
+			/**
+			 *	Get the name of the resource			 
+			 * 
+			 *	@since 0.1.0
+			 *	@return string The resource name
+			 */
+			public function getName(){
+				return $this->resource;
+			}
+			
+			/**
+			 *	The create task
+			 * 
+			 *	@since 0.1.0
+			 *	@return object For chaining
+			 */
+			public function create(){
+				
+				// Create a collection from the resource //
+				$collection = new Collection( 
+					$this->getData(), 
+					$this->resource
+				);
+				
+				// Pass to Database for insertion, set the Id //
+				$resource = $this;
+				Database :: insert( $collection, function( $id ) use( $collection, $resource ){
+					$collection->first()->add(array(
+						$resource->getPrimaryKey() => (int) $id
+					));
+				});
+				
+				// Store the resource as a collection in memory //
+				self :: store( $collection, $this->getName() );
+				
+				// Reset the data //
+				$resource->setData( $collection->first()->toArray() );
+				
+				return $this;
+			}
+			
+			/**
+			 *	The read task. Uses the 
+			 *	read fields specified in schema
+			 *	for the query, and only reads
+			 *	acceptable fields.
+			 * 
+			 *	@since 0.1.0
+			 *	@return Collection The data read
+			 */
+			public function read(){			
+				
+				if( $storedData = self :: getStoredData( $this->getName()) ){
+					return $storedData;
+				}
+				
+				$query = new \Ant\Query;
+				
+				$query->select( 
+					implode(',', $this->getReadableFields()),
+					\Ant\Database :: getTablePrefix() . $this->getName()
+				);	
+				
+				// Try getting the resource using any acceptable read fields //
+				$data = $this->getData();
+				$wh = '';
+				$i=0;
+				
+				foreach( $this->crudFields('read') as $field ){
+					
+					// Skip this field if not set //
+					if( is_null($data[$field] )){
+						continue;
+					}
+					
+					// Append to the where //
+					$bind[ $field ] = $data[ $field ];
+					if( $i > 0 ){ $wh .= ' || '; }
+					$wh .= '(' . $field . ' = :' . $field . ')';
+					$i++;
+				}
+				
+				$query->where( $wh, $bind );
+				
+				$collection = \Ant\Database :: query( $query );
+				
+				// No results from query //
+				if( $collection->length() == 0 ){
+					throw new \Exception( 'Resource does not exist', 404 );
+				}
+				
+				// Store the resource as a collection in memory //
+				self :: store( $collection, $this->getName() );
+				
+				// Return array data //
+				if( $collection->length() == 1 ){
+					return $collection->first()->toArray();
+				}
+				
+				return $collection->toArray();
+			}
+			
+			/**
+			 *	The default update task
+			 *	
+			 *	@param Resource $resource
+			 *  
+			 *	@since 0.1.0
+			 *	@return Collection The data updated/read
+			 */
+			public function update(){
+				
+				$data	= $this->getData();
+				$id		= $this->getId();
+				$idKey	= $this->getIdKey();
+				
+				// Create a collection from the resource //
+				$collection = new Collection( 
+					$data,
+					$this->getName()
+				);
+				
+				// Update the database //
+				\Ant\Database :: update( $collection, array(
+					$idKey => $id
+				));
+				
+				// Store the resource as a collection in memory //
+				self :: store( $collection, $this->getName() );
+				
+				// Reset the data //
+				$this->setData( $collection->first()->toArray() );
+				
+				return $this;
+			}
+			
+			/**
+			 *	The default delete task
+			 * 
+			 *	@param Resource $resource
+			 *	
+			 *	@since 0.1.0
+			 *	@return bool The success
+			 */
+			public function delete(){
+				return $this;
+			}
+			
+			/**
+			 *	Store and extend the resource
+			 *	as a Collection in memory. This reduces
+			 *	'read' calls to the database.
+			 *	
+			 *	@param array $col The Collection
+			 * 
+			 *	@uses Collection
+			 *	@since 0.1.0
+			 */
+			public static function store( $col, $resourceName ){
+				if( $store = self :: $storage[ $resourceName ] ){
+					self :: $storage[ $resourceName ] = Collection :: merge( $store, $col );
+				} else {
+					self :: $storage[ $resourceName ] = $col;
+				}
+			}
+			
+			/**
+			 *	Get the stored data. 
+			 * 
+			 *	@param string $resourceName The named resource
+			 *	
+			 *	@uses Collection
+			 *	@since 0.1.0
+			 *	@return array The Collection data
+			 */
+			public static function getStoredData( $resourceName ){
+				if( $col = self :: $storage[ $resourceName ] ){
+					if( $col->length() == 1 ){
+						return $col->first()->toArray();
+					}
+					return $col->toArray();
+				}
+				return false;
 			}
 			
 		}
