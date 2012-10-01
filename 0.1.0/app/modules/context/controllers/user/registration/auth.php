@@ -19,15 +19,19 @@
 	 *	@param array $vars The args
 	 *	
 	 *	@since 0.1.0
+	 *	@todo Stuff
 	 */
 	function auth( $vars ){
 		
-		$thisPath = Router :: getAppPath();
+		$redirPath = Router :: getAppPath() 
+					. '?return=' 
+						. $_GET['return'];
 		
+		// See if a user is logged in //
 		$user = User :: getCurrentUser();
 		
 		if( ! $user->isGuest() ){
-			return true;
+			// return true;
 			$userData = $user->getData();
 			if( $userData[ $vars['request']->auth_type ]){
 				return true;
@@ -37,13 +41,11 @@
 		// Must be a valid auth type //
 		switch( $vars['request']->auth_type ){
 			case 'google' :
-				$auth = Auth :: authorize( 'google', $thisPath );
-				if( $auth ){
-					
-				}
+				$auth = Auth :: authorize( 'google', $redirPath );
+				if( $auth ){}
 				break;
 			case 'facebook' :
-				$auth = Auth :: authorize( 'facebook', $thisPath );
+				$auth = Auth :: authorize( 'facebook', $redirPath );
 				if( $auth ){
 					$userData = Auth :: api( 'facebook', 'me', 'store' );
 				}
@@ -106,6 +108,11 @@
 				}
 			}
 			
+		}
+		
+		// Redirect to the specified path //
+		if( isset($_GET['return'] )){
+			\Ant\Application :: redirect( $_GET['return'] );
 		}
 		
 	}

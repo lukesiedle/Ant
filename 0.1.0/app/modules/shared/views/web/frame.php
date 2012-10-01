@@ -60,7 +60,10 @@
 		
 		// Store the login //
 		function login( $data ){
+			
+			$data['return'] = urlencode( Router :: getAppPath() );
 			$login = new Collection( $data , 'user.login' );
+			
 			if( $request = \Ant\Request :: get('post') ){
 				if( isset($request['username'] )){
 					$login->join( new Collection(array(
