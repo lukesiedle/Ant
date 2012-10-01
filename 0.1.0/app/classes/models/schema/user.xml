@@ -18,10 +18,15 @@
 	-->
 	
 	<data>
-		<field pk="true" type="int">user_id</field>
+		<field pk="true" type="int" use="id">user_id</field>
 		<field type="string">user_first_name</field>
 		<field type="string">user_last_name</field>
 		<field type="email">user_email</field>
+		<field type="int">user_status</field>
+		<field>user_register_ut</field>
+		<field>user_login_ut</field>
+		<field>user_secret</field>
+		<field type="string">user_username</field>
 	</data>
 	
 	<tasks>
@@ -32,7 +37,8 @@
 		-->
 		
 		<create>
-			<field>user_email</field>
+			<field>user_first_name</field>
+			<field>user_last_name</field>
 		</create>
 		
 		<!-- 
@@ -41,7 +47,7 @@
 		-->
 		
 		<read>
-			<field use="id">user_id</field>
+			<field>user_id</field>
 			<field>user_email</field>
 		</read>
 		

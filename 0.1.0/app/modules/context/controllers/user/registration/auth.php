@@ -17,12 +17,22 @@
 	 *	APIs, Google or Facebook.
 	 *	
 	 *	@param array $vars The args
-	 * 
+	 *	
 	 *	@since 0.1.0
 	 */
 	function auth( $vars ){
 		
 		$thisPath = Router :: getAppPath();
+		
+		$user = User :: getCurrentUser();
+		
+		if( ! $user->isGuest() ){
+			return true;
+			$userData = $user->getData();
+			if( $userData[ $vars['request']->auth_type ]){
+				return true;
+			}
+		}
 		
 		// Must be a valid auth type //
 		switch( $vars['request']->auth_type ){
@@ -45,44 +55,79 @@
 		
 		if( $auth ){
 			
-			$rs = new \Ant\Resource('user_account_facebook_user', array(
-				'id'				=> $userData['id'],
-				'field_email'		=> $userData['email'],
-				'field_first_name'	=> $userData['first_name'],
-				'field_last_name'	=> $userData['last_name'],
-				'field_full_name'	=> $userData['first_name'] . ' ' . $userData['last_name'],
-				'last_fetch_ut'		=> date('U')
-			));
+			$userData['last_update_ut'] = date('U');
 			
-			$rs->create();
-		}
-		
-		// Skip login if the user is already logged in //
-		if( $user = User :: getCurrentUser() ){
-			if( ! $user->isGuest() ){
-				return false;
+			// Init resource from this data //
+			$rs = new \Ant\Resource( 'user_account_facebook_user', $userData );
+			
+			try {
+				
+				// Check if exists //
+				$data = $rs->read();
+				
+				// Updates Auth details to latest //
+				$data = $rs->update()->read();
+				
+				// Update the user account //
+				$userRs = new \Ant\Resource( 'user' );
+				
+				$userRs->setData( filterUserFields( $data, 'update' ) );
+				
+				// Need to set the user first to allow update permission //
+				User :: setCurrentUser( $userRs->read() );
+				
+				// Update the resource //
+				$userRs->update();
+				
+				
+			} catch( \Exception $e ){ 
+				
+				// 404 does not exist //
+				if( $e->getCode() == 404 ){
+					
+					$data = $rs->create()->read();
+					
+					// Create the new user account //
+					$userRs = new \Ant\Resource( 'user' , filterUserFields( $data, 'create' ) );
+					
+					// Read the new user data //
+					$data = $userRs->create()->read();
+					
+					$rs->setData( array(
+						'user_id' => $data['user_id']
+					));
+					
+					$rs->update();
+					
+					User :: setCurrentUser( $data );
+					
+				} else {
+					echo $e->getMessage();
+				}
 			}
+			
 		}
 		
-		$query	= Controller :: query('User.getUserByLogin', array(
-			'username'	=> $request['username'],
-			'password'	=> $request['password']
-		));
+	}
+	
+	function filterUserFields( $data, $type ){
 		
-		$collection = Database :: query( $query );		
+		$result = array(
+			'user_first_name'	=> $data['field_first_name'],
+			'user_last_name'	=> $data['field_last_name'],
+			'user_email'		=> $data['field_email'],
+			'user_login_ut'		=> date('U'),
+			'user_status'		=> 1
+		);
 		
-		if( $collection->length() == 1 ){
-			
-			$data = $collection->first()->toArray();
-			
-			if( $request['remember_me'] ){
-				Cookie :: set('Ant.User', array(
-					'user_secret'	=> $data['user_secret']
-				), Config :: get('login_cookie_age') );
-			}
-			
-			// Set the current user in memory //
-			User :: setCurrentUser( $data );
+		switch( $type ){
+			case 'create' :
+				$result['user_register_ut'] = date('U');
+				break;
+			case 'update' :
+				$result['user_id'] = $data['user_id'];
+				break;
 		}
 		
+		return $result;
 	}

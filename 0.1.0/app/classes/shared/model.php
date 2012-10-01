@@ -107,12 +107,17 @@
 					));
 				});
 				
-				return $collection;
+				$resource->setData( $collection->first()->toArray() );
+				
+				return $resource;
 			}
 			
 			/**
-			 *	The default read task
-			 * 
+			 *	The default read task. Uses the 
+			 *	read fields specified in schema
+			 *	for the query, and only reads
+			 *	acceptable fields.
+			 *	
 			 *	@param Resource $resource
 			 * 
 			 *	@since 0.1.0
@@ -120,9 +125,33 @@
 			 */
 			public function read( $resource ){			
 				
-				$query = \Ant\Controller :: query( $this->modelName . '.crud.read', array(
-					'resource' => $resource
-				));
+				$query = new \Ant\Query;
+				
+				$query->select( 
+					implode(',', $resource->getReadableFields()),
+					\Ant\Database :: getTablePrefix() . $this->getName()
+				);	
+				
+				// Try getting the resource using any acceptable read fields //
+				$data = $resource->getData();
+				$wh = '';
+				$i=0;
+				
+				foreach( $resource->crudFields('read') as $field ){
+					
+					// Skip this field if not set //
+					if( is_null($data[$field] )){
+						continue;
+					}
+					
+					// Append to the where //
+					$bind[ $field ] = $data[ $field ];
+					if( $i > 0 ){ $wh .= ' || '; }
+					$wh .= '(' . $field . ' = :' . $field . ')';
+					$i++;
+				}
+				
+				$query->where( $wh, $bind );
 				
 				$collection = \Ant\Database :: query( $query );
 				
@@ -130,20 +159,6 @@
 				if( $collection->length() == 0 ){
 					throw new \Exception( 'Resource does not exist', 404 );
 				}
-				
-				// Remove non-readable fields //
-				$buffer = array();
-				$collection->each( function( $record ) use( & $buffer, $resource ) {
-					$each = $record->toArray();
-					$fields = $resource->getReadableFields();
-					foreach( $each as $key => $value ){
-						if( in_array($key, $fields )){
-							$buffer[ $key ] = $value;
-						}
-					}
-				});
-				
-				$collection = new \Ant\Collection( $buffer, $collection->getNamespace() );
 				
 				if( $collection->length() == 1 ){
 					return $collection->first()->toArray();
@@ -162,8 +177,15 @@
 			 */
 			public function update( $resource ){
 				
+				echo $this->getName();
+				echo $id;
+				echo $idKey;
+				
 				$data	= $resource->getData();
 				$id		= $resource->getId();
+				$idKey	= $resource->getIdKey();
+				
+				
 				
 				// Create a collection from the resource //
 				$collection = new Collection( 
@@ -173,16 +195,12 @@
 				
 				// Update the database //
 				\Ant\Database :: update( $collection, array(
-					$resource->getPrimaryKey() => $id
+					$idKey => $id
 				));
 				
-				// Return the resource //
-				$rs = new \Ant\Resource( $resource->getResource(), array(
-					'id' => $id
-				));
+				$resource->setData( $collection->first()->toArray() );
 				
-				// Read the resource //
-				return $rs->read();
+				return $resource;
 			}
 			
 			/**
@@ -194,7 +212,7 @@
 			 *	@return bool The success
 			 */
 			public function delete( $resource ){
-				
+				return $resource;
 			}
 			
 		}

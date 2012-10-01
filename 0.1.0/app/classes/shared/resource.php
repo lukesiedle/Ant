@@ -16,6 +16,9 @@
 		
 		Class Resource {
 			
+			public $keys = array();
+			public static $xml = array();
+			
 			/**
 			 *	Constructor initializes
 			 *	the resource in use by name, and 
@@ -35,11 +38,8 @@
 				// Generate a default or custom model //
 				$this->model	= Model :: make( $resource );
 				
-				// Try set the resource Id //
-				$this->setId( $this->data['id'] );
-				
 				// Get the schema of this resource //
-				$this->setSchema( );
+				$this->setSchema();
 			}
 			
 			/**
@@ -69,18 +69,25 @@
 				$schemaFile = 'app/classes/models/schema/' 
 						. $this->resource . '.xml';
 				
-				// If it doesn't exist, throw error //
-				if( file_exists( $schemaFile )){
-					$xml = simplexml_load_file( $schemaFile );
+				// Don't load xml more than once //
+				if( self :: $xml[ $this->resource ] ){
+					$xml = self :: $xml[ $this->resource ];
 				} else {
-					throw new \Exception('You must specify a schema for resource ' 
-						. $this->resource, 404 );
+					// If it doesn't exist, throw error //
+					if( file_exists( $schemaFile )){
+						$xml = simplexml_load_file( $schemaFile );
+						self :: $xml[ $resource ] = $xml;
+					} else {
+						throw new \Exception('You must specify a schema for resource ' 
+							. $this->resource, 404 );
+					}
 				}
 				
 				// Get all the fields, type casting, 
 				// and validation/sanitization options //
 				foreach( $xml->data as $set ){
 					foreach( $set as $field ){
+						
 						$key = (string) $field;
 						$this->fields[ $key ] = array(
 							'type' => (string)$field->attributes()->type,
@@ -93,9 +100,21 @@
 							$this->fields[ $key ]['key'] = (string) $field->attributes()->use;
 						}
 						
+						// Store the alias/actual keys //
+						$this->keys[ $key ] = $this->fields[ $key ]['key'];
+						
 						// Set the primary key for the resource //
 						if( $field->attributes()->pk ){
 							$this->setPrimaryKey( $key );
+							$this->setIdKey( $key );
+							$this->setId( $this->data[ $this->fields[ $key ]['key'] ] );
+						}
+						
+						// Set an Id key for the resource //
+						if( $field->attributes()->id ){
+							$this->setIdKey( $key );
+							$this->setId( $this->data[ $this->fields[ $key ]['key'] ] );		
+							
 						}
 						
 						$readable[] = $key;
@@ -110,15 +129,10 @@
 					foreach( $set as $crud => $fieldSet ){
 						$fields = array();
 						foreach( $fieldSet as $field ){
-							
-							// Task attributes can specifiy an alias key //
-							if( $field->attributes()->use ){
-								$fields[ (string) $field->attributes()->use ] = (string) $field;
-							} else {
-								$fields[ (string) $field ] = (string) $field;
-							}
-							
+							// Get the key being used for this field //
+							$fields[ $this->keys[(string)$field ] ] = (string)$field;
 						}
+						
 						$this->crud[ $crud ] = $fields;
 					}
 				}
@@ -151,7 +165,7 @@
 									$this->data[ $each['key'] ], 
 									$each['key'],
 									$each['type'] )) > 0 ){
-									throw new \Exception('Incorrect or insufficient values or value types for ' 
+									throw new \Exception('Incorrect or insufficient values ('.$each['key'].') or value types for ' 
 										. $operation . ' task in ' . $this->resource, 0 );
 								}
 							}
@@ -165,13 +179,15 @@
 							
 						}
 						
-						// Check if minimum fields are met // 
-						foreach( $this->crud[ $operation ] as $key => $each ){							
-							if( ! isset( $this->data[ $key ] ) ){
-								throw new \Exception('Insufficent data for ' 
-									. $operation . ' task in ' . $this->resource
-										. '. Requires ' . implode(', ', $this->crud[ $operation ] ), 0 
-								);
+						if( $this->task == 'create' || $this->task == 'delete' ){
+							// Check if minimum fields are met // 
+							foreach( $this->crud[ $operation ] as $key => $each ){							
+								if( ! isset( $this->data[ $key ] ) ){
+									throw new \Exception('Insufficent data for ' 
+										. $operation . ' task in ' . $this->resource
+											. '. Requires ' . implode(', ', $this->crud[ $operation ] ), 0 
+									);
+								}
 							}
 						}
 						
@@ -180,7 +196,6 @@
 						
 						// For reads //
 						$read = false;
-						
 						foreach( $this->crud[ $operation ] as $key => $each ){
 							if( isset( $this->data[ $key ])){
 								$read = true;
@@ -207,6 +222,10 @@
 						break;
 				}
 				
+			}
+			
+			public function crudFields( $task ){
+				return $this->crud[ $task ];
 			}
 			
 			/**
@@ -329,7 +348,6 @@
 				} catch ( \Exception $e ){
 					
 					// No permissions are defined //
-					
 					return true;
 				}
 				
@@ -365,6 +383,30 @@
 			}
 			
 			/**
+			 *	Set the data
+			 *	
+			 *	@since 0.1.0
+			 *	@return object The object for chaining
+			 */
+			public function setData( $data, $reverseLookup = 'reverseLookup' ){
+				
+				// Get the expected key names //
+				if( $reverseLookup == 'reverseLookup' ){
+					foreach( $this->fields as $fieldName => $field ){
+						if( $data[ $fieldName ] ){
+							$this->data[ $field['key'] ] = $data[ $fieldName ];
+						}
+					}
+				} else {
+					$this->data = $data;
+				}
+				
+				$this->setSchema();
+				
+				return $this;
+			}
+			
+			/**
 			 *	Get the mapped data. Data
 			 *	will be returned using key
 			 *	value pairs according to the
@@ -373,8 +415,12 @@
 			 *	@since 0.1.0
 			 *	@return array The data
 			 */
-			public function getData(){
-				return $this->mapData();
+			public function getData( $key = null ){
+				$data = $this->mapData();
+				if( $key ){
+					return $data[ $key ];
+				}
+				return $data;
 			}
 			
 			/**
@@ -385,13 +431,12 @@
 			 *	@return array The data
 			 */
 			public function mapData(){
-				
 				$result = array();
 				foreach( $this->fields as $fieldName => $field ){
 					if( $this->data[ $field['key'] ] ){
 						$result[ $fieldName ] = $this->data[ $field['key'] ];
 					}
-				}				
+				}
 				return $result;
 				
 			}
@@ -418,6 +463,30 @@
 			 */
 			public function getPrimaryKey(){
 				return $this->primaryKey;
+			}
+			
+			/**
+			 *	Sets the primary key
+			 *	For use with a Collection
+			 *	
+			 *	@param string $key The key 
+			 *	used for an Id, 'user_id' 'article_id'
+			 * 
+			 *	@since 0.1.0
+			 */
+			private function setIdKey( $key ){
+				$this->idKey = $key;
+			}
+			
+			/**
+			 *	Gets the primary key
+			 *	For use with a Collection	
+			 *	
+			 *	@since 0.1.0
+			 *	@return string The primary key
+			 */
+			public function getIdKey(){
+				return $this->idKey;
 			}
 			
 			/**
@@ -478,6 +547,7 @@
 			 *	task
 			 */
 			public function update(){
+				
 				$this->setTask('update');
 				return $this->model->update( $this );
 			}
@@ -497,9 +567,10 @@
 			/**
 			 *	Set the resource Id for use
 			 *	with updates, reads or deletes
-			 *	Effectively, this value is 
-			 *	the value of the primary key.
-			 * 
+			 *	This doesn't have to be the primary
+			 *	key, but since it must be unique
+			 *	this is often the case.
+			 *	
 			 *	@param int $id The Id
 			 * 
 			 *	@since 0.1.0

@@ -278,7 +278,7 @@
 						$this->statement->bindValue( $i, $each, \PDO::PARAM_STR );
 					}
 				}
-
+				
 				$this->statement->execute();
 			}
 			

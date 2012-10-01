@@ -7,7 +7,6 @@
 	task.
 	
 	@since 0.1.0
-	
 -->
 
 <schema>
@@ -18,12 +17,13 @@
 	-->
 	
 	<data>
-		<field pk="true" type="int">field_id</field>
-		<field type="string">field_first_name</field>
-		<field type="string">field_last_name</field>
-		<field type="string">field_full_name</field>
+		<field use="id" pk="true">field_id</field>
+		<field type="string" use="first_name">field_first_name</field>
+		<field type="string" use="last_name">field_last_name</field>
+		<field type="string" use="full_name">field_full_name</field>
 		<field type="int">user_id</field>
-		<field type="email">field_email</field>
+		<field type="email" use="email">field_email</field>
+		<field>last_update_ut</field>
 	</data>
 	
 	<tasks>
@@ -34,19 +34,20 @@
 		-->
 		
 		<create>
-			<field use="id">field_id</field>
+			<field>field_id</field>
 			<field>field_first_name</field>
 			<field>field_last_name</field>
 		</create>
 		
 		<!-- 
 			Acceptable fields to use to perform
-			a read
+			a read (unique, indexed)
 		-->
 		
 		<read>
-			<field use="id">user_id</field>
-			<field>user_email</field>
+			<field>field_id</field>
+			<field>user_id</field>
+			<field>field_email</field>
 		</read>
 		
 		<!-- 
@@ -54,9 +55,11 @@
 		-->
 		
 		<update>
-			<field>user_first_name</field>
-			<field>user_last_name</field>
-			<field>user_email</field>
+			<field>field_first_name</field>
+			<field>field_last_name</field>
+			<field>field_full_name</field>
+			<field>field_email</field>
+			<field>last_update_ut</field>
 		</update>
 		
 		<!-- 
