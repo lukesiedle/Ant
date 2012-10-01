@@ -690,7 +690,9 @@
 			/**
 			 *	Store and extend the resource
 			 *	as a Collection in memory. This reduces
-			 *	'read' calls to the database.
+			 *	'read' calls to the database but can
+			 *	put greater load on memory if the 
+			 *	resources are large
 			 *	
 			 *	@param array $col The Collection
 			 * 
