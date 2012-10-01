@@ -419,6 +419,32 @@
 				return new Collection(array( 1 ), $namespace );
 			}
 			
+			/**
+			 *	Shallow merge of collection data. Collections
+			 *	must be of equal length.
+			 *	
+			 *	@param Collection $col1 The Collection
+			 *  @param Collection $col2 The Collection
+			 *	
+			 *	@since 0.1.0
+			 *	@return collection The new collection
+			 */
+			public static function merge( $col1, $col2 ){
+				
+				$newData = array();
+				
+				$nm = $col1->getNamespace();
+				$col1 = $col1->toArrayShallow();
+				$col2 = $col2->toArrayShallow();
+				
+				// Merge the collection data //
+				foreach( $col1 as $i => $data ){
+					$newData[ $i ] = array_merge( $data, $col2[$i] );
+				}
+				
+				return new Collection( $newData, $nm );
+			}
+			
 		}
 		
 		/**
