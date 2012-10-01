@@ -30,8 +30,20 @@
 	// Document root //
 	define( 'DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT'] );
 	
-	// Detect public root, local or remote (http, https) //
-	define( 'PUBLIC_ROOT', str_replace( $_GET['request'], '', $_SERVER['REQUEST_URI']) );
+	// Some string hacking to detect public root, 
+	// Local or remote (http, https) //
+	$publicRoot = str_replace( 
+		$_GET['request'], 
+		'', 
+		$_SERVER['REQUEST_URI']
+	);
+	
+	// Strip query string //
+	if( $pos = strpos( $publicRoot, '?' ) ){
+		$publicRoot = substr( $publicRoot, 0, $pos );
+	}
+	
+	define( 'PUBLIC_ROOT', $publicRoot );
 	
 	// Library path //
 	define( 'LIB_PATH', dirname(__DIR__) . '/lib' );
