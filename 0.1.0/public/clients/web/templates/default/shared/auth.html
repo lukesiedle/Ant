@@ -2,27 +2,29 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>Authenticating...</title>
+		<title>Logging you in...</title>
 		<script type="text/javascript">
 			
+			// Get the url parts //
 			var url = parseUrl();			
 			
-			// Handle redirection //
-			if( url.code ){
-				location.hash = '';
-			}
+			// Remove hash //
+			location.hash = '';
 			
-			var readyStateCheckInterval = setInterval(function() {
+			// Check for ready state using an interval //
+			var readyStateCheck = setInterval(function() {
 				if (document.readyState === "complete") {
+					// Redirect //
 					if( url.redir ){
 						location.href = urldecode( url.redir );
 					} else {
 						location.href = '{auth.redirect}';
 					}
-					clearInterval(readyStateCheckInterval);
+					clearInterval( readyStateCheck );
 				}
-			}, 10);
+			}, 10 );
 			
+			// Parse URL //
 			function parseUrl(){
 				var arr1 = location.search.split( '&' );
 				var obj = {};
@@ -37,6 +39,7 @@
 				return obj;
 			}
 			
+			// Decode URL //
 			function urldecode(url) {
 				return decodeURIComponent(url.replace(/\+/g, ' '));
 			}
@@ -44,6 +47,6 @@
 		</script>
 	</head>
 	<body>
-		Hey there! We're logging you in...
+		Please wait while we log you in...
 	</body>
 </html>
