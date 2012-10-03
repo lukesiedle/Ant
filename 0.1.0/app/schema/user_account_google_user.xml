@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+	The schema specificies
+	all the data, and the minimum
+	data required for each
+	task.
+	
+	@since 0.1.0
+-->
+
+<schema>
+	
+	<!-- 
+		All the data possible
+		(a mirror of the database)
+	-->
+	
+	<data>
+		<field use="id" pk="true">field_id</field>
+		<field type="string" use="name">field_first_name</field>
+		<field type="string" use="family_name">field_last_name</field>
+		<field type="string" use="given_name">field_full_name</field>
+		<field type="int">user_id</field>
+		<field type="email" use="email">field_email</field>
+		<field>last_update_ut</field>
+	</data>
+	
+	<tasks>
+		
+		<!-- 
+			Minimum fields required
+			for a create
+		-->
+		
+		<create>
+			<field>field_id</field>
+			<field>field_first_name</field>
+			<field>field_email</field>
+		</create>
+		
+		<!-- 
+			Acceptable fields to use to perform
+			a read (unique, indexed)
+		-->
+		
+		<read>
+			<field>field_id</field>
+			<field>user_id</field>
+			<field>field_email</field>
+		</read>
+		
+		<!-- 
+			Fields acceptable to update
+		-->
+		
+		<update>
+			<field>field_first_name</field>
+			<field>field_last_name</field>
+			<field>field_full_name</field>
+			<field>field_email</field>
+			<field>last_update_ut</field>
+		</update>
+		
+		<!-- 
+			Acceptable fields to query to perform
+			a delete
+		-->
+		
+		<delete>
+			<field>user_id</field>
+		</delete>
+		
+	</tasks>
+	
+</schema>

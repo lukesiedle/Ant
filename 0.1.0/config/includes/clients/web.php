@@ -24,5 +24,5 @@
 	// Google API Client + Plus API and configuration
 	// @since 0.1.0
 	include( LIB_PATH . '/php/google/apiClient.php' );
-	include( LIB_PATH . '/php/google/contrib/apiPlusService.php' );
+	include( LIB_PATH . '/php/google/contrib/apiOauth2Service.php' );
 	include( 'config/libraries/google.php');

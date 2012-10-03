@@ -18,7 +18,9 @@
 					if( url.redir ){
 						location.href = urldecode( url.redir );
 					} else {
-						location.href = '{auth.redirect}';
+						if( url.type == 'google' ){
+							location.href = '{auth.post_return_url}';
+						}
 					}
 					clearInterval( readyStateCheck );
 				}

@@ -18,6 +18,6 @@
 	
 	// Scopes //
 	$config['google_app']['scopes'][] = 'https://www.googleapis.com/auth/userinfo.profile';
-	// $config['google_app']['scopes'][] = 'https://www.googleapis.com/auth/userinfo.email';
+	$config['google_app']['scopes'][] = 'https://www.googleapis.com/auth/userinfo.email';
 	
 	Configuration :: set( $config );

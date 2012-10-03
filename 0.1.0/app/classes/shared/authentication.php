@@ -13,12 +13,14 @@
 	namespace Ant {
 		
 		use \apiClient as GoogleApiClient;
+		use \apiOauth2Service as GoogleOAuth2;
 		
 		Class Authentication {
 			
 			// Stores all authorizations and their tokens //
 			public static $authorizations = array();
 			public static $facebook;
+			public static $google;
 			public static $data = array();
 			
 			public $authType;
@@ -122,7 +124,7 @@
 					
 					Application :: redirect( $facebook->getLoginUrl(array(
 						// Pass the redirect to a javascript file to remove the hash //
-						'redirect_uri'	=> Router :: getPublicRoot() . '/index.php?channel=auth&redir=' . urldecode($postReturnUrl),
+						'redirect_uri'	=> Router :: getPublicRoot() . '/index.php?channel=auth&redir=' . urlencode($postReturnUrl),
 						'scope'			=> implode( ',', $config['scope'] )
 					)));
 					
@@ -149,16 +151,21 @@
 				
 				$config = (object)Configuration :: get('google_app');
 				
-				$client = new GoogleApiClient();
+				self :: $google = $client = new GoogleApiClient();
 				
 				$client->setClientId( $config->client_id );
 				$client->setClientSecret( $config->client_secret );
+				
+				// Always approve //
+				$client->setApprovalPrompt('auto');
 				
 				Session :: add('application', array(
 					'post_return_url' => $postReturnUrl
 				));
 				
-				$client->setRedirectUri( Router :: getPublicRoot() );
+				$client->setRedirectUri( 
+					Router :: getPublicRoot() . '?channel=auth&type=google'
+				);
 				
 				$client->setScopes( $config->scopes );
 				
@@ -170,16 +177,21 @@
 						)
 					));
 					$app = Session :: get('application');
-					Application :: redirect( $app['post_return_url'] );
-					return;
+					$auth = true;
+					
 				} else {
 					if( $auth = Session :: get('authentication') ){
 						if( $google = $auth['google'] ){
 							$client->setAccessToken( $google['token'] );
 							self :: $authorizations['google'] = $google;
-							return;
+							$auth = true;
 						}
 					}
+				}
+				
+				// Stop if already authorized //
+				if( $auth ){
+					return;
 				}
 				
 				Application :: redirect( $client->createAuthUrl() );
@@ -204,7 +216,7 @@
 					case 'facebook' :
 						
 						if( ! self :: isAuthorized('facebook') ){
-							throw 'Facebook is not yet authorized';
+							throw new \Exception( 'Facebook is not yet authorized', 403 );
 						}
 						
 						// If being stored, check if it exists already //
@@ -230,6 +242,7 @@
 						return $data;
 						break;
 					case 'google' :
+						return new GoogleOAuth2( self :: $google );
 						break;
 				}
 			}

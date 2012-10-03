@@ -31,7 +31,7 @@
 			 *	
 			 *	@since 0.1.0
 			 */
-			public function __construct( $resource, $data = array()){
+			public function __construct( $resource, Array $data = array()){
 				
 				$this->resource = strtolower( $resource );
 				$this->data		= $data;
@@ -557,10 +557,12 @@
 			 */
 			public function create(){
 				
+				
+				
 				// Create a collection from the resource //
 				$collection = new Collection( 
 					$this->getData(), 
-					$this->resource
+					$this->getName()
 				);
 				
 				// Pass to Database for insertion, set the Id //
@@ -601,6 +603,8 @@
 					implode(',', $this->getReadableFields()),
 					\Ant\Database :: getTablePrefix() . $this->getName()
 				);	
+				
+				
 				
 				// Try getting the resource using any acceptable read fields //
 				$data = $this->getData();

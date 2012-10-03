@@ -20,14 +20,18 @@
 		use \Ant\Collection as Collection;
 		use \Ant\Router as Router;
 		use \Ant\Document as Document;
+		use \Ant\Session as Session;
 		
 		function index( $request ){
 			
 			// Load a template from the shared space //
 			$frame		= Template :: loadSharedTemplate('auth');
 			
+			$app = Session :: get('application');
+			
 			Template :: addGlobals( new Collection(array(
-				'redirect' => Router :: getPublicRoot()
+				'redirect'			=> Router :: getPublicRoot(),
+				'post_return_url'	=> $app['post_return_url']
 			), 'auth' ));
 			
 			// Buffer the template for output //
@@ -39,8 +43,14 @@
 			// Flush the buffer so the user sees a "Logging in..." message //
 			flush();
 			
-			// Authorize //
-			Auth :: authFacebook();
+			switch( $_GET['type'] ){
+				case 'facebook' :
+				Auth :: authFacebook();
+					break;
+				case 'google' :
+				Auth :: authGoogle();
+					break;
+			}
 			
 			exit;
 		}
