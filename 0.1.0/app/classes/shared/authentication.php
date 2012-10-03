@@ -66,6 +66,26 @@
 			}
 			
 			/**
+			 *	Just create a Facebook
+			 *	instance for retrieving 
+			 *	an Auth URL. 
+			 *	
+			 *	@since 0.1.0
+			 *	@return array Basic auth data
+			 */
+			public static function authFacebookBare(){
+				
+				$config = Configuration :: get('facebook_app');
+				
+				self :: $facebook = $facebook = new \Facebook(array(
+					'appId'		=> $config['app_id'],
+					'secret'	=> $config['app_secret']
+				));
+				
+				$facebook->getSignedRequest();
+			}
+			
+			/**
 			 *	Authorize Facebook with
 			 *	optional return url
 			 * 
@@ -103,7 +123,7 @@
 					Application :: redirect( $facebook->getLoginUrl(array(
 						// Pass the redirect to a javascript file to remove the hash //
 						'redirect_uri'	=> Router :: getPublicRoot() . '/index.php?channel=auth&redir=' . urldecode($postReturnUrl),
-						'scope'			=> implode( ',', $config->scope )
+						'scope'			=> implode( ',', $config['scope'] )
 					)));
 					
 					exit;

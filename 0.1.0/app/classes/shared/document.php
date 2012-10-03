@@ -18,6 +18,7 @@
 			public static $processedStylesheets;
 			public static $processedJavascripts;
 			public static $headers = array();
+			public static $postLoad = array();
 			
 			/**
 			 *	Set the document title
@@ -252,6 +253,28 @@
 			 */
 			public static function getHeaders(){
 				return array_values( self :: $headers );
+			}
+			
+			/**
+			 *	Post load Closures
+			 * 
+			 *	@param Closure $fn The function to run
+			 * 
+			 *	@since 0.1.0
+			 */
+			public static function postLoad( \Closure $fn ){
+				self :: $postLoad[] = $fn;
+			}
+			
+			/**
+			 *	Execute item buffered for post load			 
+			 *	
+			 *	@since 0.1.0
+			 */
+			public static function execPostLoad(){
+				foreach( self :: $postLoad as $load ){
+					$load();
+				}
 			}
 			
 		}

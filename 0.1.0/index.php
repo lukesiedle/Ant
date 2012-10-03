@@ -8,7 +8,7 @@
 	 *	@package Ant
 	 *	@since 0.1.0
 	 */
-	 
+
 	// Errors //
 	error_reporting( 
 		E_ERROR | 
@@ -84,5 +84,5 @@
 	// Set the headers, set within the current route //
 	App :: setHeaders();
 	
-	// Generate output and release any resources //
+	// Generate output, post-output, and release any resources //
 	App :: flush();

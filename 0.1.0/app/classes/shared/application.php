@@ -320,16 +320,23 @@
 			 */
 			public static function flush(){
 				
-				// Prepare the document parts for output //
-				Document :: prepare();
-				
 				// If a channel exists, e.g. Ajax, output is its reponsibility //
 				if( Router :: $channel ){
 					return;
-				}				
+				}
+				
+				// Prepare the document parts for output //
+				Document :: prepare();
 				
 				// Output the contents of the Template buffer //
 				echo Template :: output();
+				
+				// Flush and execute anything to post load
+				// Windows users may need to disable 
+				// Output Buffering for flush to work : 
+				// http://www.php.net/manual/en/function.flush.php#99988 //
+				flush();
+				Document :: execPostLoad();
 			}
 			
 			/**

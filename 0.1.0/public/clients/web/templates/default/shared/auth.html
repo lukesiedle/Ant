@@ -5,15 +5,23 @@
 		<title>Authenticating...</title>
 		<script type="text/javascript">
 			
+			var url = parseUrl();			
 			
-			var get = parseUrl();			
-			
-			if( get.redir ){
+			// Handle redirection //
+			if( url.code ){
 				location.hash = '';
-				setTimeout( function(){
-					location.href = urldecode( get.redir );
-				}, 3000 );	
 			}
+			
+			var readyStateCheckInterval = setInterval(function() {
+				if (document.readyState === "complete") {
+					if( url.redir ){
+						location.href = urldecode( url.redir );
+					} else {
+						location.href = '{auth.redirect}';
+					}
+					clearInterval(readyStateCheckInterval);
+				}
+			}, 10);
 			
 			function parseUrl(){
 				var arr1 = location.search.split( '&' );
@@ -38,5 +46,4 @@
 	<body>
 		Hey there! We're logging you in...
 	</body>
-		
 </html>
