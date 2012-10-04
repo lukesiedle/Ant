@@ -16,5 +16,6 @@
 	$config['facebook_app']['app_secret'] = "b3fc5e22019552a7cd6615d8efd32bf8";
 	$config['facebook_app']['scope'][] = "user_events";
 	$config['facebook_app']['scope'][] = "friends_events";
+	$config['facebook_app']['scope'][] = "email";
 	
 	\Ant\Configuration :: set( $config );

@@ -16,7 +16,6 @@
 		All the data possible
 		(a mirror of the database)
 	-->
-	
 	<data>
 		<field pk="true" type="int" use="id">user_id</field>
 		<field type="string">user_first_name</field>
@@ -35,7 +34,6 @@
 			Minimum fields required
 			for a create
 		-->
-		
 		<create>
 			<field>user_first_name</field>
 			<field>user_last_name</field>
@@ -45,27 +43,23 @@
 			Acceptable fields to use to perform
 			a read
 		-->
-		
 		<read>
 			<field>user_id</field>
 			<field>user_email</field>
 		</read>
 		
 		<!-- 
-			Fields acceptable to update
+			Required fields to query to perform
+			an update
 		-->
-		
 		<update>
-			<field>user_first_name</field>
-			<field>user_last_name</field>
-			<field>user_email</field>
+			<field>user_id</field>
 		</update>
 		
 		<!-- 
-			Acceptable fields to query to perform
+			Required fields to query to perform
 			a delete
 		-->
-		
 		<delete>
 			<field>user_id</field>
 		</delete>

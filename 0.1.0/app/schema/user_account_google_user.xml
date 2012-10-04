@@ -51,22 +51,17 @@
 		</read>
 		
 		<!-- 
-			Fields acceptable to update
+			Required fields to query to perform
+			an update
 		-->
-		
 		<update>
-			<field>field_first_name</field>
-			<field>field_last_name</field>
-			<field>field_full_name</field>
-			<field>field_email</field>
-			<field>last_update_ut</field>
+			<field>field_id</field>
 		</update>
 		
 		<!-- 
-			Acceptable fields to query to perform
+			Required fields to query to perform
 			a delete
 		-->
-		
 		<delete>
 			<field>user_id</field>
 		</delete>

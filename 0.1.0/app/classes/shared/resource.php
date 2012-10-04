@@ -177,15 +177,13 @@
 							
 						}
 						
-						if( $this->task == 'create' || $this->task == 'delete' ){
-							// Check if minimum fields are met // 
-							foreach( $this->crud[ $operation ] as $key => $each ){							
-								if( ! isset( $this->data[ $key ] ) ){
-									throw new \Exception('Insufficent data for ' 
-										. $operation . ' task in ' . $this->resource
-											. '. Requires ' . implode(', ', $this->crud[ $operation ] ), 0 
-									);
-								}
+						// Check if minimum fields are met // 
+						foreach( $this->crud[ $operation ] as $key => $each ){							
+							if( ! isset( $this->data[ $key ] ) ){
+								throw new \Exception('Insufficent data for ' 
+									. $operation . ' task in ' . $this->resource
+										. '. Requires ' . implode(', ', $this->crud[ $operation ] ), 0 
+								);
 							}
 						}
 						
@@ -351,7 +349,8 @@
 				
 				// Check if not allowed and throw forbidden //
 				if( ! $perms['allow'] ){
-					throw new \Exception( 'Insufficient permissions for this task.', 403 );
+					throw new \Exception( 'Insufficient permissions for this task "' 
+						. $this->getTask() . '" for resource "' . $this->getName() . '"' , 403 );
 				}
 				
 				return $perms['allow'];
@@ -557,7 +556,7 @@
 			 */
 			public function create(){
 				
-				
+				$this->setTask( 'create' );
 				
 				// Create a collection from the resource //
 				$collection = new Collection( 
@@ -593,6 +592,8 @@
 			 */
 			public function read(){			
 				
+				$this->setTask( 'read' );
+				
 				if( $storedData = self :: getStoredData( $this->getName()) ){
 					return $storedData;
 				}
@@ -608,7 +609,6 @@
 				$data = $this->getData();
 				$wh = '';
 				$i=0;
-				
 				
 				foreach( $this->crudFields('read') as $field ){
 					
@@ -654,16 +654,11 @@
 			 */
 			public function update(){
 				
+				$this->setTask( 'update' );
+				
 				$data	= $this->getData();
 				$id		= $this->getId();
 				$idKey	= $this->getIdKey();
-				
-				// Must have Id/Key set //
-				if( ! is_numeric($id) || is_null( $idKey ) ){
-					throw new \Exception( 
-						'No Id or Id Key set. This must be set to perform an update.', 422 
-					);
-				}
 				
 				// Create a collection from the resource //
 				$collection = new Collection( 
@@ -694,6 +689,9 @@
 			 *	@return bool The success
 			 */
 			public function delete(){
+				
+				$this->setTask( 'delete' );
+				
 				return $this;
 			}
 			

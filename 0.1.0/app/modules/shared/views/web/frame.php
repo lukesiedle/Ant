@@ -1,17 +1,13 @@
 <?php
 	
-	/*
-	 * 
+	/**
 	 *	Shared view 'frame' for performing
 	 *	global client view tasks specific
 	 *	to the application.
 	 *	
 	 *	@package Ant
-	 *	@type Shared
 	 *	@since 0.1.0
-	 * 
 	 */
-	
 	namespace Ant\Web {
 		
 		use \Ant\Application as App;
@@ -38,8 +34,6 @@
 			
 			// Always attempt to determine the current user //
 			$theUser = Control :: call('User.state.initialize');
-			
-			
 			
 			return new CollectionSet(
 				

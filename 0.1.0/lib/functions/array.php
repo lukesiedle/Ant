@@ -23,7 +23,7 @@
 	}
 	
 	/**
-	 *	Strips slashes withiin strings in 
+	 *	Strips slashes within strings in 
 	 *	an array.
 	 *	
 	 *	@param array $data 
