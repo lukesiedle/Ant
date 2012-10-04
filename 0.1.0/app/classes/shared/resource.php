@@ -604,12 +604,11 @@
 					\Ant\Database :: getTablePrefix() . $this->getName()
 				);	
 				
-				
-				
 				// Try getting the resource using any acceptable read fields //
 				$data = $this->getData();
 				$wh = '';
 				$i=0;
+				
 				
 				foreach( $this->crudFields('read') as $field ){
 					
@@ -658,6 +657,13 @@
 				$data	= $this->getData();
 				$id		= $this->getId();
 				$idKey	= $this->getIdKey();
+				
+				// Must have Id/Key set //
+				if( ! is_numeric($id) || is_null( $idKey ) ){
+					throw new \Exception( 
+						'No Id or Id Key set. This must be set to perform an update.', 422 
+					);
+				}
 				
 				// Create a collection from the resource //
 				$collection = new Collection( 
