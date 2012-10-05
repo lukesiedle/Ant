@@ -10,7 +10,7 @@
 	 *	@since 0.1.0
 	 * 
 	 */	
-
+	
 	// Mysql Class and configuration
 	// @since 0.1.0
 	require('lib/mysql.class.php');

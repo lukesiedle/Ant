@@ -12,6 +12,7 @@
 			<file>public/clients/web/css/shared/reset.less</file>
 		</core>
 		<context>
+			<file>public/clients/web/css/context/ant.less</file>
 			<file>public/clients/web/css/context/setup.less</file>
 		</context>
 	</stylesheets>

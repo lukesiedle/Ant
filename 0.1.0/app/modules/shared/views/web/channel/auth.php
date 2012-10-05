@@ -37,6 +37,9 @@
 			// Buffer the template for output //
 			Template :: setBuffer( $frame );
 			
+			// Prepare the document (stylesheets, javascripts) //
+			Document :: prepare();
+			
 			// Channel is always responsible for output //
 			echo Template :: output();
 			

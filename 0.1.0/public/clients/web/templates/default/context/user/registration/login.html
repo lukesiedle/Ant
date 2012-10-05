@@ -1,17 +1,19 @@
-<form method="post" action="user/login">
-	<script type="text/x-handlebars">
-		The President of the United States is me.
-	</script>
-	<fieldset>
-		{\errors}
-		<legend>Login</legend>
-		<label>Username</label><input type="text" name="username" value="{request.username}" autocomplete="off" />
-		<label>Password</label><input type="password" name="password" />
-		<button type="submit">Submit</button>
-		<label><input type="checkbox" name="remember_me" />Remember Me</label>
-	</fieldset>
-	<fieldset>
-		<a href="user/login/facebook?return={return}">Login with Facebook</a>
-		<a href="user/login/google?return={return}">Login with Google</a>
-	</fieldset>
-</form>
+<div class="login-box">
+	<form method="post" action="user/login">
+		<script type="text/x-handlebars">
+			The President of the United States is me.
+		</script>
+		<fieldset>
+			{\errors}
+			<legend>Login</legend>
+			<label>Email</label><input type="text" name="email" value="{request.email}" autocomplete="off" />
+			<label>Password</label><input type="password" name="password" />
+			<button type="submit">Submit</button>
+			<label><input type="checkbox" name="remember_me" />Remember Me</label>
+			<div class="api-login">
+				<a href="user/login/facebook?return={return}">Login with Facebook</a>
+				<a href="user/login/google?return={return}">Login with Google</a>
+			</div>
+		</fieldset>
+	</form>
+</div>
