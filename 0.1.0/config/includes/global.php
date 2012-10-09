@@ -10,59 +10,59 @@
 
 	// Collection Class 
 	// @since 0.1.0 //
-	require('app/classes/shared/collection.php');
+	require('app/classes/core/collection.php');
 	
 	// Query Class
 	// @since 0.1.0 //
-	require('app/classes/shared/query.php');
+	require('app/classes/core/query.php');
 	
 	// Database Class
 	// @since 0.1.0 //
-	require('app/classes/shared/database.php');
+	require('app/classes/core/database.php');
 	
 	// Resource Class
 	// @since 0.1.0 //
-	require('app/classes/shared/resource.php');
+	require('app/classes/core/resource.php');
 	
 	// Request Class
 	// @since 0.1.0 //
-	require('app/classes/shared/request.php');
+	require('app/classes/core/request.php');
 	
 	// Router Class
 	// @since 0.1.0 //
-	require('app/classes/shared/router.php');
+	require('app/classes/core/router.php');
 	
 	// Controller Class
 	// @since 0.1.0 //
-	require('app/classes/shared/controller.php');
+	require('app/classes/core/controller.php');
 	
 	// Store Class
 	// @since 0.1.0 //
-	require('app/classes/shared/store.php');
+	require('app/classes/core/store.php');
 	
 	// Template Class
 	// @since 0.1.0 //
-	require('app/classes/shared/template.php');
+	require('app/classes/core/template.php');
 	
 	// Session Class
 	// @since 0.1.0 //
-	require('app/classes/shared/session.php');
+	require('app/classes/core/session.php');
 	
 	// Cookie Class
 	// @since 0.1.0 //
-	require('app/classes/shared/cookie.php');
+	require('app/classes/core/cookie.php');
 	
 	// Document Class
 	// @since 0.1.0 //
-	require('app/classes/shared/document.php');
+	require('app/classes/core/document.php');
 	
 	// Authentication
 	// @since 0.1.0 //
-	require('app/classes/shared/authentication.php');
+	require('app/classes/core/authentication.php');
 	
 	// Exception
 	// @since 0.1.0 //
-	require('app/classes/shared/exception.php');
+	require('app/classes/core/exception.php');
 	
 	// General Functions
 	// @since 0.1.0 //
@@ -82,5 +82,6 @@
 	function __autoload( $class ){
 		$opts = explode( '\\', $class );
 		$file = strtolower( $opts[ count( $opts )-1 ] );
-		require_once('app/classes/context/' . $file . '.php' );
+		$type = $opts[0];
+		require_once('app/classes/' . $type . '/' . $file . '.php' );
 	}
