@@ -3,13 +3,13 @@
 	/**
 	 *	Query building class
 	 * 
-	 *	@package Ant
+	 *	@package Core
 	 *	@subpackage Query
+	 *	@uses Collection, Underscore
 	 *	@since 0.1.0
 	 */
-	namespace Ant {
+	namespace Core {
 		
-		use \Ant\Collection as Collection;
 		use \__ as __;
 		
 		Class Query {
@@ -96,7 +96,7 @@
 			public function select( $cols, $tableName = null ){
 				
 				if( $this->select != '' ){
-					$cols .= ',';
+					$cols = ',' . $cols;
 				}
 				
 				$this->select .= $cols;
@@ -372,6 +372,15 @@
 			 */
 			public function output(){
 				Application :: out( $this->query );
+			}
+			
+			/**
+			 *	Shortcut method to build a query
+			 * 
+			 *	@since 0.1.0
+			 */
+			public static function make(){
+				return new self;
 			}
 			
 		}
