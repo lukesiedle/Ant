@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+	
+	@description
+	
+	Route.xml offers a whitelist map of specific
+	keywords or types of values that may
+	exist within the request, and then
+	defines what module/template PHP
+	should load.
+	
+	This is the route for the current context. If 
+	this file doesn't exist, the default route
+	will be used.
+	
+-->
+
+<base is="user">
+	
+	<!-- User registration and login actions -->
+	<next is="login">
+		<controller>User.login</controller>
+		<next is="facebook">
+			<var>auth_type</var>
+			<controller>User.auth</controller>
+		</next>
+		<next is="google">
+			<var>auth_type</var>
+			<controller>User.auth</controller>
+		</next>
+	</next>
+	<next is="logout">
+		<controller>User.logout</controller>
+	</next>
+	
+	
+	<next is="register">
+		<module>register</module>
+		<template>registration/register</template>
+		<doctitle>
+			<register>User | Sign Up</register>
+		</doctitle>
+	</next>
+	
+	<next is="edit">
+		<module>register</module>
+		<template>registration/register</template>
+		<var>edit</var>
+		<stop><!-- Stop routing --></stop>
+	</next>
+	
+	<var>context</var>
+	<template>index</template>
+	<module>index</module>
+	<frame>frame</frame>
+	
+	<doctitle>
+		<home>Home</home>
+		<user>User</user>
+	</doctitle>
+	
+</base>

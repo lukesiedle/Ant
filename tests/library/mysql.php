@@ -57,9 +57,9 @@
 		
 		public function testQueryBinding(){
 			
-			require_once(PROJECT_ROOT . '/app/classes/shared/query.php');
+			require_once(PROJECT_ROOT . '/app/classes/core/query.php');
 			
-			$query	= new Ant\Query("SELECT test_id FROM ant_tests WHERE test_id = :id");
+			$query	= new Core\Query("SELECT test_id FROM ant_tests WHERE test_id = :id");
 			
 			$query->bind(array(
 				':id' => 1

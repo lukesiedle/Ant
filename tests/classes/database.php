@@ -13,19 +13,19 @@
 	 *	@since 0.1.0
 	 */
 
-	use Ant\Database as Database;
-	use Ant\Collection as Collection;
-	use Ant\Application as Application;
-	use Ant\Query as Query;
+	use Core\Database as Database;
+	use Core\Collection as Collection;
+	use Core\Application as Application;
+	use Core\Query as Query;
 	use Library\MySQL as MySQL;
 
 	
 	require_once( PROJECT_ROOT . '/lib/mysql.class.php' );
-	require_once( PROJECT_ROOT . '/app/classes/shared/database.php' );
-	require_once( PROJECT_ROOT . '/app/classes/shared/query.php' );
+	require_once( PROJECT_ROOT . '/app/classes/core/database.php' );
+	require_once( PROJECT_ROOT . '/app/classes/core/query.php' );
 	require_once( dirname(PROJECT_ROOT) . '/lib/php/underscore.php' );
-	require_once( PROJECT_ROOT . '/app/classes/shared/collection.php' );
-	require_once( PROJECT_ROOT . '/app/classes/shared/application.php' );
+	require_once( PROJECT_ROOT . '/app/classes/core/collection.php' );
+	require_once( PROJECT_ROOT . '/app/classes/core/application.php' );
 	
 	// Initialize the App object //
 	Application :: $app = new StdClass;

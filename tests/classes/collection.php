@@ -10,7 +10,7 @@
 	 */
 	
 	// Require Collection and its dependency, Underscore //
-	require_once( PROJECT_ROOT . '/app/classes/shared/collection.php' );
+	require_once( PROJECT_ROOT . '/app/classes/core/collection.php' );
 	require_once( dirname(PROJECT_ROOT) . '/lib/php/underscore.php' );
 	
 	class TestCollection extends PHPUnit_Framework_TestCase
@@ -41,26 +41,26 @@
 		
 		public function testToArrayEmpty()
 		{
-			$collection = new \Ant\Collection;
+			$collection = new \Core\Collection;
 			$this->assertEmpty( $collection->toArray() );
 		}
 		
 		public function testToArraySingle()
 		{
-			$collection = new \Ant\Collection( self :: $testArraySingle );
+			$collection = new \Core\Collection( self :: $testArraySingle );
 			$this->assertEquals( self :: $testArraySingle, $collection->toArray() );
 		}
 		
 		public function testToArrayMulti()
 		{
-			$collection = new \Ant\Collection( self :: $testArrayMulti );
+			$collection = new \Core\Collection( self :: $testArrayMulti );
 			$this->assertEquals( self :: $testArrayMulti , $collection->toArray() );
 		}
 		
 		public function testToArrayShallow()
 		{
-			$collection = new \Ant\Collection( self :: $testArrayMulti );
-			$join		= new \Ant\Collection( self :: $testArraySingle );
+			$collection = new \Core\Collection( self :: $testArrayMulti );
+			$join		= new \Core\Collection( self :: $testArraySingle );
 			
 			$collection->join( $join );
 			
@@ -69,13 +69,13 @@
 		
 		public function testToObjectEmpty()
 		{
-			$collection = new \Ant\Collection;
+			$collection = new \Core\Collection;
 			$this->assertEmpty( $collection->toObject() );
 		}
 		
 		public function testToObjectSingle()
 		{
-			$collection = new \Ant\Collection( self :: $testArraySingle );
+			$collection = new \Core\Collection( self :: $testArraySingle );
 			
 			$obj = array((object) self :: $testArraySingle[0]);
 			
@@ -84,7 +84,7 @@
 		
 		public function testToObjectMulti()
 		{
-			$collection = new \Ant\Collection( self :: $testArrayMulti );
+			$collection = new \Core\Collection( self :: $testArrayMulti );
 			
 			$obj = array(
 				0 => (object) self :: $testArrayMulti[0],
@@ -97,25 +97,25 @@
 		
 		public function testEmptyInstance()
 		{
-			$collection = new \Ant\Collection;
+			$collection = new \Core\Collection;
 			$this->assertEmpty( $collection->toArray() );
 		}
 		
 		public function testSingleRecordInstance()
 		{
-			$collection = new \Ant\Collection( self :: $testArraySingle);
+			$collection = new \Core\Collection( self :: $testArraySingle);
 			$this->assertEquals( self :: $testArraySingle, $collection->toArray() );
 		}
 		
 		public function testMultiRecordInstance()
 		{
-			$collection = new \Ant\Collection( self :: $testArrayMulti );
+			$collection = new \Core\Collection( self :: $testArrayMulti );
 			$this->assertEquals( self :: $testArrayMulti, $collection->toArray() );
 		}
 		
 		public function testLength()
 		{
-			$collection = new \Ant\Collection( self :: $testArrayMulti );
+			$collection = new \Core\Collection( self :: $testArrayMulti );
 			$this->assertEquals( 2, $collection->length() );
 		}
 		
@@ -123,8 +123,8 @@
 			
 			global $testArrayMulti;
 			
-			$collection = new \Ant\Collection( self :: $testArrayMulti, 'movies' );
-			$join		= new \Ant\Collection( self :: $testJoin, 'actors' );
+			$collection = new \Core\Collection( self :: $testArrayMulti, 'movies' );
+			$join		= new \Core\Collection( self :: $testJoin, 'actors' );
 			
 			$collection->join( $join );
 			
@@ -140,8 +140,8 @@
 		
 		public function testJoinSingle(){
 			
-			$collection = new \Ant\Collection( self :: $testArrayMulti, 'movies' );
-			$join		= new \Ant\Collection( self :: $testJoin, 'actors' );
+			$collection = new \Core\Collection( self :: $testArrayMulti, 'movies' );
+			$join		= new \Core\Collection( self :: $testJoin, 'actors' );
 			
 			$collection->join( $join );
 			
@@ -157,9 +157,9 @@
 		
 		public function testUnjoin(){
 			
-			$collection = new \Ant\Collection( self :: $testArrayMulti, 'movies' );
+			$collection = new \Core\Collection( self :: $testArrayMulti, 'movies' );
 			
-			$join		= new \Ant\Collection( self :: $testJoin, 'actors' );
+			$join		= new \Core\Collection( self :: $testJoin, 'actors' );
 			
 			$collection->join( $join );
 			
@@ -170,22 +170,22 @@
 		}
 		
 		public function testFirst(){
-			$collection = new \Ant\Collection( self :: $testArrayMulti );
+			$collection = new \Core\Collection( self :: $testArrayMulti );
 			$this->assertEquals( self :: $testArrayMulti[0], $collection->first()->toArray() );	
 		}
 		
 		public function testLast(){
-			$collection = new \Ant\Collection( self :: $testArrayMulti );
+			$collection = new \Core\Collection( self :: $testArrayMulti );
 			$this->assertEquals( self :: $testArrayMulti[1], $collection->last()->toArray() );	
 		}
 		
 		public function testAt(){
-			$collection = new \Ant\Collection( self :: $testArrayMulti );
+			$collection = new \Core\Collection( self :: $testArrayMulti );
 			$this->assertEquals( self :: $testArrayMulti[1], $collection->at(1)->toArray() );	
 		}
 		
 		public function testEach(){
-			$collection = new \Ant\Collection( self :: $testArrayMulti );
+			$collection = new \Core\Collection( self :: $testArrayMulti );
 			
 			$arr = array();
 			
@@ -204,7 +204,7 @@
 		
 		public function testFind(){
 			
-			$collection = new \Ant\Collection( self :: $testArrayMulti );
+			$collection = new \Core\Collection( self :: $testArrayMulti );
 			
 			$searchResults = $collection->find(array(
 				'title' => 'Batman Returns'
@@ -215,14 +215,14 @@
 		
 		public function testGetNamespace(){
 			
-			$collection = new \Ant\Collection( self :: $testArrayMulti, 'movies' );
+			$collection = new \Core\Collection( self :: $testArrayMulti, 'movies' );
 			
 			$this->assertEquals( 'movies', $collection->getNamespace() );
 		}
 		
 		public function testAdd(){
 			
-			$collection = new \Ant\Collection( self :: $testArrayMulti, 'movies' );
+			$collection = new \Core\Collection( self :: $testArrayMulti, 'movies' );
 			
 			$arr = array(
 				'year' => '1995',
@@ -239,7 +239,7 @@
 		
 		public function testClear(){
 			
-			$collection = new \Ant\Collection( self :: $testArrayMulti );
+			$collection = new \Core\Collection( self :: $testArrayMulti );
 			
 			$collection->clear();
 			
