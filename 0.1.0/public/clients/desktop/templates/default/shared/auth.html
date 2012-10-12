@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Logging you in...</title>
+		{\stylesheets}
+		<script type="text/javascript">
+			
+			// Get the url parts //
+			var url = parseUrl();			
+			
+			// Remove hash //
+			location.hash = '';
+			
+			// Check for ready state using an interval //
+			var readyStateCheck = setInterval(function() {
+				if (document.readyState === "complete") {
+					// Redirect //
+					if( url.redir ){
+						location.href = urldecode( url.redir );
+					} else {
+						if( url.type == 'google' ){
+							location.href = '{auth.post_return_url}';
+						}
+					}
+					clearInterval( readyStateCheck );
+				}
+			}, 10 );
+			
+			// Parse URL //
+			function parseUrl(){
+				var arr1 = location.search.split( '&' );
+				var obj = {};
+				for( var x in arr1 ){
+					if( x == 0 ){
+						arr1[x] = arr1[x].substr(1);
+					}
+					var each = arr1[x].split('=');
+					
+					obj[ each[0] ] = each[ 1 ] || null; 
+				}
+				return obj;
+			}
+			
+			// Decode URL //
+			function urldecode(url) {
+				return decodeURIComponent(url.replace(/\+/g, ' '));
+			}
+			
+		</script>
+	</head>
+	<body>
+		Please wait while we log you in...
+	</body>
+</html>
