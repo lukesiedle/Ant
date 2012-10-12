@@ -5,7 +5,7 @@
 	class User extends \Core\Data {
 		
 		// Required constants //
-		CONST RESOURCE				= 'user';
+		CONST TABLE_NAME			= 'user';
 		CONST PRIMARY_KEY			= 'user_id';
 		
 		// Status //

@@ -8,7 +8,7 @@
 	class Account extends \Core\Data {
 		
 		// Required constants //
-		CONST RESOURCE				= 'user_account_user';
+		CONST TABLE_NAME			= 'user_account_user';
 		CONST PRIMARY_KEY			= '_id';
 		CONST JOIN_KEY				= 'user_account_id';
 		

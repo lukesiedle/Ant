@@ -28,7 +28,7 @@
 		public function __construct( Array $data ){
 			$this->rawData = $data;
 			$this->setPrimaryKey( static :: PRIMARY_KEY );
-			$this->setName( static :: RESOURCE );
+			$this->setName( static :: TABLE_NAME );
 		}
 		
 		/**
@@ -127,7 +127,7 @@
 		
 		
 		/**
-		 *	Set the raw data
+		 *	Set (by extending) the raw data
 		 * 
 		 *	@since 0.1.0
 		 *	@return object The object for chaining
