@@ -202,6 +202,9 @@
 			 *	
 			 *	@since 0.1.0
 			 */
+			
+			
+			
 			$initAuthUser = function( $type, $userData ){
 				
 				$userData['last_update_ut'] = date('U');
@@ -214,7 +217,7 @@
 				));
 				
 				// Init the account resource //
-				$account	= new Resource( 'user_account_user' , $userData );
+				$account	= new Resource( 'account' , $userData );
 				
 				// Check if the user exists //
 				try {
@@ -263,6 +266,8 @@
 				// Proceed with a new auth ... //
 				if( $newAuth ){
 					
+					
+					
 					// Filter the data for the resource //
 					$user->handler->setData( $filterFields( $userData, 'update') );
 					
@@ -304,6 +309,8 @@
 			// See if a user is logged in //
 			$user = Model :: getCurrentUser();
 			
+			
+			
 			if( ! $user->isGuest() ){
 				// return true;
 				$userData = $user->getData();
@@ -322,7 +329,7 @@
 					}
 					break;
 				case 'facebook' :
-					$auth = Auth :: authorize( 'facebook', $redirPath );
+					$auth = Auth :: authorize( 'facebook', $redirPath );					
 					if( $auth ){
 						$userData = Auth :: api( 'facebook', 'me', 'store' );
 					}

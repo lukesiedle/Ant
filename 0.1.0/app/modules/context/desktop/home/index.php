@@ -28,7 +28,6 @@
 		
 		$user = new Resource('user', $data );
 		
-		$accounts = new Resource('user/1/account/2');
+		$fbAccount = new Resource('user/1/account/1');
 		
-		print_r( $accounts->read() );
 	}
