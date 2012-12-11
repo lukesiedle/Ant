@@ -49,6 +49,9 @@
 			// @since 0.1.0 //
 			if( $controllers = Router :: getControllers() ){
 				$args = array();
+				if( !is_array( $controllers) ){
+					$controllers = array( $controllers );
+				}				
 				foreach( $controllers as $controller ){
 					
 					// Execute the controller to get a result //
@@ -94,6 +97,7 @@
 			// Get the CSRF tokens from memory and store them
 			// @since 0.1.0
 			Session :: add( 'csrf', Request :: getCSRF() );
+			
 			
 			// Load the shared view
 			// @since 0.1.0

@@ -48,8 +48,8 @@
 	define( 'LIB_PATH', dirname( __DIR__ ) . '/lib' );
 	
 	// Initial requires //
-	require( 'app/classes/core/application.php' );
-	require( 'app/classes/core/configuration.php');
+	require( 'app/classes/application.php' );
+	require( 'app/classes/configuration.php');
 	
 	use Core\Application as App;
 	

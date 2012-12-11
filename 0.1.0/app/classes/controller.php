@@ -34,7 +34,7 @@
 			public static function call( $method, Array $args = array()){
 				$parts = explode('.', $method );
 				$method = '\Controller\\' . $parts[0];
-				$args['request'] = Router :: getRequestVars();
+				$args['request'] = Router :: getRouteVars();
 				return $method :: $parts[1]( $args );
 			}
 			

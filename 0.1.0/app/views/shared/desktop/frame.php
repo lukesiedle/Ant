@@ -36,6 +36,8 @@
 			// Always attempt to determine the current user //
 			$theUser = UserControl :: initialize();
 			
+			
+			
 			return new CollectionSet(
 				
 				// Document globals //

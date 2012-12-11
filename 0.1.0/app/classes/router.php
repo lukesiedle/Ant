@@ -22,6 +22,7 @@
 							$controlDir,
 							$namespace,
 							$context		= 'home',
+							$routes			= array(),
 							$path			= '',
 							$requestVars	= array(),
 							$routeVars		= array(),
@@ -52,12 +53,21 @@
 				// Initializes request vars //
 				Request :: initialize( $_GET );
 				
-				// Load the contextual map if it exists and plan the route //
-				if( self :: loadRouteMap( 'app/views/context/' . $client .'/'. Application :: get()->context . '/route.xml' )){
+				// Load the main route handlers //
+				self :: $routes = require_once('app/routes/' . $client . '/index.php');
+				
+				if( strlen(Application :: get()->context ) > 0 ){
+					self :: $context = Application :: get()->context;
+				}
+				
+				// Load the contextual handlers //
+				$routeMap = 'app/routes/' . $client . '/' . self :: $context . '.php';
+				if( file_exists( $routeMap )){
+					require_once( $routeMap );
 					self :: planRoute();
-				// Load the shared route map if it exists and plan the route //
-				} else if( self :: loadRouteMap( self :: $viewDir . 'route.xml' )){
-					self :: planRoute();
+				} else {
+					// 404 ? ... //
+					Application :: setError('404');
 				}
 				
 				// Check if a channel is in use ( .../?channel=ajax ) //
@@ -176,30 +186,6 @@
 			}
 			
 			/**
-			 *	Load the route map if it exists.
-			 *	This file is always named 'route.xml'
-			 *	within the shared client view.
-			 * 
-			 *	The route map is a set of conditionals
-			 *	which creates certain variables based
-			 *	on the depth and contents of the request.
-			 * 
-			 *	@param string $file The xml map
-			 * 
-			 *	@since 0.1.0
-			 *	@return bool True for map exists, or false
-			 */
-			public static function loadRouteMap( $file ){
-				
-				// There is a different route map for every client //
-				if( file_exists($file)){
-					self :: $routeXml = simplexml_load_file( $file );
-					return true;
-				}
-				return false;
-			}
-			
-			/**
 			 *	Plan the route if a route map exists,
 			 *	using the variables created from the map.
 			 *	Required variables include:
@@ -210,126 +196,48 @@
 			 *	@since 0.1.0
 			 */
 			public static function planRoute(){
-				self :: parseRouteXml( self :: $routeXml, App :: get()->request, 0 );
-				self :: $routeVars		= (object) self :: $routeVars;
-				self :: $requestVars	= (object) self :: $requestVars;
+				
+				// Defaults //
+				self :: $routeVars = array(
+					'context'	=> self :: $context
+				);
+				
+				$tokens = array(
+					':string' => '([a-zA-Z]+)',
+					':number' => '([0-9]+)',
+					':alpha'  => '([a-zA-Z0-9-_]+)'
+				);
+				
+				$path_info = '/' . self :: getRequestURI();
+				
+				// Borrowed from ToroPHP //
+				foreach (self :: $routes as $pattern => $handler) {
+					$pattern = strtr($pattern, $tokens);
+					if (preg_match('#^/?' . $pattern . '/?$#', $path_info, $matches)) {
+						$handlerName = $handler;
+						$regex_matches = $matches;
+						$routeFound = true;
+						break;
+					}
+				}
+				
+				// 404 not found //
+				if( ! $routeFound ){
+					Application :: setError('404');
+				}
+				
+				if( ! $handlerVars = $handlerName( $regex_matches )){
+					Application :: setError('404');
+				}
+				
+				// Create the vars //
+				self :: $routeVars		= (object) array_merge(
+					self :: $routeVars, 	
+					$handlerVars
+				);
+				
 			}
 			
-			/**
-			 *	XML parsing function used in route planning.
-			 *	This is the function which considers
-			 *	every conditional laid out in the xml
-			 *	and creates request or route vars
-			 *	accordingly.
-			 *	
-			 *	@param object $xml The xml map object of the
-			 *	current iteration
-			 *	@param array $request The request variables
-			 *	@param int $i The current iteration
-			 *	
-			 *	@since 0.1.0
-			 */
-			public static function parseRouteXml( $xml, $request, $i ){
-				
-				if( self :: $stopRouting ){
-					return;
-				}
-				
-				$foundRoute = false;
-				
-				foreach( $xml->attributes() as $attr => $val ){
-					
-					if( $xml->attributes()->base ){
-						if( $request[0] != $xml->attributes()->base ){
-							break;
-						}
-					}
-					
-					switch( $attr ){
-						case 'is' : 
-							if( in_array($request[$i], explode(',', $val))){
-								if( $i == 0 ){
-									self :: $routeVars['context']	= $request[$i];
-									self :: $routeVars['module']	= $request[0];
-								}
-								self :: $requestVars[ (string)$xml->var ] = $request[ $i ];
-								$foundRoute = true;
-							}
-							// Default the context to first item if url is empty //
-							if( $i == 0 && empty($request[$i]) ){
-								$context = explode(',', $val );
-								self :: $routeVars['context']	= $context[0];
-								self :: $routeVars['module']	= $xml->module;
-								self :: $requestVars['context'] = $context[0];
-								$foundRoute = true;
-							}
-							break;
-						case 'when' :
-							switch( $val ){
-								case 'numeric'	:
-									if( is_numeric($request[$i]) ){
-										self :: $requestVars[ (string)$xml->var ] = $request[$i];
-										$foundRoute = true;
-									}
-									break;
-								case '!numeric' :
-									if( ! is_numeric($request[$i]) ){
-										self :: $requestVars[ (string)$xml->var ] = $request[$i];
-										$foundRoute = true;
-									}
-									break;
-								case 'string' :
-									if( is_string($request[$i]) ){
-										self :: $requestVars[ (string)$xml->var ] = $request[$i];
-										$foundRoute = true;
-									}
-									break;
-							}
-							break;
-					}
-				}
-				
-				// If a route wasn't found, it's probably a 404
-				// The application will handle it from here //
-				if( ! $foundRoute ){
-					return;
-				} else {
-					// Set a document title for the current iteration //
-					if( $xml->doctitle && $title = $xml->doctitle->{ self :: $routeVars['context'] }  ){
-						self :: $routeVars['doctitle'] = (string)$title;
-					}
-				}
-				
-				$i++;
-				$children = $xml->children();
-				
-				// Reset any controllers (we only want the last set of controllers defined to run //
-				self :: $routeVars['controller'] = array();
-				
-				foreach( $children as $tag => $xml2 ){
-					if( $tag == 'next' || 
-							$tag == 'var' || 
-								$tag == 'doctitle' ){
-						continue;
-					} 
-					
-					if( $tag == 'controller' ){
-						self :: $routeVars[ $tag ][] = (string) $xml2;
-						continue;
-					}
-					
-					self :: $routeVars[ $tag ] = (string) $xml2;
-				}
-				
-				foreach( $children as $tag => $xml2 ){
-					// Recurse through all xml or until stop is called //
-					if( $tag == 'stop' ){
-						self :: $stopRouting = true;
-						return;
-					}
-					self :: parseRouteXml ( $xml2, $request, $i );
-				}
-			}
 			
 			/**
 			 *	Set the route context, 'article' 'user'
@@ -359,7 +267,7 @@
 				require('app/views/shared/' . self :: $client . '/index.php');
 				// Execute //
 				$fn = self :: $namespace . "\\index";
-				return $fn( self :: getRequestVars() );
+				return $fn( self :: getRouteVars() );
 			}
 			
 			/**
@@ -537,7 +445,7 @@
 			 *	@return array The controller names
 			 */
 			public static function getControllers(){
-				return self :: $routeVars->controller;
+				return self :: $routeVars->controllers;
 			}
 			
 		}

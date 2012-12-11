@@ -200,6 +200,7 @@
 					Database :: getTablePrefix() . $this->handler->getName() . ' this'
 				);
 				
+				
 				// Try getting the resource using any acceptable read fields //
 				$data = $this->handler->getPreparedData();
 				$wh = '';
