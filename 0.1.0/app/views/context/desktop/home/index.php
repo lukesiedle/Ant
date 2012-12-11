@@ -6,7 +6,7 @@
 	 *	@package Ant
 	 *	@since 0.1.0
 	 */
-	namespace Ant\Desktop\Home;
+	namespace View\Desktop\Home;
 	
 	use \Core\Application as App;
 	use \Core\Query as Query;
@@ -31,3 +31,4 @@
 		$fbAccount = new Resource('user/1/account/1');
 		
 	}
+	

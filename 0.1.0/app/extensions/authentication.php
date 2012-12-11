@@ -5,12 +5,12 @@
 	 *	using either the Facebook
 	 *	or Google API.
 	 * 
-	 *	@package Plugin
+	 *	@package Extension
 	 *	@subpackage Authentication
 	 *	@uses Google API SDK, Facebook API SDK
 	 *	@since 0.1.0
 	 */
-	namespace Plugin {
+	namespace Extension {
 		
 		// Lib //
 		use \apiClient as GoogleApiClient;

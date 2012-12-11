@@ -9,7 +9,7 @@
 	 *	@since 0.1.0
 	 */
 
-	namespace Ant\Desktop\Channel\Error {
+	namespace View\Desktop\Channel\Error {
 		
 		use \Core\Template as Template;
 		use \Core\Application as App;

@@ -19,7 +19,7 @@
 	 // Namespace must always specify the client //
 	 // @since 0.1.0
 
-	 namespace Ant\Desktop {
+	 namespace View\Desktop {
 		
 		use \Core\Router as Router;
 		use \Core\Application as Application;

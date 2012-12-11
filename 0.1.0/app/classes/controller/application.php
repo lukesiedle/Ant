@@ -40,15 +40,22 @@
 		 *	@return array The data 
 		 *	from the resource
 		 */
-		static function resource( $args ){
+		static function resource( $args 
+			
+			// Array
+			// path
+			// intention
+			// task
+				
+			){
 			
 			$request = Router :: getRequestVars();
 			
 			// Get POST data //
 			$post = Request :: get('post');
-
+			
 			// Resource //
-			$resourceName = $request->resource;
+			$resourceName = $post['__resource'];
 			
 			// Store useful vars //
 			$data = $post;
@@ -62,13 +69,7 @@
 			}
 			
 			// Check the csrf token is valid for this resource //
-			foreach( $request as $key => $each ){
-				if( $each ){
-					$requestParts[ $key ] = $each;
-				}
-			}
-			
-			$requestToken = Request :: CSRFtoken( implode('/', $requestParts ) );
+			$requestToken = Request :: CSRFtoken( Router :: getRequestURI() );
 			
 			if( $post['__token'] != $requestToken ){
 				throw new \Exception( 'Invalid token', 422 );
@@ -92,7 +93,13 @@
 			// Implement a resource //
 			$resource = new Resource( $resourceName, $data );
 			
-			$resource->{ $task }();
+			try {
+				$resource->{ $task }();
+			} catch( \Exception $e ){
+				return array(
+					'errors' => $resource->handler->getErrors()
+				);
+			}
 			
 			$result = $resource->read();
 			
@@ -101,6 +108,8 @@
 			*	for giving the CRUD task
 			*	some context, and allows
 			*	for post-CRUD task executions.
+			*
+			*	Only occurs on success.
 			*	
 			*	@example 'User.registration.register'
 			*	@since 0.1.0
@@ -110,7 +119,8 @@
 			if( isset($intention) ){
 				Controller :: call( $intention, array(
 					'resource'	=> $resource,
-					'is_ajax'	=> $args['is_ajax']
+					'is_ajax'	=> $args['is_ajax'],
+					'result'	=> $result
 				));
 			}
 			

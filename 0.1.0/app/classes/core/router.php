@@ -42,9 +42,9 @@
 				
 				// Set some useful vars and paths //
 				self :: $client			= $client;
-				self :: $viewDir		= 'app/modules/shared/' . $client . '/';
-				self :: $controlDir		= 'app/modules/shared/controllers/' . $client . '/';
-				self :: $namespace		= "\Ant\\" . $client;
+				self :: $viewDir		= 'app/views/shared/' . $client . '/';
+				self :: $controlDir		= 'app/views/shared/controllers/' . $client . '/';
+				self :: $namespace		= "\View\\" . $client;
 				
 				// Create the "true" query string //
 				self :: setQueryString();
@@ -53,7 +53,7 @@
 				Request :: initialize( $_GET );
 				
 				// Load the contextual map if it exists and plan the route //
-				if( self :: loadRouteMap( 'app/modules/context/' . $client .'/'. Application :: get()->context . '/route.xml' )){
+				if( self :: loadRouteMap( 'app/views/context/' . $client .'/'. Application :: get()->context . '/route.xml' )){
 					self :: planRoute();
 				// Load the shared route map if it exists and plan the route //
 				} else if( self :: loadRouteMap( self :: $viewDir . 'route.xml' )){
@@ -107,7 +107,7 @@
 						require( $channelFile );
 						
 						$fn = '\\' . implode('\\', array(
-							'Ant',
+							'View',
 							self :: $client, 
 							'Channel',
 							$channel,
@@ -356,7 +356,7 @@
 			 */
 			public static function loadRouteIndex(){
 				
-				require('app/modules/shared/' . self :: $client . '/index.php');
+				require('app/views/shared/' . self :: $client . '/index.php');
 				// Execute //
 				$fn = self :: $namespace . "\\index";
 				return $fn( self :: getRequestVars() );
@@ -384,7 +384,7 @@
 				
 				$mod = self :: getModule();				
 				
-				$view = ('app/modules/context/' 
+				$view = ('app/views/context/' 
 							. self :: $client . '/'
 							. self :: getContext() . '/'
 							. self :: getModule() . '.php');
@@ -429,11 +429,11 @@
 					$client = self :: $client; 
 				}
 				
-				require('app/modules/shared/' 
+				require('app/views/shared/' 
 							. $client . '/'
 							. $view . '.php');
 				
-				$fn = '\Ant\\' . $client . "\\" . $view;
+				$fn = '\View\\' . $client . "\\" . $view;
 				return $fn( self :: getRequestVars(), $contextView );
 				
 			}
@@ -459,6 +459,16 @@
 			 */
 			public static function getRequestVars(){
 				return self :: $requestVars;
+			}
+			
+			/**
+			 *	Get the original request URI
+			 * 			 
+			 *	@since 0.2.0
+			 *	@return string The request URI
+			 */
+			public static function getRequestURI(){
+				return implode( '/', Application :: get()->request );
 			}
 			
 			/**

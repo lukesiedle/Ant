@@ -2,7 +2,7 @@
 	
 	/**
 	 *	Every context has methods
-	 *	which extend from the store.
+	 *	which extend from the model.
 	 * 
 	 *	These methods usually shouldn't
 	 *	interact directly with other

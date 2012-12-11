@@ -14,8 +14,8 @@
 	use \Data\User as Data;
 	use \Query\User as Query;
 	
-	// Plugin //
-	use \Plugin\Authentication as Auth;
+	// Extension //
+	use \Extension\Authentication as Auth;
 
 	
 	/**
@@ -80,7 +80,13 @@
 			return false;
 		}
 		
-		static function intentRegister(){
+		static function intentRegister( array $opts 
+		/*
+			resource, 
+		 	is_ajax, 
+			result
+		 */
+		){	
 			App :: redirect();
 		}
 		
@@ -112,7 +118,7 @@
 			// Clear session and cookie //
 			\Core\Session :: clear( 'User' );
 			\Core\Cookie :: delete( 'User' );
-			\Plugin\Authentication :: clearSession();
+			\Extension\Authentication :: clearSession();
 			
 			// Redirect home //
 			\Core\Application :: redirect();

@@ -11,13 +11,14 @@
 	 *	@since 0.1.0
 	 */
 	
-	namespace Ant\Web\Channel\Ajax {
+	namespace View\Desktop\Channel\Ajax {
 		
-		use \Ant\Router as Router;
-		use \Ant\Application as Application;
-		use \Ant\Template as Template;
-		use \Ant\CollectionSet as CollectionSet;
-		use \Ant\Controller as Controller;
+		use \Core\Router as Router;
+		use \Core\Application as Application;
+		use \Core\Template as Template;
+		use \Core\CollectionSet as CollectionSet;
+		use \Core\Controller as Controller;
+		use \Core\Document as Document;
 		
 		function index( $request ){
 			
@@ -28,9 +29,9 @@
 				
 				try {
 
-					$view		= \Ant\Router :: loadRouteView();
+					$view		= Router :: loadRouteView();
 
-					if( $view instanceof \Ant\CollectionSet ){
+					if( $view instanceof CollectionSet ){
 						$output['data'] = $view->toArray();
 					}
 
@@ -47,7 +48,7 @@
 			
 			echo json_encode( $output );
 			
-			\Ant\Document :: addHeader( 'Content-type:Application/Json' );
+			Document :: addHeader( 'Content-type:Application/Json' );
 		}
 	
 	}

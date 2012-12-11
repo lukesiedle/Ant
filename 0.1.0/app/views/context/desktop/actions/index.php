@@ -1,6 +1,6 @@
 <?php
 
-	namespace Ant\Web\Actions;
+	namespace View\Web\Actions;
 	use \Ant\Collection as Collection;
 	use \Ant\CollectionSet as CollectionSet;
 	use \Ant\Router as Router;

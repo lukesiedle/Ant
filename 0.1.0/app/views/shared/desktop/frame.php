@@ -8,7 +8,7 @@
 	 *	@package Ant
 	 *	@since 0.1.0
 	 */
-	namespace Ant\Desktop {
+	namespace View\Desktop {
 		
 		// Core //
 		use \Core\Application as App;
@@ -25,7 +25,7 @@
 		
 		function frame(){
 			
-			// First time installation of Ant (REMOVE THIS) //
+			// First time installation of framework (REMOVE THIS) //
 			if( ! file_exists( $file = APPLICATION_ROOT . '/config/installed' )){
 				if( Router :: getContext() != 'setup' ){
 					file_put_contents( $file , 1 );

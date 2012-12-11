@@ -40,7 +40,7 @@
 			
 			/**
 			 *	Call a query method. Lazy-loads
-			 *	a method defined in app/modules/context/queries
+			 *	a method defined in app/views/context/queries
 			 *	
 			 *	@params string $method A period-separated string
 			 *	@params array $args The arguments to be passed.

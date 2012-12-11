@@ -1,6 +1,6 @@
 <?php
 
-	namespace Ant\Desktop\User;
+	namespace View\Desktop\User;
 
 	function index(){
 		

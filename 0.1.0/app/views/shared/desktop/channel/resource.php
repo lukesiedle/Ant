@@ -12,7 +12,7 @@
 	 *	@since 0.1.0
 	 */
 	
-	namespace Ant\Desktop\Channel\Resource {
+	namespace View\Desktop\Channel\Resource {
 		
 		use \Core\Router as Router;
 		use \Core\Application as Application;

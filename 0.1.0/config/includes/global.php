@@ -83,5 +83,15 @@
 		$opts = explode( '\\', $class );
 		$file = strtolower( $opts[ count( $opts )-1 ] );
 		$type = strtolower( $opts[0] );
-		require_once('app/classes/' . $type . '/' . $file . '.php' );
+		$root = 'app/';
+		
+		switch( $type ){
+			case 'extension' :
+				$root .= 'extensions/';	
+			break;
+			default : 
+				$root .= 'classes/' . $type;
+		}
+		
+		require_once( $root . '/' . $file . '.php' );
 	}

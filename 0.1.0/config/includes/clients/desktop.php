@@ -2,7 +2,7 @@
 	
 	/*
 	 *	Specific configuration for web client
-	 *	only. "Web" is used to refer to a web
+	 *	only. "Desktop" is used to refer to a web
 	 *	browser.
 	 * 
 	 *	@package Ant

@@ -9,7 +9,7 @@
 	 *	@since 0.1.0
 	 */
 
-	namespace Ant\Desktop\User;
+	namespace View\Desktop\User;
 	
 	use \Core\Controller as Controller;
 	use \Core\Resource as Resource;
@@ -55,19 +55,37 @@
 				if( isset($_GET['saved'] )){
 					$tpl['success']		= '<span style="color:green">Profile Updated!</span>';
 				}
+				
 				break;
 				
+			// Handle submissions //
+			// Do this here so the resource can fail without requiring redirect/session //
+			case 'do' :
+				
+				$post = Request :: get('post');
+				
+				if( isset($post['__resource']) ){
+					$result = \Controller\Application :: resource(array(
+						'resource' => $post['__resource']
+					));
+					// Show errors //
+					if( $result['errors'] ){
+						print_r( $result );
+					}
+				}
+					
 			default : 
 				$tpl['title']		= 'Sign Up';
 				$tpl['task']		= 'create';
 				$tpl['intention']	= 'User.intentRegister';
 				$tpl['resource']	= 'resource/user';
+				$tpl['action']		= 'user/register/do';
 				$tpl['save']		= 'Register';
 				break;
 		}
 		
 		// Create or get csrf token for this form's resource //
-		$tpl['token'] = Request :: CSRFtoken( $tpl['resource'] );
+		$tpl['token'] = Request :: CSRFtoken( $tpl['action'] );
 		
 		// Pass the user if available (for edit profile) //
 		$user = new Collection( $userData, 'user' );

@@ -12,7 +12,7 @@
 	 *	@since 0.1.0
 	 */
 
-	namespace Ant\Desktop\Channel\Auth {
+	namespace View\Desktop\Channel\Auth {
 		
 		// Core
 		use \Core\Application as App;
@@ -22,8 +22,8 @@
 		use \Core\Document as Document;
 		use \Core\Session as Session;
 		
-		// Plugin //
-		use \Plugin\Authentication as Auth;
+		// Extensions //
+		use \Extension\Authentication as Auth;
 		
 		function index( $request ){
 			

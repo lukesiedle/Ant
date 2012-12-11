@@ -3,7 +3,7 @@
 <!--
 	
 	Frame template map, bound to collections
-	specified in /app/modules/shared/views/web/frame.php
+	specified in /app/views/shared/views/web/frame.php
 	
 	@since 0.1.0
 	

@@ -11,7 +11,7 @@
 	 *	@since 0.1.0
 	 */
 	
-	namespace Ant\Web\Channel\Action {
+	namespace View\Web\Channel\Action {
 		
 		function index(){
 			

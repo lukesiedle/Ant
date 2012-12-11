@@ -2,6 +2,8 @@
 
 	namespace Data;
 	
+	use \Core\Resource as Resource;
+	
 	class User extends \Core\Data {
 		
 		// Required constants //
@@ -85,6 +87,15 @@
 			
 			if( count($errs) > 0 ){
 				$this->setError( \LANG :: ERR_USER_INVALID_EMAIL );
+			}
+			
+			// Ensure the resource doesn't exist (by email) //
+			$testExists = new Resource('user', array(
+				'user_email' => $data['user_email']
+			));
+			
+			if( $user = $testExists->read() ){
+				$this->setError( \LANG :: ERR_USER_ALREADY_EXISTS );
 			}
 			
 		}

@@ -8,7 +8,7 @@
 	 *	@since 0.1.0
 	 */
 	 
-	namespace Ant\Desktop\Resource;
+	namespace View\Desktop\Resource;
 	
 	use \Core\Application as App;
 	use \Core\Query as Query;

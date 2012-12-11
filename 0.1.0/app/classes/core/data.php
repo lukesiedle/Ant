@@ -294,6 +294,15 @@
 		}
 		
 		/**
+		 *	Get errors
+		 * 
+		 *	@since 0.2.0
+		 */
+		public function getErrors(){
+			return $this->errors;
+		}
+		
+		/**
 		 *	Removes error
 		 * 
 		 *	@since 0.2.0

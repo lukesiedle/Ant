@@ -97,6 +97,11 @@
 						// Set the task //
 						$this->task = $task;
 						$this->handler->setTask( $task );
+						
+						// Check if the handler discovered errors //
+						if( count($errors = $this->handler->getErrors()) > 0){
+							throw new \Exception( 'Data handler errors encountered : ' . json_encode( $errors ) );
+						}
 						break;
 						default : 
 							throw new \Exception('Invalid task "' . $task . '"' );

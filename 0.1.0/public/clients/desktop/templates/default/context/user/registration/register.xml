@@ -3,7 +3,7 @@
 <!--
 	
 	Frame template map, bound to collections
-	specified in /app/modules/context/setup/index.php
+	specified in /app/views/context/setup/index.php
 	
 	@since 0.1.0
 	
