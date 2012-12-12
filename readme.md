@@ -8,7 +8,10 @@ Ant is a lightweight PHP application framework (that can do the heavy lifting).
 
 - PHP 5.3+ (namespace/closure support)
 
-## Version History
+## Current Version
 
-- 0.2.1 Current release
-- 0.1.0 Initial release
+- 0.2.1.
+
+## Documentation
+
+https://github.com/luke-siedle/Ant/wiki
