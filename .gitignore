@@ -4,3 +4,4 @@
 /post-receive.php
 /build.sh
 /release/cache/
+/release/public/clients/desktop/generated/
