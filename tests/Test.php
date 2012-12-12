@@ -9,9 +9,13 @@
 	
 	require_once('PHPUnit/Autoload.php');
 	
-	error_reporting( E_ALL ^ E_NOTICE );
+	error_reporting( 
+		E_ERROR | 
+			E_WARNING | 
+				E_RECOVERABLE_ERROR 
+	);
 	
-	define( 'PROJECT_ROOT', dirname(__DIR__) . '/0.1.0' );
+	define( 'PROJECT_ROOT', dirname(__DIR__) . '/release' );
 	
 	// Change this to your local public directory //
 	define( 'PUBLIC_ROOT', 'http://127.0.0.1/lukesiedle/ant' );

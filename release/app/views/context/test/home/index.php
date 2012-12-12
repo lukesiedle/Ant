@@ -8,7 +8,7 @@
 	 *	@since 0.1.0
 	 */
 	
-	namespace Ant\Test\Home;
+	namespace View\Test\Home;
 	
 	use \Core\Application as App;
 	use \Core\Query as Query;

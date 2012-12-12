@@ -10,7 +10,7 @@
 	 *	@since 0.1.0
 	 */
 	 
-	require_once(PROJECT_ROOT . '/lib/mysql.class.php');
+	require_once(PROJECT_ROOT . '/lib/mysql.php');
 	
 	use \Library\MySQL as MySQL;
 	
@@ -57,7 +57,7 @@
 		
 		public function testQueryBinding(){
 			
-			require_once(PROJECT_ROOT . '/app/classes/core/query.php');
+			require_once(PROJECT_ROOT . '/app/classes/query.php');
 			
 			$query	= new Core\Query("SELECT test_id FROM ant_tests WHERE test_id = :id");
 			

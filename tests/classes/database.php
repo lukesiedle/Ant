@@ -19,13 +19,12 @@
 	use Core\Query as Query;
 	use Library\MySQL as MySQL;
 
-	
-	require_once( PROJECT_ROOT . '/lib/mysql.class.php' );
-	require_once( PROJECT_ROOT . '/app/classes/core/database.php' );
-	require_once( PROJECT_ROOT . '/app/classes/core/query.php' );
+	require_once( PROJECT_ROOT . '/lib/mysql.php' );
+	require_once( PROJECT_ROOT . '/app/classes/database.php' );
+	require_once( PROJECT_ROOT . '/app/classes/query.php' );
 	require_once( dirname(PROJECT_ROOT) . '/lib/php/underscore.php' );
-	require_once( PROJECT_ROOT . '/app/classes/core/collection.php' );
-	require_once( PROJECT_ROOT . '/app/classes/core/application.php' );
+	require_once( PROJECT_ROOT . '/app/classes/collection.php' );
+	require_once( PROJECT_ROOT . '/app/classes/application.php' );
 	
 	// Initialize the App object //
 	Application :: $app = new StdClass;

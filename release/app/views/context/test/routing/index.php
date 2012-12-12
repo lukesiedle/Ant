@@ -8,7 +8,7 @@
 	 *	@since 0.1.0
 	 */
 	
-	namespace Ant\Test\Routing;
+	namespace View\Test\Routing;
 	
 	function index(){
 		

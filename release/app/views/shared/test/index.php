@@ -11,7 +11,7 @@
 	 // Namespace must always specify the client //
 	 // @since 0.1.0
 
-	 namespace Ant\Test {
+	 namespace View\Test {
 		
 		use \Core\Router as Router;
 		use \Core\Application as Application;

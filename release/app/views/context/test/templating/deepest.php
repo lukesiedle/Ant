@@ -9,7 +9,7 @@
 	 *	@since 0.1.0
 	 */
 	
-	namespace Ant\Test\Home;
+	namespace View\Test\Home;
 	
 	function deepest(){
 		

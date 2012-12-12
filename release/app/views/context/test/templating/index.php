@@ -8,14 +8,14 @@
 	 *	@since 0.1.0
 	 */
 	
-	namespace Ant\Test\Templating;
+	namespace View\Test\Templating;
 	
 	use \Core\Application as App;
 	use \Core\Query as Query;
 	use \Core\Collection as Collection;
 	use \Core\CollectionSet as CollectionSet;
 	use \Core\Database as Database;
-	use \Core\Authentication as Auth;
+	use \Extension\Authentication as Auth;
 	use \Core\Router as Router;
 
 	/*

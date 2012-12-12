@@ -10,13 +10,13 @@
 	 * 
 	 */
 
-	namespace Ant\Test {
+	namespace View\Test {
 		
 		use \Core\Collection as Collection;
 		use \Core\CollectionSet as CollectionSet;
 		use \Core\Controller as Control;
 		use \Core\Database as Database;
-		use \Core\Authentication as Auth;
+		use \Extension\Authentication as Auth;
 		use \Core\Router as Router;
 		
 		// Context Classes //

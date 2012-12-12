@@ -10,7 +10,7 @@
 	 */
 	
 	// Require Collection and its dependency, Underscore //
-	require_once( PROJECT_ROOT . '/app/classes/core/collection.php' );
+	require_once( PROJECT_ROOT . '/app/classes/collection.php' );
 	require_once( dirname(PROJECT_ROOT) . '/lib/php/underscore.php' );
 	
 	class TestCollection extends PHPUnit_Framework_TestCase
