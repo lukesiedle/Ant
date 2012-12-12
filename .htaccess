@@ -8,11 +8,11 @@ Options +FollowSymLinks
 RewriteEngine On
 RewriteCond %{ENV:REDIRECT_STATUS} 200
 RewriteRule .* - [L]
-RewriteRule (public/.*.xml)$ 0.1.0/index.php?request=?channel=error [L]
-RewriteRule (public/.*)$ 0.1.0/$1 [L]
+RewriteRule (public/.*.xml)$ release/index.php?request=?channel=error [L]
+RewriteRule (public/.*)$ release/$1 [L]
 RewriteRule (tests) tests/index.php [L]
 RewriteRule (test.php) test.php [L]
-RewriteRule ^(.*+)$ 0.1.0/index.php?request=$1&uri=%{REQUEST_URI} [L]
+RewriteRule ^(.*+)$ release/index.php?request=$1&uri=%{REQUEST_URI} [L]
 
 # Directory 
 DirectoryIndex index.php

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+	
+	Frame template map, bound to collections
+	specified in /app/views/context/setup/index.php
+	
+	@since 0.1.0
+	
+-->
+
+<collections>
+	
+	<!-- Register -->
+	<register></register>
+	
+	<errors>
+		<template>shared/object/error</template>
+	</errors>
+	
+	<!-- Make the collection 'user' available -->
+	<user></user>
+	
+</collections>
