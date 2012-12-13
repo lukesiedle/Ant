@@ -299,7 +299,27 @@
 			 *	@return bool The success
 			 */
 			public function delete(){
+				
 				$this->setTask( 'delete' );
+				
+				$handler = $this->getHandler();
+				
+				$data	= $handler->getPreparedData();
+				$id		= $handler->getId();
+				$idKey	= $handler->getIdKey();
+				
+				if( !$id || !$idKey ){
+					throw new \Exception( 'Id or Id Key not set.', 422 );
+				}
+				
+				// Create a collection from the resource //
+				$collection = new Collection( 
+					$data,
+					$this->handler->getName()
+				);
+				
+				Database :: delete( $query );
+				
 				return $this;
 			}
 			
@@ -316,6 +336,7 @@
 			 *	@since 0.1.0
 			 */
 			public static function store( $col, $resourceName ){
+				
 				if( $store = self :: $storage[ $resourceName ] ){
 					self :: $storage[ $resourceName ] = Collection :: merge( $store, $col );
 				} else {

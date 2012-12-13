@@ -32,14 +32,14 @@
 			}
 			
 			public static function store(){
-				\Core\Session :: clear( 'extension.persists' );
-				\Core\Session :: add( 'extension.persists', self :: $persists );
+				\Core\Session :: clear( 'extension.persistance' );
+				\Core\Session :: add( 'extension.persistance', self :: $persists );
 			}
 			
 			public static function get( $path = null ){
 				
 				if( ! $isLoaded ){
-					self :: $persists = \Core\Session :: get('extension.persists');
+					self :: $persists = \Core\Session :: get('extension.persistance');
 				}
 				
 				if( is_null($path) ){
