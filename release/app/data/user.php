@@ -94,8 +94,12 @@
 				'user_email' => $data['user_email']
 			));
 			
-			if( $user = $testExists->read() ){
-				$this->setError( \LANG :: ERR_USER_ALREADY_EXISTS );
+			try {
+				if( $user = $testExists->read() ){
+					$this->setError( \LANG :: ERR_USER_ALREADY_EXISTS );
+				}
+			} catch( \Exception $e ){
+				// Resource does not exist.. proceed //
 			}
 			
 		}

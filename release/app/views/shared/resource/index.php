@@ -36,26 +36,29 @@
 			// Is it an AJAX request //
 			$isAjax = isset( $post['__ajax'] );				
 			
-			// Run the resource handler
 			try {
 				
-				$data = handler();
+				// Run the resource handler
+				$data = handler();				
 				
-				if( $data['errors'] ){
-					throw new \Exception('An error occurred.', 403 );
+				// The resource data was insufficient //
+				if( $data['user.errors'] ){
+					throw new \Exception('A data error occurred.', 422 );
 				}
 				
 				$results = array(
 					'success' => true
 				);
 				
-				if( $data instanceof Collection ){
-					$results['resource'] = $data->toArray();
+				// Convert to plain array data //
+				if( $data['result'] instanceof Collection ){
+					$results['data'] = $data['result']->toArray();
 				} else {
-					if( !is_array( $data )){
-						throw new \Exception('Data returned by resource must be an array.');
+					$results['data'] = $data['result'];
+					if( !is_array( $data['result'] )){
+						// Force array structure //
+						$results['data'] = array();
 					}
-					$results['resource'] = $data;
 				}
 				
 			} catch ( \Exception $e ) {
@@ -65,25 +68,30 @@
 					
 					// Adds the error header //
 					Document :: addHeader('HTTP/1.0 404 Not Found');
-					$results['error']['message'] = '404 Not Found.';
+					$results['system.error']['message'] = '404 Not Found.';
 					
 				} else {
 					
 					$results['success']			= false;
 					
 					// Show the message and trace //
-					$results['error']['message'] = $e->getMessage();
-					$results['error']['code']	= $e->getCode();
-					// $results['error']['trace']	= $e->getTrace();
+					$results['system.error']['message'] = $e->getMessage();
+					$results['system.error']['code']	= $e->getCode();
 					
 					switch( $e->getCode() ){
+						
+						case 0 :
+							$fatalError = true;
+						
 						case 403 : 
 							// Forbidden //
 							Document :: addHeader('HTTP/1.0 403 Forbidden');
+							$fatalError = 403;
 							break;
 						case 404 :
 							// Adds the error header //
 							Document :: addHeader('HTTP/1.0 404 Not Found');
+							$fatalError = 404;
 							break;
 						case 422 : 
 							// Unprocessable entity - syntactically correct, bad semantics //
@@ -93,28 +101,28 @@
 				}
 			}
 			
-			// Store any internal errors that occurred //
-			if( $data['errors'] ){
-				$results['errors'] = $data['errors'];
-			}
+			// Get the CSRF tokens from memory and store them
+			Session :: clear( 'csrf' );
+			Session :: add( 'csrf', Request :: getCSRF() );
 			
 			/*
 			*	The intention is used
 			*	for giving the CRUD task
 			*	some context, and allows
-			*	for post-CRUD task executions.
-			*
-			*	Only occurs on success.
+			*	for post-CRUD task executions.			
 			*	
 			*	@example 'User.registration.register'
 			*	@since 0.1.0
 			*/
 			
 			// Post resource task hook The Intention //
-			if( isset($post['__intention']) ){
+			if( ! $fatalError && 
+					isset($post['__intention'])){
+				
 				Controller :: call( $post['__intention'], array(
-					'resource'	=> $resource,
-					'result'	=> $results
+					'resource'		=> $data['resource'],
+					'result'		=> $results,
+					'user.errors'	=> $data['user.errors']
 				));
 			}
 			
@@ -155,8 +163,11 @@
 			// Check the csrf token is valid for this resource //
 			$requestToken = Request :: CSRFtoken( Router :: getRequestURI() );
 			
+			// Then remove token to prevent automatic retries //
+			// Request :: clearCSRFtoken( Router :: getRequestURI() );
+			
 			if( $post['__token'] != $requestToken ){
-				throw new \Exception( 'Invalid token', 422 );
+				throw new \Exception( 'Invalid token', 403 );
 			}
 
 			// Task is create but Id was sent (for RUD) //
@@ -178,16 +189,24 @@
 			$resource = new Resource( $resourceName, $post );
 			
 			try {
-				$resource->{ $task }();
+				$result = $resource->{ $task }();
 			} catch( \Exception $e ){
 				return array(
-					'errors' => $resource->handler->getErrors()
+					'user.errors'	=> $resource->handler->getErrors(),
+					'resource'		=> $resource,
+					
+					// Maybe a system error occurred //
+					'system.error'	=> $e->getMessage()
 				);
 			}
+			if( $task != 'read' ){
+				$result = $resource->read();
+			}
 			
-			$result = $resource->read();
-			
-			return $result;
+			return array(
+				'resource' => $resource,
+				'result'	=> $result
+			);
 
 		}
 	

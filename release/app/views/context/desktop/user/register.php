@@ -28,7 +28,10 @@
 		
 		// Collection for template //
 		$register		= Collection :: make('register');
+		
+		// On retry //
 		$errors			= Collection :: make('errors');
+		$previous		= Collection :: make('previous');
 		
 		switch( true ){
 			// The signup view //
@@ -83,14 +86,23 @@
 			'token' => Request :: CSRFtoken( $resourceName )
 		));
 		
-		if( $err = \Extension\Persistence :: get(
+		if( $persists = \Extension\Persistence :: get(
 			Router :: getRequestURI())){
-			$errors->add( $err );
+			
+			// Show errors //
+			if( is_array($persists['data'] )){
+				$errors->add( $persists['errors'] );
+			}
+			
+			// Load previous data into page //
+			if( is_array($persists['data'] )){
+				$previous->add( $persists['data'] );
+			}
 		}
 		
 		// Pass the user if available (for edit profile) //
 		$user = new Collection( $userData, 'user' );
 		
-		return new CollectionSet( $register, $user, $errors );
+		return new CollectionSet( $register, $user, $errors, $previous );
 		
 	}

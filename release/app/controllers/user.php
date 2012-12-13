@@ -86,13 +86,18 @@
 			result
 		 */
 		){	
-			$resolvePath = 'user/register/complete';
+			$resolvePath = 'user/register/complete/' . $opts['result']['data']['user_id'];
 			
 			if( ! $opts['result']['success'] ){
+				
 				$resolvePath = 'user/register';
+				
 				\Extension\Persistence :: save( 
 					$resolvePath, 
-					$opts['result']['errors']
+					array(
+						'errors' => $opts['user.errors'],
+						'data'	=> $opts['resource']->handler->getPreparedData()
+					)
 				);
 			}
 			

@@ -318,7 +318,9 @@
 					$this->handler->getName()
 				);
 				
-				Database :: delete( $query );
+				Database :: delete( $collection, array(
+					$idKey => $id
+				));
 				
 				return $this;
 			}

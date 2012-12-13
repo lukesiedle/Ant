@@ -47,6 +47,17 @@
 			}
 			
 			/**
+			 *	Clear a CSRF token
+			 *	
+			 *	@param string $resource The resource
+			 *	
+			 *	@since 0.2.1
+			 */
+			public static function clearCSRFtoken( $resource ){
+				unset( self :: $csrf[ $resource ] );
+			}
+			
+			/**
 			 *	Get or set a CSRF token
 			 *	for a particular resource
 			 *	
