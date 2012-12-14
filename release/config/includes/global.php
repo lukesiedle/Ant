@@ -47,9 +47,6 @@
 			case 'query' : 
 				$root .= 'queries/';
 				break;
-			case 'library' : 
-				$root = 'lib/';
-				break;
 			default : 
 				$root .= $type . '/';
 		}

@@ -14,7 +14,7 @@
 	 */
 	namespace Core {
 		
-		use \Library\MySQL as MySQL;
+		use \Extension\MySQL as MySQL;
 		use \__ as __;
 		
 		Class Database {

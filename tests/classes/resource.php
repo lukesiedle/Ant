@@ -16,7 +16,7 @@
 	require_once( PROJECT_ROOT . '/app/data/test.php' );
 	require_once( PROJECT_ROOT . '/app/classes/database.php' );
 	require_once( PROJECT_ROOT . '/app/classes/collection.php' );
-	require_once( PROJECT_ROOT . '/lib/mysql.php' );
+	require_once( PROJECT_ROOT . '/app/extensions/mysql.php' );
 	
 	require_once( dirname(PROJECT_ROOT) . '/lib/php/underscore.php' );
 	
@@ -27,7 +27,7 @@
 	\Core\Application :: set(array(
 		'local' => true,
 		'connection' => array(
-			'mysql' => \Library\MySQL :: connect(array(
+			'mysql' => \Extension\MySQL :: connect(array(
 				'host'		=> 'localhost',
 				'db'		=> 'ant',
 				'port'		=> '3306',

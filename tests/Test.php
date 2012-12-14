@@ -20,19 +20,19 @@
 	// Change this to your local public directory //
 	define( 'PUBLIC_ROOT', 'http://127.0.0.1/lukesiedle/ant' );
 	
-	// include('classes/collection.php');
+	include('classes/collection.php');
 	
-	// include('library/mysql.php');
+	include('library/mysql.php');
 	
-	// include('classes/database.php');
+	include('classes/database.php');
 	
-	// include('classes/configuration.php');
+	include('classes/configuration.php');
 	
-	// include('classes/session.php');
+	include('classes/session.php');
 	
 	include('classes/resource.php');
 	
 	// Application behaviour //
-	// include('application/routing.php');
+	include('application/routing.php');
 	
-	// include('application/templating.php');
+	include('application/templating.php');

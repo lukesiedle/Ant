@@ -345,7 +345,7 @@
 					// Connection to database //
 					case 'mysql' :
 						try {
-							self :: $app->connection[ $type ] = \Library\MySQL :: connect( $config );
+							self :: $app->connection[ $type ] = \Extension\MySQL :: connect( $config );
 							
 						} catch( \Exception $e ){
 							
@@ -357,7 +357,7 @@
 							$config['host'] = 'localhost';
 							
 							try {
-								self :: $app->connection[ $type ] = \Library\MySQL :: connect( $config );
+								self :: $app->connection[ $type ] = \Extension\MySQL :: connect( $config );
 							} catch( \Exception $e ){
 								self :: set(array(
 									'errors' => array('mysql' => $e->getMessage())
