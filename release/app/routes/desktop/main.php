@@ -1,7 +1,7 @@
 <?php
 	
 	/**
-	 *	Context : home
+	 *	The Main route
 	 *	@since 0.2.1
 	 */
 	

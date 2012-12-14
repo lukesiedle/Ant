@@ -1,7 +1,7 @@
 <?php
 	
 	/**
-	 *	Context : resource
+	 *	The Main route
 	 *	@since 0.2.1
 	 */
 	
