@@ -12,13 +12,14 @@
 	return array(
 		
 		// Specific routing  //
-		'/user/register'	=> '\Route\User\register',
+		'/user/register'		=> '\Route\User\register',
+		'/user/register/edit'	=> '\Route\User\editProfile',
 		
+		'/user/login/:string'	=> '\Route\User\login',
+		'/user/:string'			=> '\Route\User\task',
 		
 		// Generic routing //
 		'/'					=> '\Route\Main\index',
-		'/:string'			=> '\Route\Main\index',
-		'/:string/:number'	=> '\Route\Main\index',
-		'/:string/:string'	=> '\Route\Main\index',
+		'/home'				=> '\Route\Main\index'
 		
 	);

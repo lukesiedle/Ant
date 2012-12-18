@@ -14,22 +14,6 @@
 	use Core\Application as App;
 	use Core\Configuration as Config;
 	use Core\Document as Document;
-
-	// Mysql connection
-	// @since 0.1.0 //
-	$mysql = Config :: get('mysql_remote');
-	
-	if( App :: get()->local ){
-		$mysql = Config :: get('mysql_local');
-	}
-	
-	App :: connect( array_merge(
-		$mysql, array(
-			'port'			=> '3306',
-			'timeout'		=> '15',
-			'connection'	=> 'mysql'
-		)
-	));
 	
 	// Get resources from XML //
 	$resources = simplexml_load_file( __DIR__ . '/desktop.xml' );
@@ -149,6 +133,22 @@
 		return $publicDir . $filename;
 
 	});
+	
+	// Mysql connection
+	// @since 0.1.0 //
+	$mysql = Config :: get('mysql_remote');
+	
+	if( App :: get()->local ){
+		$mysql = Config :: get('mysql_local');
+	}
+	
+	App :: connect( array_merge(
+		$mysql, array(
+			'port'			=> '3306',
+			'timeout'		=> '15',
+			'connection'	=> 'mysql'
+		)
+	));
 	
 	/*
 	 *	Removes existing files

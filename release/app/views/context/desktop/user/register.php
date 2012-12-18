@@ -1,10 +1,7 @@
 <?php
 	
 	/*
-	 *	Registration view
-	 *	Passes CSRF token
-	 *	and form action to
-	 *	view.
+	 *	Registration example view
 	 * 
 	 *	@since 0.1.0
 	 */
@@ -33,53 +30,14 @@
 		$errors			= Collection :: make('errors');
 		$previous		= Collection :: make('previous');
 		
-		switch( true ){
-			// The signup view //
-			default : 
-				$register->add(array(
-					'title'			=> 'Sign Up',
-					'task'			=> 'create',
-					'intention'		=> 'User.intentRegister',
-					'resource'		=> $resourceName,
-					'action'		=> $resourceName,
-					'save'			=> 'Register'
-				));
-				break;
-				
-			// The edit view //
-			case isset( $request->edit ) :
-				
-				$user = UserModel :: getCurrentUser();
-				
-				$resourceName  .= '/' . $user->getId();
-				
-				$register->add(array(
-					'title'			=> 'Edit Profile',
-					'task'			=> 'update',
-					'intention'		=> 'User.intentEditProfile',
-					'resource'		=> $resourceName,
-					'save'			=> 'Update'
-				));
-				
-				// Kill the page if it's a guest //
-				if( $user->isGuest() ){
-					throw new \Exception('You need to be logged in to access this page.', 403 );
-				}
-				
-				// Create the user resource //
-				$rs	= new Resource( 'user', array(
-					'id' => $user->getId()
-				));
-				
-				// Read the user data //
-				$userData	= $rs->read();
-				
-				if( isset($_GET['saved'] )){
-					$tpl['success']		= '<span style="color:green">Profile Updated!</span>';
-				}
-				
-				break;
-		}
+		$register->add(array(
+			'title'			=> 'Sign Up',
+			'task'			=> 'create',
+			'intention'		=> 'User.intentRegister',
+			'resource'		=> $resourceName,
+			'action'		=> $resourceName,
+			'save'			=> 'Register'
+		));
 		
 		// Create or get csrf token for this form's resource //
 		$register->add(array(
@@ -90,7 +48,7 @@
 			Router :: getRequestURI())){
 			
 			// Show errors //
-			if( is_array($persists['data'] )){
+			if( is_array($persists['errors'] )){
 				$errors->add( $persists['errors'] );
 			}
 			

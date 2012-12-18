@@ -7,6 +7,7 @@
 	
 	namespace Route\Main;
 	
+	// Home / Default //
 	function index( $vars = array() ){
 		return array(
 			'module'		=> 'index',

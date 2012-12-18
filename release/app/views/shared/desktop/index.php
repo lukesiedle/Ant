@@ -74,18 +74,8 @@
 			
 			// Load view specific data
 			// @since 0.1.0 //
-			try {
-				$view		= Router :: loadRouteView();
-			} catch( \Exception $e ){
-				switch( $e->getCode() ){
-					case 403 :
-						Application :: setError('403', $e->getMessage() );
-						break;
-					default : 
-						throw new \Exception( $e->getMessage() );
-						break;
-				}
-			}
+			$view		= Router :: loadRouteView();
+			
 			
 			// Check if the channel has changed 
 			// from the view, and stop here

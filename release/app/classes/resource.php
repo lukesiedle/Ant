@@ -97,15 +97,19 @@
 					case 'read' :
 					case 'update' :
 					case 'delete' :
+						
 						// Set the task //
 						$this->task = $task;
 						$this->handler->setTask( $task );
 						
 						// Check if the handler discovered errors //
-						if( count($errors = $this->handler->getErrors()) > 0){
-							throw new \Exception( 'Data handler errors encountered : ' . json_encode( $errors ) );
+						if( $errors = $this->getErrors() ){
+							// Create an error but keep it silent //
+							new \Core\Error( '422', 'resource_data_handler_error', 'silent' );
 						}
+						
 						break;
+						
 						default : 
 							throw new \Exception('Invalid task "' . $task . '"' );
 				}
@@ -234,7 +238,7 @@
 				
 				// No results from query //
 				if( $collection->length() == 0 ){
-					throw new \Exception( 'Resource does not exist', 404 );
+					return false;
 				}
 				
 				// Store the resource as a collection in memory //
@@ -323,6 +327,13 @@
 				));
 				
 				return $this;
+			}
+			
+			public function getErrors(){
+				if( count($errors = $this->handler->getErrors()) > 0 ){
+					return $errors;
+				}	
+				return false;
 			}
 			
 			/**

@@ -3,12 +3,12 @@
 	
 	{\errors}
 	
-	<form method="post" action="{register.action}">
+	<form method="post" action="{register.resource}">
 		
 		<!-- Fields -->
-		<label>First Name</label><input type="text" name="user_first_name" value="{previous.user_first_name}" /><br />
-		<label>Last Name</label><input type="text" name="user_last_name" value="{previous.user_last_name}" /><br />
-		<label>Email<input type="text" name="user_email" value="{previous.user_email}" /></label><br />
+		<label>First Name</label><input type="text" name="user_first_name" value="{previous.user_first_name}{current.user_first_name}" /><br />
+		<label>Last Name</label><input type="text" name="user_last_name" value="{previous.user_last_name}{current.user_last_name}" /><br />
+		<label>Email<input type="text" name="user_email" value="{previous.user_email}{current.user_email}" /></label><br />
 		
 		<!-- Create task -->
 		<input type="text" name="__task" value="{register.task}" />

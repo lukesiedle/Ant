@@ -15,6 +15,14 @@
 		);
 	}
 	
+	function editProfile( $vars ){
+		
+		return array(
+			'module'		=> 'editprofile',
+			'template'		=> 'registration/register'
+		);
+	}
+	
 	function login( $args ){
 		switch( $args[1] ){
 			case 'facebook' :
@@ -34,7 +42,11 @@
 		$return;
 		switch( $args[1] ){
 			case 'logout' :
+				
+				// Apply a module //
 				$return['module'] = 'user';
+				
+				// Apply a controller //
 				$return['controllers'] = 'User.logout';
 				break;
 			default :
