@@ -82,22 +82,48 @@
 		static function intentRegister( array $opts 
 		/*
 			resource, 
-		 	is_ajax, 
-			result
+			result,
+			errors
 		 */
 		){	
-			$resolvePath = 'user/register/complete';
+			$resolvePath = 'user/register/complete/' . $opts['result']['data']['user_id'];
 			
 			if( ! $opts['result']['success'] ){
 				$resolvePath = 'user/register';
-				\Extension\Persistence :: save( 
-					$resolvePath, 
-					$opts['result']['errors']
-				);
 			}
 			
+			// Save the data once for reload //
+			\Extension\Persistence :: save( 
+				$resolvePath, 
+				array(
+					'errors' => $opts['errors'],
+					'data'	=> $opts['resource']->handler->getPreparedData()
+				)
+			);
+			
 			App :: redirect( $resolvePath );
-			// App :: redirect();
+		}
+		
+		static function intentEditProfile( array $opts 
+		/*
+			resource, 
+			result,
+			errors
+		 */
+		){	
+			$resolvePath = 'user/register/edit';
+			
+			// Save the data once for reload //
+			\Extension\Persistence :: save( 
+				$resolvePath, 
+				array(
+					'errors' => $opts['errors'],
+					'data'	=> $opts['resource']->handler->getPreparedData(),
+					'success' => $opts['result']['success']
+				)
+			);
+			
+			App :: redirect( $resolvePath );
 		}
 		
 		/**

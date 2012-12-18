@@ -26,6 +26,12 @@
 	
 	include('classes/database.php');
 	
+	include('classes/configuration.php');
+	
+	include('classes/session.php');
+	
+	include('classes/resource.php');
+	
 	// Application behaviour //
 	include('application/routing.php');
 	

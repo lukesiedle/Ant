@@ -34,88 +34,54 @@
 			$post = Request :: get('post');	
 			
 			// Is it an AJAX request //
-			$isAjax = isset( $post['__ajax'] );				
+			$isAjax = isset( $post['__ajax'] );
 			
 			// Run the resource handler
-			try {
+			$handler = handler();
 				
-				$data = handler();
-				
-				if( $data['errors'] ){
-					throw new \Exception('An error occurred.', 403 );
-				}
-				
-				$results = array(
-					'success' => true
-				);
-				
-				if( $data instanceof Collection ){
-					$results['resource'] = $data->toArray();
-				} else {
-					if( !is_array( $data )){
-						throw new \Exception('Data returned by resource must be an array.');
-					}
-					$results['resource'] = $data;
-				}
-				
-			} catch ( \Exception $e ) {
-				
-				if( $e->getCode() == 404 
-						&& ! Application :: get()->developerMode ){
-					
-					// Adds the error header //
-					Document :: addHeader('HTTP/1.0 404 Not Found');
-					$results['error']['message'] = '404 Not Found.';
-					
-				} else {
-					
-					$results['success']			= false;
-					
-					// Show the message and trace //
-					$results['error']['message'] = $e->getMessage();
-					$results['error']['code']	= $e->getCode();
-					// $results['error']['trace']	= $e->getTrace();
-					
-					switch( $e->getCode() ){
-						case 403 : 
-							// Forbidden //
-							Document :: addHeader('HTTP/1.0 403 Forbidden');
-							break;
-						case 404 :
-							// Adds the error header //
-							Document :: addHeader('HTTP/1.0 404 Not Found');
-							break;
-						case 422 : 
-							// Unprocessable entity - syntactically correct, bad semantics //
-							Document :: addHeader('HTTP/1.0 422 Unprocessable Entity');
-							break;
-					}
+			// Convert to plain array data //
+			if( $handler['result'] instanceof Collection ){
+				$results['data'] = $handler['result']->toArray();
+			} else {
+				$results['data'] = $handler['result'];
+				if( !is_array( $handler['result'] )){
+					// Force array structure //
+					$results['data'] = array();
 				}
 			}
 			
-			// Store any internal errors that occurred //
-			if( $data['errors'] ){
-				$results['errors'] = $data['errors'];
-			}
+			// Get the CSRF tokens from memory and store them
+			Session :: clear( 'csrf' );
+			Session :: add( 'csrf', Request :: getCSRF() );
 			
 			/*
 			*	The intention is used
 			*	for giving the CRUD task
 			*	some context, and allows
-			*	for post-CRUD task executions.
-			*
-			*	Only occurs on success.
+			*	for post-CRUD task executions.			
 			*	
 			*	@example 'User.registration.register'
 			*	@since 0.1.0
 			*/
 			
+			$errors = $handler['resource']->getErrors();
+			
+			$handler['result']['success'] = ! is_array( $errors );
+			
 			// Post resource task hook The Intention //
 			if( isset($post['__intention']) ){
+				
 				Controller :: call( $post['__intention'], array(
-					'resource'	=> $resource,
-					'result'	=> $results
+					'resource'			=> $handler['resource'],
+					'result'			=> $handler['result'],
+					'errors'			=> $errors				
 				));
+				
+			}
+			
+			// Report errors //
+			if( $handler['errors'] ){
+				$results['errors'] = $handler['errors'];
 			}
 			
 			Document :: addHeader( 'Content-type: Application/Json' );
@@ -124,7 +90,7 @@
 			Application :: setHeaders();
 			
 			// Output JSON with header //
-			echo json_encode( $results );			
+			echo json_encode( $results );
 		}
 		
 		/**
@@ -155,14 +121,17 @@
 			// Check the csrf token is valid for this resource //
 			$requestToken = Request :: CSRFtoken( Router :: getRequestURI() );
 			
+			// Then remove token to prevent automatic retries //
+			// The following will cause problems with AJAX-based UI!
+			Request :: clearCSRFtoken( Router :: getRequestURI() );
+			
 			if( $post['__token'] != $requestToken ){
-				throw new \Exception( 'Invalid token', 422 );
+				new \Core\Error( 403, 'resource_invalid_token' );
 			}
 
 			// Task is create but Id was sent (for RUD) //
 			if( $task == 'create' && isset($request->id) ){
-				throw new \Exception( 'Task/Resource mismatch. ' 
-				. 'Create task should not specify Id.', 422 );
+				new \Core\Error( 422, 'task_resource_mismatch' );
 			}
 			
 			// Perform a read by default //
@@ -177,17 +146,26 @@
 			// Implement a resource //
 			$resource = new Resource( $resourceName, $post );
 			
-			try {
-				$resource->{ $task }();
+			// The resource can break out using an exception //
+			try { 
+				$result = $resource->{ $task }();
 			} catch( \Exception $e ){
+				$errors = $resource->getErrors();
 				return array(
-					'errors' => $resource->handler->getErrors()
+					'resource'	=> $resource,
+					'errors'	=> $errors
 				);
 			}
 			
-			$result = $resource->read();
+			// We should always return a read (of a single resource) //
+			if( $task != 'read' ){
+				$result = $resource->read();
+			}
 			
-			return $result;
+			return array(
+				'resource'	=> $resource,
+				'result'	=> $result
+			);
 
 		}
 	

@@ -4,44 +4,29 @@
 	
 	use \Core\Resource as Resource;
 	
-	class User extends \Core\Data {
+	class Test extends \Core\Data {
 		
 		// Required constants //
-		CONST TABLE_NAME			= 'user';
-		CONST PRIMARY_KEY			= 'user_id';
-		
-		// Status //
-		CONST USER_STATUS_INACTIVE	= 0;
-		CONST USER_STATUS_ACTIVE	= 1;
-		CONST USER_STATUS_BANNED	= 2;
+		CONST TABLE_NAME			= 'tests';
+		CONST PRIMARY_KEY			= 'test_id';
 		
 		// All the available fields //
 		public static $fields = array(
-			'id' => 'user_id',
-			'user_first_name',
-			'user_last_name',
-			'user_register_ut',
-			'user_email'
+			'id'	=> 'test_id',
+			'value' => 'test_value'
 		);
 		
 		// Strict data types //
-		public static $dataTypes = array(
-			'user_name'			=> 'string',
-			'user_first_name'	=> 'string',
-			'user_last_name'	=> 'string'
-		);
+		public static $dataTypes = array();
 		
 		// Minimum fields for create //
 		public static $create = array(
-			'user_first_name',
-			'user_last_name',
-			'user_email'
+			'test_value'
 		);
 		
 		// Fields to query read //
 		public static $read = array(
 			self :: PRIMARY_KEY,
-			'user_email'
 		);
 		
 		// Fields to query update //
@@ -76,29 +61,7 @@
 		 *	@since 0.2.0
 		 */
 		public function create(){
-			
-			// Check if the required fields are available for this task //
 			$this->prepareData( 'create' );
-			
-			$data = $this->getPreparedData();
-			
-			// Check if the email is correct //
-			$errs = self :: validate( $data['user_email'], 'user_email', 'email' );
-			
-			if( count($errs) > 0 ){
-				$this->setError( \LANG :: ERR_USER_INVALID_EMAIL );
-			}
-			
-			// Ensure the resource doesn't exist (by email) //
-			$testExists = new Resource('user', array(
-				'user_email' => $data['user_email']
-			));
-			
-			// Check if the user exists //
-			if( $testExists->read() ){
-				$this->setError( \LANG :: ERR_USER_ALREADY_EXISTS );
-			}
-			
 		}
 		
 		/**

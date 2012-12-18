@@ -97,15 +97,19 @@
 					case 'read' :
 					case 'update' :
 					case 'delete' :
+						
 						// Set the task //
 						$this->task = $task;
 						$this->handler->setTask( $task );
 						
 						// Check if the handler discovered errors //
-						if( count($errors = $this->handler->getErrors()) > 0){
-							throw new \Exception( 'Data handler errors encountered : ' . json_encode( $errors ) );
+						if( $errors = $this->getErrors() ){
+							// Create an error but keep it silent //
+							new \Core\Error( '422', 'resource_data_handler_error', 'silent' );
 						}
+						
 						break;
+						
 						default : 
 							throw new \Exception('Invalid task "' . $task . '"' );
 				}
@@ -234,7 +238,7 @@
 				
 				// No results from query //
 				if( $collection->length() == 0 ){
-					throw new \Exception( 'Resource does not exist', 404 );
+					return false;
 				}
 				
 				// Store the resource as a collection in memory //
@@ -299,8 +303,37 @@
 			 *	@return bool The success
 			 */
 			public function delete(){
+				
 				$this->setTask( 'delete' );
+				
+				$handler = $this->getHandler();
+				
+				$data	= $handler->getPreparedData();
+				$id		= $handler->getId();
+				$idKey	= $handler->getIdKey();
+				
+				if( !$id || !$idKey ){
+					throw new \Exception( 'Id or Id Key not set.', 422 );
+				}
+				
+				// Create a collection from the resource //
+				$collection = new Collection( 
+					$data,
+					$this->handler->getName()
+				);
+				
+				Database :: delete( $collection, array(
+					$idKey => $id
+				));
+				
 				return $this;
+			}
+			
+			public function getErrors(){
+				if( count($errors = $this->handler->getErrors()) > 0 ){
+					return $errors;
+				}	
+				return false;
 			}
 			
 			/**
@@ -316,6 +349,7 @@
 			 *	@since 0.1.0
 			 */
 			public static function store( $col, $resourceName ){
+				
 				if( $store = self :: $storage[ $resourceName ] ){
 					self :: $storage[ $resourceName ] = Collection :: merge( $store, $col );
 				} else {

@@ -13,7 +13,6 @@
 		</core>
 		<context>
 			<file>public/clients/desktop/css/context/ant.less</file>
-			<file>public/clients/desktop/css/context/setup.less</file>
 		</context>
 	</stylesheets>
 </resources>

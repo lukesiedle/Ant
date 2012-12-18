@@ -10,9 +10,9 @@
 	 *	@since 0.1.0
 	 */
 	 
-	require_once(PROJECT_ROOT . '/lib/mysql.php');
+	require_once(PROJECT_ROOT . '/app/extensions/mysql.php');
 	
-	use \Library\MySQL as MySQL;
+	use \Extension\MySQL as MySQL;
 	
 	class TestLibraryMySQL extends PHPUnit_Framework_TestCase {
 		

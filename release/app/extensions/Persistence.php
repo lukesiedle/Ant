@@ -7,7 +7,7 @@
 	 *	thereafter for memory conservation.
 	 * 
 	 *	@package Persistence
-	 *	@since 0.1.0
+	 *	@since 0.2.1
 	 */
 	namespace Extension {
 		
@@ -16,11 +16,27 @@
 			public static $persists = array(),
 					$isLoaded = false;
 			
+			/**
+			 *	Save path in memory and associate	
+			 *	data
+			 * 
+			 *	@param $path The requestURI
+			 *	@param $data The data to save in memory
+			 *			 
+			 *	@since 0.2.1
+			 */
 			public static function save( $path, $data ) {
 				self :: $persists[ $path ] = $data;
 				self :: store();
 			}
 			
+			/**
+			 *	Clear path data or all persistent data
+			 * 
+			 *	@param $path The requestURI
+			 *			 
+			 *	@since 0.2.1
+			 */
 			public static function clear( $path = null ){
 				if( is_null($path) ){
 					self :: $persists = array();
@@ -31,15 +47,30 @@
 				self :: store();
 			}
 			
+			/**
+			 *	Save path data to the session
+			 *		
+			 *	@since 0.2.1
+			 */
 			public static function store(){
-				\Core\Session :: clear( 'extension.persists' );
-				\Core\Session :: add( 'extension.persists', self :: $persists );
+				\Core\Session :: clear( 'extension.persistance' );
+				\Core\Session :: add( 'extension.persistance', self :: $persists );
 			}
 			
+			/**
+			 *	Get path data or all persistent data
+			 *	from the session/memory
+			 *
+			 *	@param $path The request URI
+			 *
+			 *	@return array The data
+			 * 
+			 *	@since 0.2.1
+			 */
 			public static function get( $path = null ){
 				
 				if( ! $isLoaded ){
-					self :: $persists = \Core\Session :: get('extension.persists');
+					self :: $persists = \Core\Session :: get('extension.persistance');
 				}
 				
 				if( is_null($path) ){

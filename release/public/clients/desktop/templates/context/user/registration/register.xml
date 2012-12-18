@@ -18,7 +18,10 @@
 		<template>shared/object/error</template>
 	</errors>
 	
-	<!-- Make the collection 'user' available -->
-	<user></user>
+	<!-- Reload previous attempt -->
+	<previous></previous>
+	
+	<!-- Make the collection 'current' available -->
+	<current></current>
 	
 </collections>

@@ -49,7 +49,7 @@
 			public static function add( $key, $arr ){
 				
 				if( !self :: $started ){
-					throw 'Session has not been started yet.';
+					throw new \Exception( 'Session has not been started yet.' );
 				}
 				
 				if( isset($_SESSION[ self::$keychain ][ $key ] )){

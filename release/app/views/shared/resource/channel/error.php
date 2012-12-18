@@ -13,12 +13,18 @@
 		
 		use \Core\Template as Template;
 		use \Core\Application as App;
+		use \Core\Document as Doc;
 		
 		function index( $request ){
 			
+			Doc :: addHeader( 'Content-type: Application/Json' );
+			
 			App :: setHeaders();
 			
-			echo 'An error occurred.';
+			echo json_encode(array(
+				'success'	=> false,
+				'errors'	=> \Core\Error :: getErrors()
+			));
 		}
 	
 	}

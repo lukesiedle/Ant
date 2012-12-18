@@ -9,7 +9,7 @@
 	 *	@since 0.1.0
 	 *	
 	 */
-	namespace Library {
+	namespace Extension {
 		
 		use \Core\Query as Query;
 		

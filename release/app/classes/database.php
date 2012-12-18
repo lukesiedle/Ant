@@ -14,7 +14,7 @@
 	 */
 	namespace Core {
 		
-		use \Library\MySQL as MySQL;
+		use \Extension\MySQL as MySQL;
 		use \__ as __;
 		
 		Class Database {
@@ -289,6 +289,7 @@
 				}
 				
 				$schema = self :: getSchema($tableName);
+				
 				foreach( $keys as $key ){
 					if( !isset($schema[$key])){	
 						throw new \Exception("Schema of queried table does not match collection.");

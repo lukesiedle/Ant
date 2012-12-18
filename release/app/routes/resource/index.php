@@ -13,12 +13,18 @@
 		
 		// Generic routes //
 		
-		'/resource'					=> '\Route\Main\index',
+		'/resource'									=> '\Route\Main\index',
 		
-		// User //
-		'/resource/:string'			=> '\Route\Main\index',
+		// Create //
+		'/resource/:string'							=> '\Route\Main\index',
 		
 		// User Edit/Delete/Update //
-		'/resource/:string/:number'	=> '\Route\Main\index'
+		'/resource/:string/:number'					=> '\Route\Main\index',
+		
+		// Sub resource create //
+		'/resource/:string/:number/:string'			=> '\Route\Main\index',
+		
+		// Sub resource Edit/Delete/Update
+		'/resource/:string/:number/:string/:number'	=> '\Route\Main\index'
 		
 	);

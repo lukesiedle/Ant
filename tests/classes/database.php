@@ -17,9 +17,9 @@
 	use Core\Collection as Collection;
 	use Core\Application as Application;
 	use Core\Query as Query;
-	use Library\MySQL as MySQL;
+	use Extension\MySQL as MySQL;
 
-	require_once( PROJECT_ROOT . '/lib/mysql.php' );
+	require_once( PROJECT_ROOT . '/app/extensions/mysql.php' );
 	require_once( PROJECT_ROOT . '/app/classes/database.php' );
 	require_once( PROJECT_ROOT . '/app/classes/query.php' );
 	require_once( dirname(PROJECT_ROOT) . '/lib/php/underscore.php' );

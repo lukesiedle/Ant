@@ -275,8 +275,12 @@
 			 *	@since 0.1.0
 			 */
 			public static function route(){
+				
+				// Initial paths //
+				Router :: setPaths( self :: $app->client );
+				
 				// Routes the app  //
-				Router :: route( self :: $app->client );
+				Router :: route();
 			}
 			
 			/**
@@ -345,25 +349,9 @@
 					// Connection to database //
 					case 'mysql' :
 						try {
-							self :: $app->connection[ $type ] = \Library\MySQL :: connect( $config );
-							
+							self :: $app->connection[ $type ] = \Extension\MySQL :: connect( $config );
 						} catch( \Exception $e ){
-							
-							self :: set(array(
-								'errors' => array('mysql' => $e->getMessage())
-							));
-							
-							// Otherwise try connect to the local host //
-							$config['host'] = 'localhost';
-							
-							try {
-								self :: $app->connection[ $type ] = \Library\MySQL :: connect( $config );
-							} catch( \Exception $e ){
-								self :: set(array(
-									'errors' => array('mysql' => $e->getMessage())
-								));
-							}
-							
+							new Error( '500', 'mysql_connection_failed' );
 						}
 						break;
 				}
@@ -450,49 +438,36 @@
 			 * 
 			 *	@since 0.1.0
 			 */	
-			public static function setError( $code = '404', $msg = null ){
+			public static function setError( \Core\Error $error ){
 				
-				switch( $code ){
-					case '403' :
-						// Adds the error header //
-						Document :: addHeader('HTTP/1.0 403 Forbidden');
-						if( ! $msg ){
-							$msg = 'You do not have permission to access this resource.';
-						}
-						break;
-					case '404' :
-						// Adds the error header //
-						Document :: addHeader('HTTP/1.0 404 Not Found');
-						if( ! $msg ){
-							$msg = 'Resource not found.';
-						}
-					break;
-				
-					case '422' :
-						// Adds the error header //
-						Document :: addHeader('HTTP/1.0 422 Unprocessable Entity');
-						if( ! $msg ){
-							$msg = 'Request could not be completed due to invalid request data.';
-						}
-						break;
-				}
+				// Ensure paths are set //
+				Router :: setPaths( self :: $app->client );
 				
 				// Add the error message to globals //
-				Template :: addGlobals( new Collection(array(array(
-					"msg"	=> $msg,
-					"code"	=> $code
-				)),'error' ));
+				Template :: addGlobals( new Collection(array( $error->getError() ),'error' ));
 				
 				// Resetting the channel loads error output //
 				Router :: resetChannel( 'error' );
 				
 				// Sets the defined headers //
-				self :: setHeaders();					
+				self :: setHeaders();
 				
 				// Flushes the output //
 				self :: flush();
 				
 				exit;
+			}
+			
+			/**
+			 *	Shortcut method to 
+			 *	determine if in developer (local)
+			 *	mode.
+			 * 
+			 *	@since 0.2.1
+			 *	@returns bool
+			 */
+			public static function developerMode(){
+				return self :: get()->developerMode;
 			}
 
 		}

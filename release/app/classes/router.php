@@ -27,17 +27,16 @@
 							$stopRouting	= false;
 			
 			/**
-			 *	The principal function to
-			 *	start routing the application.
-			 *	Usually used from a shortcut
-			 *	within @subpackage Application
+			 *	Set some paths critical for 
+			 *	other areas of application
+			 *	which may be initiated prior
+			 *	to routing.
+			 * 
+			 *	@since 0.2.1
 			 *	
-			 *	@param string $client The client 'web' 'mobile'
-			 *	
-			 *	@since 0.1.0
 			 */
-			public static function route( $client ){
-				
+			
+			public static function setPaths( $client ){
 				// Set some useful vars and paths //
 				self :: $client			= $client;
 				self :: $viewDir		= 'app/views/shared/' . $client . '/';
@@ -49,24 +48,37 @@
 				
 				// Initializes request vars //
 				Request :: initialize( $_GET );
+			}
+			
+			/**
+			 *	The principal function to
+			 *	start routing the application.
+			 *	Usually used from a shortcut
+			 *	within @subpackage Application
+			 *	
+			 *	@param string $client The client 'web' 'mobile'
+			 *	
+			 *	@since 0.1.0
+			 */
+			public static function route(){
 				
 				// Load the main route handlers //
-				self :: $routes = require_once('app/routes/' . $client . '/index.php');
+				self :: $routes = require_once('app/routes/' . self :: $client . '/index.php');
 				
 				self :: $context = Application :: get()->context;
 				
 				$mapLoaded = false;
 				
 				// Load the main map //
-				$routeMapMain = 'app/routes/' . $client . '/main.php';
+				$routeMapMain = 'app/routes/' . self :: $client . '/main.php';
 				if( file_exists($routeMapMain) ){
 					require_once( $routeMapMain );
 				} else {
-					Application :: setError('404');
+					new Error( 404, 'route_not_found' );
 				}
 				
 				// Load the contextual map if it exists //
-				$routeMap = 'app/routes/' . $client . '/' . self :: $context . '.php';
+				$routeMap = 'app/routes/' . self :: $client . '/' . self :: $context . '.php';
 				
 				if( file_exists( $routeMap )){
 					require_once( $routeMap );
@@ -131,6 +143,7 @@
 						));
 						
 						$fn( self :: getRouteVars() );
+						
 						return $channel;
 					} else {
 						throw new \Exception(
@@ -232,12 +245,16 @@
 				}
 				
 				// 404 not found //
+				if( !function_exists($handlerName) ){
+					new Error( 404, 'route_not_found' );
+				}
+				
 				if( ! $routeFound ){
-					Application :: setError('404');
+					new Error( 404, 'route_not_found' );
 				}
 				
 				if( ! $handlerVars = $handlerName( $regex_matches )){
-					Application :: setError('404');
+					new Error( 404, 'route_not_found' );
 				}
 				
 				// Create the vars //
@@ -307,10 +324,10 @@
 							. self :: getContext() . '/'
 							. self :: getModule() . '.php');
 				
-				// If not view is found, must be a 404 Not Found //
+				// If no view is found this is an internal error
+				// since the route has specified one should exist //
 				if( ! file_exists($view) ){
-					Application :: setError( '404', 'The route view could not be found.' );
-					return;
+					new Error( '500', 'view_not_found' );
 				}
 				
 				// Include and execute //
@@ -347,9 +364,16 @@
 					$client = self :: $client; 
 				}
 				
-				require('app/views/shared/' 
+				// If the file doesn't exist, throw internal 500. //
+				if( !file_exists($sharedView = 'app/views/shared/' 
 							. $client . '/'
-							. $view . '.php');
+							. $view . '.php')){
+					
+					new Error('500', 'shared_view_not_found');
+					
+				}
+				
+				require( $sharedView );
 				
 				$fn = '\View\\' . $client . "\\" . $view;
 				return $fn( self :: getRouteVars(), $contextView );
